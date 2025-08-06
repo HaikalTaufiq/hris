@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hr/core/theme.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/presentation/pages/absen/widget/absen_excel_export.dart';
+import 'package:hr/presentation/pages/absen/widget/absen_header.dart';
+import 'package:hr/presentation/pages/absen/widget/absen_search.dart';
+import 'package:hr/presentation/pages/absen/widget/absen_tabel.dart';
 
 class AbsenPage extends StatefulWidget {
   const AbsenPage({super.key});
@@ -11,21 +15,29 @@ class AbsenPage extends StatefulWidget {
 class _AbsenPageState extends State<AbsenPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: const [
-        Text("Attendance",
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, color: putih)),
-        SizedBox(height: 16),
-        Card(
-          child: ListTile(
-            leading: Icon(Icons.check_circle_outline),
-            title: Text("Status Kehadiran"),
-            subtitle: Text("Belum absen hari ini"),
+    return Stack(
+      children: [
+        ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            AbsenHeader(),
+            AbsenSearch(),
+            AbsenExcelExport(),
+            AbsenTabel(),
+          ],
+        ),
+
+        // Floating Action Button
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.black,
+            shape: const CircleBorder(),
+            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
           ),
         ),
-        // Tambah widget lain sesuai kebutuhan
       ],
     );
   }

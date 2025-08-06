@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hr/core/theme.dart';
+import 'package:hr/presentation/pages/dashboard/widget/dashboard_card.dart';
+import 'package:hr/presentation/pages/dashboard/widget/attendance_chart.dart';
+import 'package:hr/presentation/pages/dashboard/widget/dashboard_header.dart';
+import 'package:hr/presentation/pages/dashboard/widget/dashboard_menu.dart';
+import 'package:hr/presentation/pages/dashboard/widget/status_task_chart.dart';
+import 'package:hr/presentation/pages/dashboard/widget/tech_task_chart.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,18 +19,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: const [
-        Text("Dashboard",
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, color: putih)),
-        SizedBox(height: 16),
-        Card(
-          child: ListTile(
-            leading: Icon(Icons.check_circle_outline),
-            title: Text("Status Kehadiran"),
-            subtitle: Text("Belum absen hari ini"),
-          ),
-        ),
-        // Tambah widget lain sesuai kebutuhan
+        DashboardHeader(),
+        DashboardCard(),
+        DashboardMenu(),
+        AttendanceChart(),
+        TechTaskChart(),
+        StatusTaskChart(),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/core/theme.dart';
 
 class NavBar extends StatefulWidget {
@@ -19,32 +20,55 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: Theme.of(context).copyWith(
-        // Remove top border by setting elevation to 0 and canvasColor to match background
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          elevation: 0,
-          backgroundColor: hitam,
-          selectedItemColor:
-              Colors.blue, // Change to your desired selected icon color
-          unselectedItemColor:
-              Colors.grey, // Change to your desired unselected icon color
-          type: BottomNavigationBarType.fixed,
+        data: Theme.of(context).copyWith(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            elevation: 0,
+            backgroundColor: hitam,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: putih,
+            type: BottomNavigationBarType.fixed,
+          ),
         ),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: widget.selectedIndex,
-        onTap: widget.onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: 'Absen'),
-          BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tugas'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.lock_clock_outlined), label: 'Lembur'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_view_day), label: 'Cuti'),
-        ],
-      ),
-    );
+        child: BottomNavigationBar(
+          currentIndex: widget.selectedIndex,
+          onTap: widget.onItemTapped,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              icon: widget.selectedIndex == 0
+                  ? const FaIcon(FontAwesomeIcons.house)
+                  : const FaIcon(FontAwesomeIcons.house),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: widget.selectedIndex == 1
+                  ? const FaIcon(FontAwesomeIcons.solidCalendarCheck)
+                  : const FaIcon(FontAwesomeIcons.calendarCheck),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: widget.selectedIndex == 2
+                  ? const FaIcon(FontAwesomeIcons.listCheck)
+                  : const FaIcon(FontAwesomeIcons.listCheck),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: widget.selectedIndex == 3
+                  ? const FaIcon(FontAwesomeIcons.solidClock)
+                  : const FaIcon(FontAwesomeIcons.clock),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: widget.selectedIndex == 4
+                  ? const FaIcon(FontAwesomeIcons.solidCalendarMinus)
+                  : const FaIcon(FontAwesomeIcons.calendarMinus),
+              label: '',
+            ),
+          ],
+        ));
   }
 }
