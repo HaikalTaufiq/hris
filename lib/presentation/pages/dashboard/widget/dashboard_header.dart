@@ -53,7 +53,10 @@ class DashboardHeader extends StatelessWidget {
                 ),
               ],
             ),
-            FaIcon(FontAwesomeIcons.barsStaggered, color: putih, size: 25),
+            GestureDetector(
+                onTap: () {},
+                child: FaIcon(FontAwesomeIcons.barsStaggered,
+                    color: putih, size: 25)),
           ],
         ),
       ),

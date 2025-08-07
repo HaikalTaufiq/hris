@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hr/core/theme.dart';
 
-class AbsenHeader extends StatelessWidget {
-  const AbsenHeader({super.key});
+class LemburHeader extends StatelessWidget {
+  const LemburHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class AbsenHeader extends StatelessWidget {
         vertical: MediaQuery.of(context).size.height * 0.01,
       ),
       child: Text(
-        'Attendance',
+        'Pengajuan Cuti',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,

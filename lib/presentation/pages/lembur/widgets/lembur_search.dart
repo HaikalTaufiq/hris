@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
-class AbsenSearch extends StatelessWidget {
-  const AbsenSearch({super.key});
+class LemburSearch extends StatelessWidget {
+  const LemburSearch({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,7 @@ class AbsenSearch extends StatelessWidget {
               fillColor: Colors.black, // background textfield
               suffixIcon: Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: FaIcon(FontAwesomeIcons.magnifyingGlass,
-                    color: Colors.grey),
+                child: FaIcon(FontAwesomeIcons.search, color: Colors.grey),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
