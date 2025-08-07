@@ -1,21 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/services/auth_service.dart'; 
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+
+  const LoginButton({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainLayout()),
-        );
+      onTap: () async {
+        final email = emailController.text.trim();
+        final password = passwordController.text;
+
+        final auth = AuthService();
+        final result = await auth.login(email, password);
+
+        if (result['success']) {
+          NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+          Navigator.pushReplacement(
+            context,
+              MaterialPageRoute(
+                builder: (_) => MainLayout(
+                  nama: result['user']['nama'],
+                  peran: result['user']['nama_peran'],
+                ),
+            ),
+          );
+        } else {
+          NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        }
+
       },
+
       child: Container(
         width: screenWidth * 0.85,
         height: 60,

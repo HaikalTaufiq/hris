@@ -13,46 +13,57 @@ class LoginPageSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
 
-    return Stack(
-      children: [
-        ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(42, 0, 0, 0),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(42, 0, 0, 0),
+                ),
               ),
             ),
           ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 92),
-            LogoText(topMargin: screenHeight * 0.1),
-            const SizedBox(height: 150),
-            const LoginInputField(
-              label: 'Email',
-              hintText: 'Enter your email',
-              isPassword: false,
-            ),
-            const SizedBox(height: 12),
-            const LoginInputField(
-              label: 'Password',
-              hintText: 'Enter your password',
-              isPassword: true,
-            ),
-            const SizedBox(height: 10),
-            const LoginCheckboxAndForgot(),
-            const SizedBox(height: 22),
-            const LoginButton(),
-            const Spacer(),
-            const LoginContact(),
-          ],
-        ),
-      ],
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 92),
+              LogoText(topMargin: screenHeight * 0.1),
+              const SizedBox(height: 150),
+              LoginInputField(
+                label: 'Email',
+                hintText: 'Enter your email',
+                isPassword: false,
+                controller: emailController,
+              ),
+              const SizedBox(height: 12),
+              LoginInputField(
+                label: 'Password',
+                hintText: 'Enter your password',
+                isPassword: true,
+                controller: passwordController,
+              ),
+              const SizedBox(height: 10),
+              const LoginCheckboxAndForgot(),
+              const SizedBox(height: 22),
+              LoginButton(
+                emailController: emailController,
+                passwordController: passwordController,
+              ),
+              const Spacer(),
+              const LoginContact(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
+

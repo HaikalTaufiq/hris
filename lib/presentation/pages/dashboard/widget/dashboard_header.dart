@@ -4,7 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
 class DashboardHeader extends StatelessWidget {
-  const DashboardHeader({super.key});
+  final String nama;
+  final String peran;
+
+  const DashboardHeader({
+    super.key,
+    required this.nama,
+    required this.peran,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +36,13 @@ class DashboardHeader extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Elon Musk',
+                    Text(nama,
                         style: TextStyle(
                             fontSize: 24,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.bold,
                             color: putih)),
-                    Text('Super Admin',
+                    Text(peran,
                         style: TextStyle(
                             fontSize: 14,
                             fontFamily: GoogleFonts.poppins().fontFamily,

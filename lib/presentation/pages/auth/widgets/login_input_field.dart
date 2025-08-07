@@ -6,12 +6,14 @@ class LoginInputField extends StatelessWidget {
   final String label;
   final String hintText;
   final bool isPassword;
+  final TextEditingController controller;
 
   const LoginInputField({
     super.key,
     required this.label,
     required this.hintText,
     required this.isPassword,
+    required this.controller,
   });
 
   @override
@@ -50,6 +52,7 @@ class LoginInputField extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: TextField(
+              controller: controller,
               obscureText: isPassword,
               style: TextStyle(
                 fontFamily: GoogleFonts.poppins().fontFamily,

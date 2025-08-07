@@ -8,22 +8,37 @@ import 'package:hr/presentation/pages/lembur/lembur_page.dart';
 import 'package:hr/presentation/pages/tugas/tugas_page.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  final String nama;
+  final String peran;
+
+  const MainLayout({
+    super.key,
+    required this.nama,
+    required this.peran,
+  });
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
+
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    DashboardPage(), // index 0
-    AbsenPage(), // index 1
-    TugasPage(), // index 2
-    LemburPage(), // index 3
-    CutiPage(), // index 5
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      DashboardPage(nama: widget.nama, peran: widget.peran),
+      AbsenPage(),
+      TugasPage(),
+      LemburPage(),
+      CutiPage(),
+    ];
+  }
+
 
   void _onItemTapped(int index) {
     setState(() {
