@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/presentation/pages/absen/absen_form/absen_form_page.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_excel_export.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_header.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_search.dart';
@@ -24,6 +25,7 @@ class _AbsenPageState extends State<AbsenPage> {
             AbsenSearch(),
             AbsenExcelExport(),
             AbsenTabel(),
+            AbsenTabel(),
           ],
         ),
 
@@ -32,7 +34,11 @@ class _AbsenPageState extends State<AbsenPage> {
           bottom: 16,
           right: 16,
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AbsenFormPage()),
+              );
+            },
             backgroundColor: Colors.black,
             shape: const CircleBorder(),
             child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),

@@ -3,9 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
-class DashboardHeader extends StatelessWidget {
+class DashboardHeader extends StatefulWidget {
   const DashboardHeader({super.key});
 
+  @override
+  State<DashboardHeader> createState() => _DashboardHeaderState();
+}
+
+class _DashboardHeaderState extends State<DashboardHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +51,10 @@ class DashboardHeader extends StatelessWidget {
                 ),
               ],
             ),
-            FaIcon(FontAwesomeIcons.barsStaggered, color: putih, size: 25),
+            GestureDetector(
+                onTap: () {},
+                child: FaIcon(FontAwesomeIcons.barsStaggered,
+                    color: putih, size: 25)),
           ],
         ),
       ),

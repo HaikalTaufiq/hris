@@ -22,7 +22,7 @@ class _MainLayoutState extends State<MainLayout> {
     AbsenPage(), // index 1
     TugasPage(), // index 2
     LemburPage(), // index 3
-    CutiPage(), // index 5
+    CutiPage(), // index 4
   ];
 
   void _onItemTapped(int index) {
