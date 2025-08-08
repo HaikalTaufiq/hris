@@ -13,6 +13,22 @@ class LemburInput extends StatefulWidget {
 class _LemburInputState extends State<LemburInput> {
   final TextEditingController _tanggalController = TextEditingController();
 
+  final TextEditingController _jamMulaiController = TextEditingController();
+  final TextEditingController _jamSelesaiController = TextEditingController();
+
+  void _onTapIcon(TextEditingController controller) async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        controller.text = pickedTime.format(context);
+      });
+    }
+  }
+
   @override
   void dispose() {
     _tanggalController.dispose();
@@ -85,9 +101,9 @@ class _LemburInputState extends State<LemburInput> {
           CustomInputField(
             label: "Jam Mulai",
             hint: "--:--",
-            controller: null,
+            controller: _jamMulaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
+            onTapIcon: () => _onTapIcon(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -95,9 +111,9 @@ class _LemburInputState extends State<LemburInput> {
           CustomInputField(
             label: "Jam Selesai",
             hint: "--:--",
-            controller: null,
+            controller: _jamSelesaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
+            onTapIcon: () => _onTapIcon(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
