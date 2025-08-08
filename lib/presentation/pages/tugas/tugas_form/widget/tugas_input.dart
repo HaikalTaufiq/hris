@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/components/custom_input.dart';
 import 'package:hr/core/theme.dart';
 
@@ -13,9 +14,27 @@ class TugasInput extends StatefulWidget {
 class _TugasInputState extends State<TugasInput> {
   final TextEditingController _tanggalController = TextEditingController();
 
+  final TextEditingController _jamMulaiController = TextEditingController();
+  final TextEditingController _jamSelesaiController = TextEditingController();
+
+  void _onTapIcon(TextEditingController controller) async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        controller.text = pickedTime.format(context);
+      });
+    }
+  }
+
   @override
   void dispose() {
     _tanggalController.dispose();
+    _jamMulaiController.dispose();
+    _jamSelesaiController.dispose();
     super.dispose();
   }
 
@@ -59,19 +78,19 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Jam Mulai",
             hint: "--:--",
-            controller: null,
+            controller: _jamMulaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
+            onTapIcon: () => _onTapIcon(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Jam Selesai",
+            label: "Jam Diterima",
             hint: "--:--",
-            controller: null,
+            controller: _jamSelesaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
+            onTapIcon: () => _onTapIcon(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -102,26 +121,26 @@ class _TugasInputState extends State<TugasInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
-          CustomInputField(
-            label: "Departemen",
-            hint: "",
-            controller: null,
-            suffixIcon:
-                const Icon(Icons.arrow_drop_down_outlined, color: Colors.white),
-            onTapIcon: () {},
+          CustomDropDownField(
+            label: 'Department',
+            hint: '',
+            items: ['Logistik', 'Technician', 'HRD'],
             labelStyle: labelStyle,
             textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
-          CustomInputField(
-            label: "Tugaskan Kepada",
-            hint: "",
-            controller: null,
-            suffixIcon:
-                const Icon(Icons.arrow_drop_down_outlined, color: Colors.white),
-            onTapIcon: () {},
+          CustomDropDownField(
+            label: 'Tugaskan Kepada',
+            hint: '',
+            items: ['Budi', 'Elon', 'Nelo'],
             labelStyle: labelStyle,
             textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
