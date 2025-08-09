@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/core/header.dart';
-import 'package:hr/presentation/pages/tugas/tugas_form/tugas_form.dart';
-import 'package:hr/presentation/pages/tugas/widgets/tugas_search.dart';
-import 'package:hr/presentation/pages/tugas/widgets/tugas_tabel.dart';
+import 'package:hr/presentation/dashboard_menu/karyawan/karyawan_form/karyawan_form.dart';
+import 'package:hr/presentation/dashboard_menu/karyawan/widgets/karyawan_search.dart';
+import 'package:hr/presentation/dashboard_menu/karyawan/widgets/karyawan_tabel.dart';
 
-class TugasPage extends StatefulWidget {
-  const TugasPage({super.key});
+class KaryawanPage extends StatefulWidget {
+  const KaryawanPage({super.key});
 
   @override
-  State<TugasPage> createState() => _TugasPageState();
+  State<KaryawanPage> createState() => _KaryawanPageState();
 }
 
-class _TugasPageState extends State<TugasPage> {
+class _KaryawanPageState extends State<KaryawanPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -20,11 +20,11 @@ class _TugasPageState extends State<TugasPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: const [
-            Header(title: 'Manajemen Tugas'),
-            TugasSearch(),
-            TugasTabel(),
-            TugasTabel(),
-            TugasTabel(),
+            Header(title: 'Manajemen Karyawan'),
+            KaryawanSearch(),
+            KaryawanTabel(),
+            KaryawanTabel(),
+            KaryawanTabel(),
           ],
         ),
         // Floating Action Button
@@ -35,7 +35,7 @@ class _TugasPageState extends State<TugasPage> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const TugasForm(),
+                  builder: (context) => const KaryawanForm(),
                 ),
               );
             },

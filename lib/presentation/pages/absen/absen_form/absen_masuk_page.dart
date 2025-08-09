@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/presentation/pages/absen/absen_form/widgets/absen_input.dart';
+import 'package:hr/presentation/pages/absen/absen_form/widgets/input_in.dart';
 
-class AbsenFormPage extends StatefulWidget {
-  const AbsenFormPage({super.key});
+class AbsenMasukPage extends StatefulWidget {
+  const AbsenMasukPage({super.key});
 
   @override
-  State<AbsenFormPage> createState() => _AbsenFormPageState();
+  State<AbsenMasukPage> createState() => _AbsenMasukPageState();
 }
 
-class _AbsenFormPageState extends State<AbsenFormPage> {
+class _AbsenMasukPageState extends State<AbsenMasukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
         title: Text(
-          'Form Absen',
+          'Form Absen Masuk',
           style: TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -35,7 +35,7 @@ class _AbsenFormPageState extends State<AbsenFormPage> {
         ),
       ),
       body: ListView(children: [
-        AbsenInput(),
+        InputIn(),
       ]),
     );
   }

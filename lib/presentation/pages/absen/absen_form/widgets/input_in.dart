@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/components/custom_input.dart';
 
-class AbsenInput extends StatefulWidget {
-  const AbsenInput({super.key});
+class InputIn extends StatefulWidget {
+  const InputIn({super.key});
 
   @override
-  State<AbsenInput> createState() => _AbsenInputState();
+  State<InputIn> createState() => _InputInState();
 }
 
-class _AbsenInputState extends State<AbsenInput> {
+class _InputInState extends State<InputIn> {
   final TextEditingController _tanggalController = TextEditingController();
+
+  final TextEditingController _jamMulaiController = TextEditingController();
+
+  void _onTapIcon(TextEditingController controller) async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        controller.text = pickedTime.format(context);
+      });
+    }
+  }
 
   @override
   void dispose() {
     _tanggalController.dispose();
+    _jamMulaiController.dispose();
     super.dispose();
   }
 
@@ -83,33 +100,23 @@ class _AbsenInputState extends State<AbsenInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
-          CustomInputField(
-            label: "Tipe Absen",
-            hint: "",
-            controller: null,
-            suffixIcon:
-                const Icon(Icons.arrow_drop_down_outlined, color: Colors.white),
-            onTapIcon: () {},
+          CustomDropDownField(
+            label: 'Tipe Absen',
+            hint: '',
+            items: ['Hadir', 'Telat', 'Izin'],
             labelStyle: labelStyle,
             textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
             label: "Jam Masuk",
-            hint: "",
-            controller: null,
+            hint: "--:--",
+            controller: _jamMulaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            inputStyle: inputStyle,
-          ),
-          CustomInputField(
-            label: "Jam Keluar",
-            hint: "",
-            controller: null,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () {},
+            onTapIcon: () => _onTapIcon(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,

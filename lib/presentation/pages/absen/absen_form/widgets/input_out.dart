@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/components/custom_input.dart';
+import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/components/custom_input.dart';
 
-class LemburInput extends StatefulWidget {
-  const LemburInput({super.key});
+class InputOut extends StatefulWidget {
+  const InputOut({super.key});
 
   @override
-  State<LemburInput> createState() => _LemburInputState();
+  State<InputOut> createState() => _InputOutState();
 }
 
-class _LemburInputState extends State<LemburInput> {
+class _InputOutState extends State<InputOut> {
   final TextEditingController _tanggalController = TextEditingController();
 
-  final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _jamSelesaiController = TextEditingController();
 
   void _onTapIcon(TextEditingController controller) async {
@@ -32,7 +32,6 @@ class _LemburInputState extends State<LemburInput> {
   @override
   void dispose() {
     _tanggalController.dispose();
-    _jamMulaiController.dispose();
     _jamSelesaiController.dispose();
     super.dispose();
   }
@@ -59,6 +58,7 @@ class _LemburInputState extends State<LemburInput> {
       color: Colors.white,
       fontSize: 14,
     );
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: MediaQuery.of(context).size.width * 0.05,
@@ -75,7 +75,7 @@ class _LemburInputState extends State<LemburInput> {
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Tanggal Lembur",
+            label: "Tanggal",
             hint: "dd / mm / yyyy",
             controller: _tanggalController,
             suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
@@ -100,22 +100,43 @@ class _LemburInputState extends State<LemburInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
+          CustomDropDownField(
+            label: 'Tipe Absen',
+            hint: '',
+            items: ['Hadir', 'Telat', 'Izin'],
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
+            inputStyle: inputStyle,
+          ),
           CustomInputField(
-            label: "Jam Mulai",
+            label: "Jam Keluar",
             hint: "--:--",
-            controller: _jamMulaiController,
+            controller: _jamSelesaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIcon(_jamMulaiController),
+            onTapIcon: () => _onTapIcon(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Jam Selesai",
-            hint: "--:--",
-            controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIcon(_jamSelesaiController),
+            label: "Lokasi",
+            hint: "",
+            controller: null,
+            suffixIcon: const Icon(Icons.location_history, color: Colors.white),
+            onTapIcon: () {},
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "Photo",
+            hint: "",
+            controller: null,
+            suffixIcon: const Icon(Icons.camera_alt, color: Colors.white),
+            onTapIcon: () {},
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -131,9 +152,7 @@ class _LemburInputState extends State<LemburInput> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // TODO: handle submit
-              },
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
                 padding: const EdgeInsets.symmetric(vertical: 18),

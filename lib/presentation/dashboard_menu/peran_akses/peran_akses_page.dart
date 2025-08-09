@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/core/header.dart';
-import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form.dart';
-import 'package:hr/presentation/pages/lembur/widgets/lembur_card.dart';
-import 'package:hr/presentation/pages/lembur/widgets/lembur_search.dart';
+import 'package:hr/presentation/dashboard_menu/peran_akses/peran_form/peran_form.dart';
+import 'package:hr/presentation/dashboard_menu/peran_akses/widgets/peran_search.dart';
+import 'package:hr/presentation/dashboard_menu/peran_akses/widgets/peran_tabel.dart';
 
-class LemburPage extends StatefulWidget {
-  const LemburPage({super.key});
+class PeranAksesPage extends StatefulWidget {
+  const PeranAksesPage({super.key});
 
   @override
-  State<LemburPage> createState() => _LemburPageState();
+  State<PeranAksesPage> createState() => _PeranAksesPageState();
 }
 
-class _LemburPageState extends State<LemburPage> {
+class _PeranAksesPageState extends State<PeranAksesPage> {
+  final List<bool> akses = List.generate(9, (_) => false);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -20,13 +22,9 @@ class _LemburPageState extends State<LemburPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: const [
-            Header(title: 'Pengajuan Lembur'),
-            LemburSearch(),
-            LemburCard(),
-            LemburCard(),
-            LemburCard(),
-            LemburCard(),
-            LemburCard(),
+            Header(title: 'Manajemen Peran & Akses'),
+            PeranAksesSearch(),
+            PeranTabel(),
           ],
         ),
         Positioned(
@@ -35,7 +33,9 @@ class _LemburPageState extends State<LemburPage> {
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const LemburForm()),
+                MaterialPageRoute(
+                  builder: (context) => const PeranForm(),
+                ),
               );
             },
             backgroundColor: Colors.black,

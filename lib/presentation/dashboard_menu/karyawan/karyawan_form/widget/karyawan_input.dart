@@ -1,33 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/components/custom_input.dart';
 import 'package:hr/core/theme.dart';
 
-class LemburInput extends StatefulWidget {
-  const LemburInput({super.key});
+class KaryawanInput extends StatefulWidget {
+  const KaryawanInput({super.key});
 
   @override
-  State<LemburInput> createState() => _LemburInputState();
+  State<KaryawanInput> createState() => _KaryawanInputState();
 }
 
-class _LemburInputState extends State<LemburInput> {
+class _KaryawanInputState extends State<KaryawanInput> {
   final TextEditingController _tanggalController = TextEditingController();
 
   final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _jamSelesaiController = TextEditingController();
-
-  void _onTapIcon(TextEditingController controller) async {
-    final pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (pickedTime != null) {
-      setState(() {
-        controller.text = pickedTime.format(context);
-      });
-    }
-  }
 
   @override
   void dispose() {
@@ -74,57 +62,86 @@ class _LemburInputState extends State<LemburInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
-          CustomInputField(
-            label: "Tanggal Lembur",
-            hint: "dd / mm / yyyy",
-            controller: _tanggalController,
-            suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
-            onTapIcon: () async {
-              final pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2101),
-              );
-              if (pickedDate != null) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                setState(() {
-                  _tanggalController.text = formatted;
-                });
-              }
-            },
+          CustomDropDownField(
+            label: 'Jabatan',
+            hint: '',
+            items: ['Staff', 'Supervisor', 'CEO'],
             labelStyle: labelStyle,
             textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
+            inputStyle: inputStyle,
+          ),
+          CustomDropDownField(
+            label: 'Peran',
+            hint: '',
+            items: ['Super Admin', 'Admin Office', 'Technician'],
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
+            inputStyle: inputStyle,
+          ),
+          CustomDropDownField(
+            label: 'Department',
+            hint: '',
+            items: ['HRD', 'Accounting', 'Sales'],
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Jam Mulai",
-            hint: "--:--",
-            controller: _jamMulaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIcon(_jamMulaiController),
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            inputStyle: inputStyle,
-          ),
-          CustomInputField(
-            label: "Jam Selesai",
-            hint: "--:--",
-            controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIcon(_jamSelesaiController),
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            inputStyle: inputStyle,
-          ),
-          CustomInputField(
-            label: "Keterangan",
+            label: "Gaji Pokok",
             hint: "",
             labelStyle: labelStyle,
             textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "NPWP",
+            hint: "",
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "No. BPJS Ketenagakerjaan (Opsional)",
+            hint: "",
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "No. BPJS Kesehatan (Opsional)",
+            hint: "",
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "Password HRIS Account",
+            hint: "",
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomDropDownField(
+            label: 'Status Pernikahan',
+            hint: '',
+            items: [
+              'Married',
+              'Not Married',
+            ],
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
           const SizedBox(height: 5),
@@ -151,6 +168,7 @@ class _LemburInputState extends State<LemburInput> {
               ),
             ),
           ),
+          const SizedBox(height: 15),
         ],
       ),
     );

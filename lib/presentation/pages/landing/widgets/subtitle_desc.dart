@@ -28,6 +28,13 @@ class SubtitleDescription extends StatelessWidget {
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 fontSize: width * 0.09,
                 color: putih,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.5),
+                    offset: const Offset(0, 4),
+                    blurRadius: 10,
+                  ),
+                ],
                 fontWeight: FontWeight.w900,
                 height: 1.1,
                 letterSpacing: -1.5,

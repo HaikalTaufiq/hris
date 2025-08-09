@@ -3,91 +3,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
-class TugasTabel extends StatelessWidget {
-  const TugasTabel({super.key});
+class LogTabel extends StatelessWidget {
+  const LogTabel({super.key});
+
   final List<String> headers = const [
-    "Judul",
-    "Kepada",
-    "Batas",
-    "Jam Mulai",
-    "Jam Diterima",
-    "Status",
-    "Selesai",
+    "Name",
+    "Time",
+    "Date",
+    "Type",
+    "Last Action",
+    "Device",
   ];
 
   final List<String> values = const [
-    "Perbaikan Tesla",
     "Elon Musk",
-    "20/10/2025",
-    "08 : 00",
-    "17 : 00",
-    "2",
-    "N / A",
+    "13:47",
+    "08/08/2025",
+    "Log in",
+    "Absen",
+    "Android (Samsung J2 Prime)",
   ];
-  Widget buildValueCell(String value, int index) {
-    // Index ke-5 adalah status: 0, 1, 2
-    if (index == 5) {
-      String statusText;
-      Color bgColor;
-
-      switch (value) {
-        case "0":
-          statusText = "On Progress";
-          bgColor = Colors.orange;
-          break;
-        case "1":
-          statusText = "Completed";
-          bgColor = Colors.green;
-          break;
-        case "2":
-          statusText = "Rejected";
-          bgColor = Colors.red;
-          break;
-        default:
-          statusText = "Unknown";
-          bgColor = Colors.grey;
-      }
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: bgColor, width: 1),
-        ),
-        child: Row(
-          children: [
-            const SizedBox(width: 4),
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                color: bgColor,
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              statusText,
-              style: TextStyle(
-                color: bgColor,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Untuk value biasa
-    return Text(
-      value,
-      style: TextStyle(
-        color: Colors.white,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +141,12 @@ class TugasTabel extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 3,
-                        child: buildValueCell(values[index], index),
+                        child: Text(
+                          values[index],
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: GoogleFonts.poppins().fontFamily),
+                        ),
                       ),
                     ],
                   ),

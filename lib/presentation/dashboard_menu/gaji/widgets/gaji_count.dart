@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
-class AbsenExcelExport extends StatelessWidget {
-  const AbsenExcelExport({super.key});
+class GajiCount extends StatelessWidget {
+  const GajiCount({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class AbsenExcelExport extends StatelessWidget {
                 ),
               ),
               child: const FaIcon(
-                FontAwesomeIcons.download,
+                FontAwesomeIcons.calculator,
                 size: 20,
                 color: Colors.white,
               ),
