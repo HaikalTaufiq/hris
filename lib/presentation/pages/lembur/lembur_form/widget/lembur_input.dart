@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom_input.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/services/lembur_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LemburInput extends StatefulWidget {
   const LemburInput({super.key});
@@ -11,10 +14,25 @@ class LemburInput extends StatefulWidget {
 }
 
 class _LemburInputState extends State<LemburInput> {
+  final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tanggalController = TextEditingController();
-
   final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _jamSelesaiController = TextEditingController();
+  final TextEditingController _deskripsiController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNamaUser();
+  }
+
+  void _loadNamaUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final nama = prefs.getString('nama') ?? '';
+    setState(() {
+      _namaController.text = nama;
+    });
+  }
 
   void _onTapIcon(TextEditingController controller) async {
     final pickedTime = await showTimePicker(
@@ -23,15 +41,23 @@ class _LemburInputState extends State<LemburInput> {
     );
 
     if (pickedTime != null) {
+      final jam = pickedTime.hour.toString().padLeft(2, '0');
+      final menit = pickedTime.minute.toString().padLeft(2, '0');
+      final formattedTime = '$jam:$menit';
+      
       setState(() {
-        controller.text = pickedTime.format(context);
+         controller.text = formattedTime; 
       });
     }
   }
 
   @override
   void dispose() {
+    _namaController.dispose();
     _tanggalController.dispose();
+    _jamMulaiController.dispose();
+    _jamSelesaiController.dispose();
+    _deskripsiController.dispose();
     super.dispose();
   }
 
@@ -68,9 +94,11 @@ class _LemburInputState extends State<LemburInput> {
           CustomInputField(
             label: "Nama",
             hint: "",
+            controller: _namaController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
+            readOnly: true,
           ),
           CustomInputField(
             label: "Tanggal Lembur",
@@ -121,6 +149,7 @@ class _LemburInputState extends State<LemburInput> {
           CustomInputField(
             label: "Keterangan",
             hint: "",
+            controller: _deskripsiController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -129,8 +158,24 @@ class _LemburInputState extends State<LemburInput> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // TODO: handle submit
+              onPressed: () async{
+                 final success = await LemburService.createLembur(
+                  tanggal: _tanggalController.text,
+                  jamMulai: _jamMulaiController.text,
+                  jamSelesai: _jamSelesaiController.text,
+                  deskripsi: _deskripsiController.text,
+                );
+
+                if (success) {
+                  if (context.mounted) {
+                    NotificationHelper.showSnackBar(context, 'Lembur berhasil diajukan');
+                    Navigator.of(context).pop();
+                  }
+                } else {
+                  if (context.mounted) {
+                    NotificationHelper.showSnackBar(context, 'Gagal mengajukan lembur', isSuccess: false);
+                  }
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
@@ -139,6 +184,8 @@ class _LemburInputState extends State<LemburInput> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+
+            
               child: Text(
                 'Submit',
                 style: GoogleFonts.poppins(

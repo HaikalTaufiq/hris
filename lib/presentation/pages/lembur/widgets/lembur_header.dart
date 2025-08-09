@@ -12,7 +12,7 @@ class LemburHeader extends StatelessWidget {
         vertical: MediaQuery.of(context).size.height * 0.01,
       ),
       child: Text(
-        'Pengajuan Cuti',
+        'Pengajuan Lembur',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,

@@ -10,6 +10,7 @@ class CustomInputField extends StatelessWidget {
   final TextStyle labelStyle;
   final TextStyle textStyle;
   final InputDecoration inputStyle;
+  final bool? readOnly;
 
   const CustomInputField({
     super.key,
@@ -21,6 +22,7 @@ class CustomInputField extends StatelessWidget {
     required this.labelStyle,
     required this.textStyle,
     required this.inputStyle,
+    this.readOnly = false,
   });
 
   @override

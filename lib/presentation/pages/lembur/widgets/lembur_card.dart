@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/models/lembur_model.dart';
 
 class LemburCard extends StatelessWidget {
-  const LemburCard({super.key});
+  
+  final LemburModel lembur;
+  final VoidCallback onApprove;
+  final VoidCallback onDecline;
+
+  const LemburCard({
+    super.key,
+    required this.lembur,
+    required this.onApprove,
+    required this.onDecline,
+  });
+  
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'disetujui':
+        return green;
+      case 'ditolak':
+        return red;
+      case 'pending':
+      default:
+        return yellow;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +58,7 @@ class LemburCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Elon Musk',
+                  '${lembur.user['nama']}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -49,18 +72,18 @@ class LemburCard extends StatelessWidget {
                       width: 15,
                       height: 15,
                       decoration: BoxDecoration(
-                        color: yellow,
+                        color: getStatusColor(lembur.status),
                         shape: BoxShape.circle,
                       ),
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'Pending',
+                      '${lembur.status}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: yellow,
+                        color: getStatusColor(lembur.status),
                       ),
                     ),
                   ],
@@ -69,7 +92,7 @@ class LemburCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '14/08/2025',
+              'Tannggal: ${lembur.tanggal}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -79,7 +102,7 @@ class LemburCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '17:00 - 20:00',
+              'Jam: ${lembur.jamMulai} - ${lembur.jamSelesai}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -91,7 +114,7 @@ class LemburCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Keterangan',
+                  'Deskripsi: ${lembur.deskripsi}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -104,57 +127,63 @@ class LemburCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 8),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.04,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: red,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(66, 0, 0, 0),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
+                GestureDetector(
+                  onTap: onDecline,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.04,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    decoration: BoxDecoration(
+                      color: red,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(66, 0, 0, 0),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      'Decline',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        color: putih,
                       ),
-                    ],
-                  ),
-                  child: Text(
-                    'Decline',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      color: putih,
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 8),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: green,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(66, 0, 0, 0),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
+                GestureDetector(
+                  onTap: onApprove,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.02,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    decoration: BoxDecoration(
+                      color: green,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(66, 0, 0, 0),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      'Approve',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        color: putih,
                       ),
-                    ],
-                  ),
-                  child: Text(
-                    'Approved',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      color: putih,
                     ),
                   ),
                 ),

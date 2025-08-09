@@ -20,7 +20,7 @@ class DashboardHeader extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           horizontal: MediaQuery.of(context).size.width * 0.04,
           vertical: MediaQuery.of(context).size.height * 0.01,
-        ),
+        ), 
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

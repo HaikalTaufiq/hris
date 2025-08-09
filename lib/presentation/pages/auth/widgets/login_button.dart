@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/services/auth_service.dart'; 
+import 'package:hr/data/services/auth_service.dart';
+import 'package:hr/data/models/user_model.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 
@@ -29,15 +32,19 @@ class LoginButton extends StatelessWidget {
 
         if (result['success']) {
           NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+
+          final UserModel user = result['user'];
+
           Navigator.pushReplacement(
             context,
-              MaterialPageRoute(
-                builder: (_) => MainLayout(
-                  nama: result['user']['nama'],
-                  peran: result['user']['nama_peran'],
-                ),
+            MaterialPageRoute(
+              builder: (_) => MainLayout(
+                nama: user.nama,
+                peran: user.peran,
+              ),
             ),
           );
+
         } else {
           NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
         }
