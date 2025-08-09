@@ -32,23 +32,16 @@ class LoginButton extends StatelessWidget {
 
         if (result['success']) {
           NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
-
           final UserModel user = result['user'];
-
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => MainLayout(
-                nama: user.nama,
-                peran: user.peran,
-              ),
+              builder: (_) => MainLayout(),
             ),
           );
-
         } else {
           NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
         }
-
       },
 
       child: Container(

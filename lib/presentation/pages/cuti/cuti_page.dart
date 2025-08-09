@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/core/header.dart';
 import 'package:hr/presentation/pages/cuti/cuti_form/cuti_form.dart';
 import 'package:hr/presentation/pages/cuti/widgets/cuti_card.dart';
-import 'package:hr/presentation/pages/cuti/widgets/cuti_header.dart';
 import 'package:hr/presentation/pages/cuti/widgets/cuti_search.dart';
 
 class CutiPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _CutiPageState extends State<CutiPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            CutiHeader(),
+            Header(title: 'Manajemen Cuti'),
             CutiSearch(),
             CutiCard(),
             CutiCard(),

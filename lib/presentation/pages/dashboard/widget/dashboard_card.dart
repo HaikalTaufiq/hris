@@ -34,13 +34,13 @@ class DashboardCard extends StatelessWidget {
       child: PageView.builder(
         itemCount: cardData.length,
         controller: PageController(
-          viewportFraction: 1.0,
+          viewportFraction: 0.9,
         ),
         itemBuilder: (context, index) {
           final data = cardData[index];
           return Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04,
+              horizontal: MediaQuery.of(context).size.width * 0.01,
               vertical: MediaQuery.of(context).size.height * 0.02,
             ),
             child: Container(

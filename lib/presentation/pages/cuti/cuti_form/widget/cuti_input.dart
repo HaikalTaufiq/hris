@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/components/custom_input.dart';
 import 'package:hr/core/theme.dart';
 
@@ -14,13 +15,6 @@ class _CutiInputState extends State<CutiInput> {
   final TextEditingController _tanggalMulaiController = TextEditingController();
   final TextEditingController _tanggalSelesaiController =
       TextEditingController();
-
-  @override
-  void dispose() {
-    _tanggalMulaiController.dispose();
-    _tanggalSelesaiController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +53,15 @@ class _CutiInputState extends State<CutiInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
-          CustomInputField(
-            label: "Tipe Absen",
-            hint: "",
-            controller: null,
-            suffixIcon:
-                const Icon(Icons.arrow_drop_down_outlined, color: Colors.white),
-            onTapIcon: () {},
+          CustomDropDownField(
+            label: 'Tipe Cuti',
+            hint: '',
+            items: ['Cuti Tahunan', 'Cuti Sakit', 'Cuti'],
             labelStyle: labelStyle,
             textStyle: textStyle,
+            dropdownColor: secondary,
+            dropdownTextColor: putih,
+            dropdownIconColor: putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(

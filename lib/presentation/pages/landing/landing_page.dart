@@ -16,9 +16,27 @@ class LandingPage extends StatelessWidget {
       body: Stack(
         children: [
           const BackgroundImage(),
-          LogoText(topMargin: screenHeight * 0.1),
-          SubtitleDescription(startFrom: screenHeight * 0.59),
-          GetStartedButton(topMargin: screenHeight * 0.88),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: LogoText(topMargin: screenHeight * 0.2),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SubtitleDescription(startFrom: screenHeight * 0.59),
+                    SizedBox(height: 10),
+                    GetStartedButton(topMargin: screenHeight * 0.88),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

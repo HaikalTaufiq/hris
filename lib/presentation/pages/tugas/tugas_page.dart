@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/core/header.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_form.dart';
-import 'package:hr/presentation/pages/tugas/widgets/tugas_header.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_search.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_tabel.dart';
 
@@ -20,7 +20,7 @@ class _TugasPageState extends State<TugasPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: const [
-            TugasHeader(),
+            Header(title: 'Manajemen Tugas'),
             TugasSearch(),
             TugasTabel(),
             TugasTabel(),

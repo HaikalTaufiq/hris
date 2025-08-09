@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/core/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/data/models/lembur_model.dart';
 import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form.dart';
 import 'package:hr/presentation/pages/lembur/widgets/lembur_card.dart';
-import 'package:hr/presentation/pages/lembur/widgets/lembur_header.dart';
 import 'package:hr/presentation/pages/lembur/widgets/lembur_search.dart';
 import 'package:hr/data/services/lembur_service.dart';
 
@@ -45,7 +45,7 @@ class _LemburPageState extends State<LemburPage> {
                 padding: const EdgeInsets.all(16),
                 itemCount: lemburData.length + 2, 
                 itemBuilder: (context, index) {
-                  if (index == 0) return const LemburHeader();
+                  if (index == 0) return const Header(title: 'Pengajuan Lembur');
                   if (index == 1) return const LemburSearch();
                   final lembur = lemburData[index - 2];
                   return LemburCard(

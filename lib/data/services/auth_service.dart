@@ -22,7 +22,8 @@ class AuthService {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', data['token']);
-      await prefs.setString('nama', user.nama);
+      await prefs.setString('nama', user.nama); // simpan nama
+      await prefs.setString('peran', user.peran); // simpan peran
 
       return {
         'success': true,
@@ -38,15 +39,29 @@ class AuthService {
     }
   }
 
-  // ✅ Fungsi untuk logout & hapus token
+  // ✅ Logout
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove('nama');
+    await prefs.remove('peran');
   }
 
-  // ✅ Fungsi untuk ambil token
+  // ✅ Ambil token
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
+  }
+
+  // ✅ Ambil nama
+  Future<String?> getNama() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nama');
+  }
+
+  // ✅ Ambil peran
+  Future<String?> getPeran() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('peran');
   }
 }

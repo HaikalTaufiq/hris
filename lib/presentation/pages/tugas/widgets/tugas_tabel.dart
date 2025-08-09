@@ -139,11 +139,13 @@ class TugasTabel extends StatelessWidget {
                       icon: const FaIcon(FontAwesomeIcons.eye,
                           color: Colors.white, size: 20),
                       onPressed: () {},
-                      iconSize: 20, // penting
-                      padding: EdgeInsets.zero, // hilangkan padding default
-                      constraints:
-                          const BoxConstraints(), // hilangkan min width/height
+                      iconSize: 20,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width *
+                            0.02), // jarak proporsional
                     IconButton(
                       icon: const FaIcon(FontAwesomeIcons.trash,
                           color: Colors.white, size: 20),
@@ -152,6 +154,7 @@ class TugasTabel extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     IconButton(
                       icon: const FaIcon(FontAwesomeIcons.pen,
                           color: Colors.white, size: 20),

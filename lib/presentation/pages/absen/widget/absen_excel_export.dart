@@ -14,81 +14,29 @@ class AbsenExcelExport extends StatelessWidget {
         vertical: MediaQuery.of(context).size.height * 0.0051,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 155,
-            height: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: primary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(9.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Start Date',
-                          style: TextStyle(
-                            color: putih,
-                            fontSize: 12,
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      Text('dd/mm/yyyy',
-                          style: TextStyle(
-                            color: putih,
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontWeight: FontWeight.w300,
-                          )),
-                    ],
-                  ),
-                  FaIcon(FontAwesomeIcons.calendar, color: putih, size: 20),
-                ],
-              ),
+          // Start Date
+          Expanded(
+            child: _buildDateCard(
+              title: 'Start Date',
+              subtitle: 'dd/mm/yyyy',
+              icon: FontAwesomeIcons.calendar,
             ),
           ),
-          Container(
-            width: 155,
-            height: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: primary,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(9.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('End Date',
-                          style: TextStyle(
-                            color: putih,
-                            fontSize: 12,
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      Text('dd/mm/yyyy',
-                          style: TextStyle(
-                            color: putih,
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontWeight: FontWeight.w300,
-                          )),
-                    ],
-                  ),
-                  FaIcon(FontAwesomeIcons.calendar, color: putih, size: 20),
-                ],
-              ),
+          const SizedBox(width: 8),
+
+          // End Date
+          Expanded(
+            child: _buildDateCard(
+              title: 'End Date',
+              subtitle: 'dd/mm/yyyy',
+              icon: FontAwesomeIcons.calendar,
             ),
           ),
-          Container(
+          const SizedBox(width: 8),
+
+          // Calculate Button
+          SizedBox(
             width: 48,
             height: 48,
             child: ElevatedButton(
@@ -100,10 +48,62 @@ class AbsenExcelExport extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const FaIcon(FontAwesomeIcons.download,
-                  size: 20, color: Colors.white),
+              child: const FaIcon(
+                FontAwesomeIcons.download,
+                size: 20,
+                color: Colors.white,
+              ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  /// Widget untuk kartu tanggal
+  Widget _buildDateCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+  }) {
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: primary,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Text bagian kiri
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: putih,
+                  fontSize: 12,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  color: putih,
+                  fontSize: 10,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+
+          // Icon bagian kanan
+          FaIcon(icon, color: putih, size: 20),
         ],
       ),
     );

@@ -9,7 +9,6 @@ import 'widgets/login_button.dart';
 
 class LoginPageSheet extends StatelessWidget {
   const LoginPageSheet({super.key});
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -22,11 +21,11 @@ class LoginPageSheet extends StatelessWidget {
         children: [
           ClipRRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
                 padding: const EdgeInsets.all(24),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(42, 0, 0, 0),
+                  color: Color.fromARGB(9, 0, 0, 0),
                 ),
               ),
             ),

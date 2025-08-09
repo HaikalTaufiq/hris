@@ -57,6 +57,8 @@ class _LemburInputState extends State<LemburInput> {
     _tanggalController.dispose();
     _jamMulaiController.dispose();
     _jamSelesaiController.dispose();
+    _jamMulaiController.dispose();
+    _jamSelesaiController.dispose();
     _deskripsiController.dispose();
     super.dispose();
   }
