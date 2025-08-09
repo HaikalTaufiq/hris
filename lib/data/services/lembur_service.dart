@@ -38,6 +38,7 @@ class LemburService {
     }
   }
 
+  // Fungsi mengajukan lembur
   static Future<bool> createLembur({
     required String tanggal,
     required String jamMulai,
@@ -97,7 +98,7 @@ class LemburService {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      return jsonResponse['message'] ?? 'Berhasil menyetujui lembur';
+      return jsonResponse['message'];
     } else {
       print('❌ Gagal menyetujui lembur: ${response.statusCode} ${response.body}');
       return null;
@@ -119,8 +120,7 @@ class LemburService {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      return jsonResponse['message'] ?? 'Berhasil menolak lembur';
-      
+      return jsonResponse['message'];
     } else {
       print('❌ Gagal menolak lembur: ${response.statusCode} ${response.body}');
       return null;

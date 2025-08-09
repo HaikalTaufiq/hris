@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom_dropdown.dart';
 import 'package:hr/components/custom_input.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/services/cuti_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiInput extends StatefulWidget {
   const CutiInput({super.key});
@@ -12,9 +15,27 @@ class CutiInput extends StatefulWidget {
 }
 
 class _CutiInputState extends State<CutiInput> {
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
+  final TextEditingController _tanggalSelesaiController = TextEditingController();
+  final TextEditingController _alasanController = TextEditingController();
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNamaUser();
+  }
+
+  void _loadNamaUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final nama = prefs.getString('nama') ?? '';
+    setState(() {
+      _namaController.text = nama;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +70,7 @@ class _CutiInputState extends State<CutiInput> {
           CustomInputField(
             label: "Nama",
             hint: "",
+            controller: _namaController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -56,13 +78,20 @@ class _CutiInputState extends State<CutiInput> {
           CustomDropDownField(
             label: 'Tipe Cuti',
             hint: '',
-            items: ['Cuti Tahunan', 'Cuti Sakit', 'Cuti'],
+            items: ['Tahunan', 'Cuti Sakit', 'Cuti Bersama', 'Izin'],
             labelStyle: labelStyle,
             textStyle: textStyle,
             dropdownColor: secondary,
             dropdownTextColor: putih,
             dropdownIconColor: putih,
             inputStyle: inputStyle,
+            onChanged: (String? val) {
+              if (val != null) {
+                setState(() {
+                  _tipeCutiController.text = val;
+                });
+              }
+            },
           ),
           CustomInputField(
             label: "Tanggal Mulai",
@@ -117,8 +146,9 @@ class _CutiInputState extends State<CutiInput> {
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Keterangan",
+            label: "Alasan",
             hint: "",
+            controller: _alasanController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -127,8 +157,24 @@ class _CutiInputState extends State<CutiInput> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                // TODO: handle submit
+              onPressed: () async {
+                final success = await CutiService.createCuti(
+                  nama: _namaController.text,
+                  tipeCuti: _tipeCutiController.text,
+                  tanggalMulai: _tanggalMulaiController.text,
+                  tanggalSelesai: _tanggalSelesaiController.text,
+                  alasan: _alasanController.text,
+                );
+                if (success) {
+                  if (context.mounted) {
+                    NotificationHelper.showSnackBar(context, 'Lembur berhasil diajukan');
+                    Navigator.of(context).pop();
+                  }
+                } else {
+                  if (context.mounted) {
+                    NotificationHelper.showSnackBar(context, 'Gagal mengajukan lembur', isSuccess: false);
+                  }
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,

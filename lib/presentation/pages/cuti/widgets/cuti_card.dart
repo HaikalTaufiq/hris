@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/models/cuti_model.dart';
 
 class CutiCard extends StatelessWidget {
-  const CutiCard({super.key});
+
+  final CutiModel cuti;
+  final VoidCallback onApprove;
+  final VoidCallback onDecline;
+
+  const CutiCard({
+    super.key,
+    required this.cuti,
+    required this.onApprove,
+    required this.onDecline,
+  });
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'disetujui':
+        return green;
+      case 'ditolak':
+        return red;
+      case 'pending':
+      default:
+        return yellow;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +58,7 @@ class CutiCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Elon Musk',
+                  '${cuti.user['nama']}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -49,18 +72,18 @@ class CutiCard extends StatelessWidget {
                       width: 15,
                       height: 15,
                       decoration: BoxDecoration(
-                        color: yellow,
+                        color: getStatusColor(cuti.status),
                         shape: BoxShape.circle,
                       ),
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'Pending',
+                      '${cuti.status}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: yellow,
+                        color: getStatusColor(cuti.status),
                       ),
                     ),
                   ],
@@ -69,7 +92,7 @@ class CutiCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Cuti Tahunan',
+              '${cuti.alasan}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -79,7 +102,7 @@ class CutiCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '14/08/2025 - 20/08/2025',
+              '${cuti.tanggal_mulai} - ${cuti.tanggal_selesai}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -91,7 +114,7 @@ class CutiCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Keterangan',
+                  '${cuti.alasan}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -104,43 +127,48 @@ class CutiCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 8),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.04,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: red,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(66, 0, 0, 0),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    'Decline',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      color: putih,
+                GestureDetector(
+                  onTap: onDecline,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.04,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
                     ),
-                  ),
+                    decoration: BoxDecoration(
+                      color: red,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(66, 0, 0, 0),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      'Decline',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        color: putih,
+                      ),
+                    ),
+                  )
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 8),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  decoration: BoxDecoration(
-                    color: green,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
+                GestureDetector(
+                  onTap: onApprove,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.02,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    decoration: BoxDecoration(
+                      color: green,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
                       BoxShadow(
                         color: const Color.fromARGB(66, 0, 0, 0),
                         blurRadius: 8,
@@ -156,6 +184,7 @@ class CutiCard extends StatelessWidget {
                       fontFamily: GoogleFonts.poppins().fontFamily,
                       color: putih,
                     ),
+                  ),
                   ),
                 ),
               ],

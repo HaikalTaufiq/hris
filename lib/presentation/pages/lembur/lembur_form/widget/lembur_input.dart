@@ -161,7 +161,7 @@ class _LemburInputState extends State<LemburInput> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async{
-                 final success = await LemburService.createLembur(
+                final success = await LemburService.createLembur(
                   tanggal: _tanggalController.text,
                   jamMulai: _jamMulaiController.text,
                   jamSelesai: _jamSelesaiController.text,
@@ -186,7 +186,6 @@ class _LemburInputState extends State<LemburInput> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-
             
               child: Text(
                 'Submit',
