@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/header.dart';
+import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_keluar_page.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_masuk_page.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_excel_export.dart';
@@ -30,7 +32,7 @@ class _AbsenPageState extends State<AbsenPage> {
           ],
         ),
 
-        // Floating Action Button
+// Floating Action Button
         Positioned(
           bottom: 16,
           right: 16,
@@ -40,11 +42,30 @@ class _AbsenPageState extends State<AbsenPage> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text("Pilih Aksi"),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    backgroundColor: AppColors.bg,
+                    title: Text(
+                      "Pilih Aksi",
+                      style: TextStyle(
+                        color: AppColors.putih,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.green,
+                            minimumSize: const Size(double.infinity, 48),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop(); // tutup dialog dulu
                             Navigator.of(context).push(
@@ -53,31 +74,52 @@ class _AbsenPageState extends State<AbsenPage> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.login),
-                          label: const Text("Check In"),
+                          icon: const Icon(
+                            Icons.login,
+                            color: Colors.white,
+                          ),
+                          label: Text("Check In",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily:
+                                      GoogleFonts.poppins().fontFamily)),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 16),
                         ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // tutup dialog dulu
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const AbsenKeluarPage(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.red,
+                              minimumSize: const Size(double.infinity, 48),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            );
-                          },
-                          icon: const Icon(Icons.logout),
-                          label: const Text("Check Out"),
-                        ),
+                              elevation: 2,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(); // tutup dialog dulu
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const AbsenKeluarPage(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.logout,
+                              color: Colors.white,
+                            ),
+                            label: Text("Check Out",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily))),
                       ],
                     ),
                   );
                 },
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.bg,
             shape: const CircleBorder(),
-            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
+            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),
         ),
       ],

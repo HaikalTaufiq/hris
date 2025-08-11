@@ -19,23 +19,23 @@ class _CutiInputState extends State<CutiInput> {
   @override
   Widget build(BuildContext context) {
     final inputStyle = InputDecoration(
-      hintStyle: const TextStyle(color: Colors.white70),
+      hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: AppColors.grey),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.putih),
       ),
     );
 
     final labelStyle = GoogleFonts.poppins(
       fontWeight: FontWeight.bold,
-      color: putih,
+      color: AppColors.putih,
       fontSize: 16,
     );
 
     final textStyle = GoogleFonts.poppins(
-      color: Colors.white,
+      color: AppColors.putih,
       fontSize: 14,
     );
     return Padding(
@@ -59,16 +59,16 @@ class _CutiInputState extends State<CutiInput> {
             items: ['Cuti Tahunan', 'Cuti Sakit', 'Cuti'],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
             label: "Tanggal Mulai",
             hint: "dd / mm / yyyy",
             controller: _tanggalMulaiController,
-            suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
+            suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
             onTapIcon: () async {
               final pickedDate = await showDatePicker(
                 context: context,
@@ -94,7 +94,7 @@ class _CutiInputState extends State<CutiInput> {
             label: "Tanggal Selesai",
             hint: "dd / mm / yyyy",
             controller: _tanggalSelesaiController,
-            suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
+            suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
             onTapIcon: () async {
               final pickedDate = await showDatePicker(
                 context: context,
@@ -131,7 +131,7 @@ class _CutiInputState extends State<CutiInput> {
                 // TODO: handle submit
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
+                backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -140,7 +140,7 @@ class _CutiInputState extends State<CutiInput> {
               child: Text(
                 'Submit',
                 style: GoogleFonts.poppins(
-                  color: putih,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

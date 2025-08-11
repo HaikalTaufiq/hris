@@ -25,7 +25,7 @@ class DashboardMenu extends StatelessWidget {
             "Office Services",
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.045,
-              color: putih,
+              color: AppColors.putih,
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontWeight: FontWeight.bold,
             ),
@@ -49,7 +49,7 @@ class DashboardMenu extends StatelessWidget {
                       height: iconSize * 1.8,
                       width: iconSize * 1.8,
                       decoration: BoxDecoration(
-                        color: secondary,
+                        color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
@@ -59,7 +59,8 @@ class DashboardMenu extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Icon(item.icon, size: iconSize, color: putih),
+                      child: Icon(item.icon,
+                          size: iconSize, color: AppColors.putih),
                     ),
                     const SizedBox(height: 6),
                     Flexible(
@@ -67,7 +68,7 @@ class DashboardMenu extends StatelessWidget {
                         item.label,
                         style: TextStyle(
                           fontSize: fontSize,
-                          color: putih,
+                          color: AppColors.putih,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
                         textAlign: TextAlign.center,

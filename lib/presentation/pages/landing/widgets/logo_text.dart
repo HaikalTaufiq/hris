@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/core/theme.dart';
 
 class LogoText extends StatelessWidget {
   final double topMargin;
@@ -18,7 +17,7 @@ class LogoText extends StatelessWidget {
           style: TextStyle(
             fontFamily: GoogleFonts.poppins().fontFamily,
             fontSize: MediaQuery.of(context).size.width * 0.15,
-            color: putih,
+            color: const Color.fromRGBO(224, 224, 224, 1),
             height: 1.2,
             letterSpacing: -2.5,
             fontWeight: FontWeight.w900,

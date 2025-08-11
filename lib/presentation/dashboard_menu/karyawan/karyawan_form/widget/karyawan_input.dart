@@ -28,23 +28,23 @@ class _KaryawanInputState extends State<KaryawanInput> {
   @override
   Widget build(BuildContext context) {
     final inputStyle = InputDecoration(
-      hintStyle: const TextStyle(color: Colors.white70),
+      hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: AppColors.grey),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.putih),
       ),
     );
 
     final labelStyle = GoogleFonts.poppins(
       fontWeight: FontWeight.bold,
-      color: putih,
+      color: AppColors.putih,
       fontSize: 16,
     );
 
     final textStyle = GoogleFonts.poppins(
-      color: Colors.white,
+      color: AppColors.putih,
       fontSize: 14,
     );
     return Padding(
@@ -68,9 +68,9 @@ class _KaryawanInputState extends State<KaryawanInput> {
             items: ['Staff', 'Supervisor', 'CEO'],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           CustomDropDownField(
@@ -79,9 +79,9 @@ class _KaryawanInputState extends State<KaryawanInput> {
             items: ['Super Admin', 'Admin Office', 'Technician'],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           CustomDropDownField(
@@ -90,9 +90,9 @@ class _KaryawanInputState extends State<KaryawanInput> {
             items: ['HRD', 'Accounting', 'Sales'],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
@@ -139,9 +139,9 @@ class _KaryawanInputState extends State<KaryawanInput> {
             ],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           const SizedBox(height: 5),
@@ -152,7 +152,7 @@ class _KaryawanInputState extends State<KaryawanInput> {
                 // TODO: handle submit
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
+                backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -161,7 +161,7 @@ class _KaryawanInputState extends State<KaryawanInput> {
               child: Text(
                 'Submit',
                 style: GoogleFonts.poppins(
-                  color: putih,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

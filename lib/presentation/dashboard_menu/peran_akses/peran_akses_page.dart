@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/core/header.dart';
+import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/dashboard_menu/peran_akses/peran_form/peran_form.dart';
 import 'package:hr/presentation/dashboard_menu/peran_akses/widgets/peran_search.dart';
 import 'package:hr/presentation/dashboard_menu/peran_akses/widgets/peran_tabel.dart';
@@ -38,9 +39,9 @@ class _PeranAksesPageState extends State<PeranAksesPage> {
                 ),
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.bg,
             shape: const CircleBorder(),
-            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
+            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),
         ),
       ],

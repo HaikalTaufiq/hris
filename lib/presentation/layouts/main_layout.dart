@@ -13,6 +13,7 @@ import 'package:hr/presentation/pages/absen/absen_page.dart';
 import 'package:hr/presentation/pages/cuti/cuti_page.dart';
 import 'package:hr/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:hr/presentation/pages/lembur/lembur_page.dart';
+import 'package:hr/presentation/pages/profile/profile_page.dart';
 import 'package:hr/presentation/pages/tugas/tugas_page.dart';
 
 class MainLayout extends StatefulWidget {
@@ -26,30 +27,45 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   late int _selectedIndex = 0;
+  bool isDarkMode = AppColors.isDarkMode;
+
+  void toggleTheme() {
+    setState(() {
+      isDarkMode = !isDarkMode;
+      AppColors.isDarkMode = isDarkMode; // update warna global jika ada
+    });
+  }
 
   final List<Widget> _pages = const [
-    DashboardPage(), // index 0
-    AbsenPage(), // index 1
-    TugasPage(), // index 2
-    LemburPage(), // index 3
-    CutiPage(), // index 4
+    DashboardPage(),
+    AbsenPage(),
+    TugasPage(),
+    LemburPage(),
+    CutiPage(),
   ];
 
-  final List<Widget> _externalPages = const [
-    KaryawanPage(), // index 0 di external
-    GajiPage(), // index 1 di external
-    DepartemenPage(), // index 2 di external
-    JabatanPage(), // index 3 di external
-    PeranAksesPage(), // index 4 di external
-    TentangPage(), // index 5 di external
-    LogPage(), // index 6 di external
-    PengaturanPage(), // index 7 di external
-  ];
+  List<Widget> get _externalPages {
+    return [
+      const KaryawanPage(),
+      const GajiPage(),
+      const DepartemenPage(),
+      const JabatanPage(),
+      const PeranAksesPage(),
+      const TentangPage(),
+      const LogPage(),
+      PengaturanPage(
+        isDarkMode: isDarkMode,
+        toggleTheme: toggleTheme,
+      ),
+      const ProfilePage(),
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex ?? 0;
+    isDarkMode = AppColors.isDarkMode;
   }
 
   void _onItemTapped(int index) {
@@ -62,7 +78,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     final bool isExternal = widget.externalPageIndex != null;
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: AppColors.bg,
       body: SafeArea(
         child: isExternal
             ? _externalPages[widget.externalPageIndex!]
@@ -72,7 +88,6 @@ class _MainLayoutState extends State<MainLayout> {
         selectedIndex: _selectedIndex,
         onItemTapped: (int index) {
           if (isExternal) {
-            // jika lagi di external, pindah ke halaman nav
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

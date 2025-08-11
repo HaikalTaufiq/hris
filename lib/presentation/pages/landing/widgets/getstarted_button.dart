@@ -42,7 +42,9 @@ class _GetStartedButtonState extends State<GetStartedButton> {
               width: width * 0.85,
               height: width * 0.14,
               decoration: BoxDecoration(
-                color: _isHovering ? blue.withOpacity(0.85) : blue,
+                color: _isHovering
+                    ? AppColors.blue.withOpacity(0.85)
+                    : AppColors.blue,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
@@ -58,7 +60,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
                   style: TextStyle(
                     fontFamily: GoogleFonts.poppins().fontFamily,
                     fontSize: width * 0.04,
-                    color: putih,
+                    color: AppColors.putih,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

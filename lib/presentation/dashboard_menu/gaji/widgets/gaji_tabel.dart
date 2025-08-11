@@ -41,13 +41,13 @@ class GajiTabel extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: primary,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              color: const Color.fromARGB(56, 5, 5, 5),
+              blurRadius: 5,
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -63,15 +63,15 @@ class GajiTabel extends StatelessWidget {
                     Checkbox(
                       value: false,
                       onChanged: (value) {},
-                      side: const BorderSide(color: Colors.white),
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
+                      side: BorderSide(color: AppColors.putih),
+                      checkColor: AppColors.hitam,
+                      activeColor: AppColors.putih,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '123', // No ID absen
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.putih,
                           fontFamily: GoogleFonts.poppins().fontFamily),
                     ),
                   ],
@@ -79,8 +79,8 @@ class GajiTabel extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.eye,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.eye,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -90,8 +90,8 @@ class GajiTabel extends StatelessWidget {
                         width: MediaQuery.of(context).size.width *
                             0.02), // jarak proporsional
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.trash,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.trash,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -99,8 +99,8 @@ class GajiTabel extends StatelessWidget {
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.pen,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.pen,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 16,
                       padding: EdgeInsets.zero,
@@ -115,7 +115,7 @@ class GajiTabel extends StatelessWidget {
               child: FractionallySizedBox(
                 widthFactor: 1.09, // lebih dari 1 = lebar penuh + lebih
                 child: Divider(
-                  color: Colors.grey,
+                  color: AppColors.secondary,
                   thickness: 1,
                 ),
               ),
@@ -130,7 +130,7 @@ class GajiTabel extends StatelessWidget {
                   const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
               itemCount: headers.length,
               separatorBuilder: (_, __) =>
-                  const Divider(color: Colors.grey, thickness: 1),
+                  Divider(color: AppColors.secondary, thickness: 1),
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -142,7 +142,7 @@ class GajiTabel extends StatelessWidget {
                         child: Text(
                           headers[index],
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontWeight: FontWeight.bold,
                               fontFamily: GoogleFonts.poppins().fontFamily),
                         ),
@@ -152,7 +152,7 @@ class GajiTabel extends StatelessWidget {
                         child: Text(
                           values[index],
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontFamily: GoogleFonts.poppins().fontFamily),
                         ),
                       ),

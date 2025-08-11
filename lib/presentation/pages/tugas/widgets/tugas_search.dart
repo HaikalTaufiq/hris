@@ -20,30 +20,33 @@ class TugasSearch extends StatelessWidget {
           // TextField Flexible
           Expanded(
               child: TextField(
-            cursorColor: Colors.white, // warna kursor
-            style: TextStyle(color: Colors.white), // warna teks yg diketik
+            cursorColor: AppColors.putih, // warna kursor
+            style: TextStyle(color: AppColors.putih), // warna teks yg diketik
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
 
               hintText: 'Search...',
               hintStyle: TextStyle(
-                  color: Colors.grey,
+                  color: AppColors.putih.withOpacity(0.5),
                   fontFamily:
                       GoogleFonts.poppins().fontFamily), // warna placeholder
               filled: true,
-              fillColor: Colors.black, // background textfield
+              fillColor: AppColors.primary, // background textfield
               suffixIcon: Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: FaIcon(FontAwesomeIcons.search, color: Colors.grey),
+                child: FaIcon(FontAwesomeIcons.magnifyingGlass,
+                    color: AppColors.putih.withOpacity(0.5)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(color: grey), // border normal
+                borderSide:
+                    BorderSide(color: AppColors.primary), // border normal
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(color: grey), // border saat hover/focus
+                borderSide: BorderSide(
+                    color: AppColors.grey), // border saat hover/focus
               ),
             ),
           )),
@@ -58,7 +61,7 @@ class TugasSearch extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                backgroundColor: secondary,
+                backgroundColor: AppColors.secondary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -68,10 +71,10 @@ class TugasSearch extends StatelessWidget {
                 transform: Matrix4.identity()
                   ..rotateZ(1.5708) // rotasi 90 derajat
                   ..scale(-1.0, 1.0), // reverse horizontal
-                child: const FaIcon(
+                child: FaIcon(
                   FontAwesomeIcons.arrowRightArrowLeft,
                   size: 20,
-                  color: Colors.white,
+                  color: AppColors.putih,
                 ),
               ),
             ),
@@ -87,15 +90,15 @@ class TugasSearch extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                backgroundColor: secondary,
+                backgroundColor: AppColors.secondary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const FaIcon(
+              child: FaIcon(
                 FontAwesomeIcons.sliders,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.putih,
               ),
             ),
           ),

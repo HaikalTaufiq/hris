@@ -39,23 +39,23 @@ class _InputOutState extends State<InputOut> {
   @override
   Widget build(BuildContext context) {
     final inputStyle = InputDecoration(
-      hintStyle: const TextStyle(color: Colors.white70),
+      hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: AppColors.grey),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.putih),
       ),
     );
 
     final labelStyle = GoogleFonts.poppins(
       fontWeight: FontWeight.bold,
-      color: putih,
+      color: AppColors.putih,
       fontSize: 16,
     );
 
     final textStyle = GoogleFonts.poppins(
-      color: Colors.white,
+      color: AppColors.putih,
       fontSize: 14,
     );
 
@@ -78,7 +78,7 @@ class _InputOutState extends State<InputOut> {
             label: "Tanggal",
             hint: "dd / mm / yyyy",
             controller: _tanggalController,
-            suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
+            suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
             onTapIcon: () async {
               final pickedDate = await showDatePicker(
                 context: context,
@@ -106,16 +106,16 @@ class _InputOutState extends State<InputOut> {
             items: ['Hadir', 'Telat', 'Izin'],
             labelStyle: labelStyle,
             textStyle: textStyle,
-            dropdownColor: secondary,
-            dropdownTextColor: putih,
-            dropdownIconColor: putih,
+            dropdownColor: AppColors.secondary,
+            dropdownTextColor: AppColors.putih,
+            dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
           CustomInputField(
             label: "Jam Keluar",
             hint: "--:--",
             controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
             onTapIcon: () => _onTapIcon(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -125,7 +125,7 @@ class _InputOutState extends State<InputOut> {
             label: "Lokasi",
             hint: "",
             controller: null,
-            suffixIcon: const Icon(Icons.location_history, color: Colors.white),
+            suffixIcon: Icon(Icons.location_history, color: AppColors.putih),
             onTapIcon: () {},
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -135,7 +135,7 @@ class _InputOutState extends State<InputOut> {
             label: "Photo",
             hint: "",
             controller: null,
-            suffixIcon: const Icon(Icons.camera_alt, color: Colors.white),
+            suffixIcon: Icon(Icons.camera_alt, color: AppColors.putih),
             onTapIcon: () {},
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -152,9 +152,11 @@ class _InputOutState extends State<InputOut> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // TODO: handle submit
+              },
               style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
+                backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -163,7 +165,7 @@ class _InputOutState extends State<InputOut> {
               child: Text(
                 'Submit',
                 style: GoogleFonts.poppins(
-                  color: putih,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

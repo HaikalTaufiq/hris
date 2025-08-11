@@ -43,15 +43,15 @@ class GajiCount extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                backgroundColor: secondary,
+                backgroundColor: AppColors.secondary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const FaIcon(
+              child: FaIcon(
                 FontAwesomeIcons.calculator,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.putih,
               ),
             ),
           ),
@@ -70,7 +70,7 @@ class GajiCount extends StatelessWidget {
       height: 48,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: primary,
+        color: AppColors.primary,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
       child: Row(
@@ -84,7 +84,7 @@ class GajiCount extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: putih,
+                  color: AppColors.putih,
                   fontSize: 12,
                   fontFamily: GoogleFonts.poppins().fontFamily,
                   fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class GajiCount extends StatelessWidget {
               Text(
                 subtitle,
                 style: TextStyle(
-                  color: putih,
+                  color: AppColors.putih,
                   fontSize: 10,
                   fontFamily: GoogleFonts.poppins().fontFamily,
                   fontWeight: FontWeight.w300,
@@ -103,7 +103,7 @@ class GajiCount extends StatelessWidget {
           ),
 
           // Icon bagian kanan
-          FaIcon(icon, color: putih, size: 20),
+          FaIcon(icon, color: AppColors.putih, size: 20),
         ],
       ),
     );

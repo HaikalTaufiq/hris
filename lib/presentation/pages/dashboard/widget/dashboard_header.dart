@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/presentation/layouts/main_layout.dart';
 
 class DashboardHeader extends StatefulWidget {
   const DashboardHeader({super.key});
@@ -63,11 +64,11 @@ class _DashboardHeaderState extends State<DashboardHeader>
                     width: 200,
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: hitam,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black26,
+                          color: AppColors.primary,
                           blurRadius: 10,
                           offset: Offset(0, 4),
                         ),
@@ -80,9 +81,21 @@ class _DashboardHeaderState extends State<DashboardHeader>
                           _hideDropdown();
                         }),
                         _buildDropdownItem("Profile", Icons.person, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => MainLayout(externalPageIndex: 8),
+                            ),
+                          );
                           _hideDropdown();
                         }),
                         _buildDropdownItem("Settings", Icons.settings, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => MainLayout(externalPageIndex: 7),
+                            ),
+                          );
                           _hideDropdown();
                         }),
                         _buildDropdownItem("Logout", Icons.logout, () {
@@ -117,10 +130,10 @@ class _DashboardHeaderState extends State<DashboardHeader>
 
   Widget _buildDropdownItem(String text, IconData icon, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.white),
+      leading: Icon(icon, color: AppColors.putih),
       title: Text(text,
           style: TextStyle(
-              color: Colors.white,
+              color: AppColors.putih,
               fontFamily: GoogleFonts.poppins().fontFamily)),
       onTap: onTap,
     );
@@ -164,11 +177,21 @@ class _DashboardHeaderState extends State<DashboardHeader>
           children: [
             Row(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: putih),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MainLayout(externalPageIndex: 8),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: AppColors.putih),
+                  ),
                 ),
                 SizedBox(width: 16),
                 Column(
@@ -179,14 +202,14 @@ class _DashboardHeaderState extends State<DashboardHeader>
                             fontSize: 24,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.bold,
-                            color: putih)),
+                            color: AppColors.putih)),
                     Text('Super Admin',
                         style: TextStyle(
                             fontSize: 14,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             height: 0.8,
                             fontWeight: FontWeight.w400,
-                            color: const Color.fromARGB(172, 224, 224, 224))),
+                            color: AppColors.putih.withOpacity(0.5))),
                   ],
                 ),
               ],
@@ -195,7 +218,7 @@ class _DashboardHeaderState extends State<DashboardHeader>
               key: _menuKey,
               onTap: _toggleDropdown,
               child: FaIcon(FontAwesomeIcons.barsStaggered,
-                  color: putih, size: 25),
+                  color: AppColors.putih, size: 25),
             ),
           ],
         ),

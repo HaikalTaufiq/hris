@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/core/theme.dart';
 
 class SubtitleDescription extends StatelessWidget {
   final double startFrom;
@@ -27,7 +26,7 @@ class SubtitleDescription extends StatelessWidget {
               style: TextStyle(
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 fontSize: width * 0.09,
-                color: putih,
+                color: const Color.fromRGBO(224, 224, 224, 1),
                 shadows: [
                   Shadow(
                     color: Colors.black.withOpacity(0.5),

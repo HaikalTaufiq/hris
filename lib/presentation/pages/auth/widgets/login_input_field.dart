@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/core/theme.dart';
 
 class LoginInputField extends StatelessWidget {
   final String label;
@@ -27,7 +26,7 @@ class LoginInputField extends StatelessWidget {
             style: TextStyle(
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontSize: 15,
-              color: putih,
+              color: const Color.fromRGBO(224, 224, 224, 1),
               fontWeight: FontWeight.w400,
             ),
           ),

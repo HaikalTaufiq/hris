@@ -17,7 +17,7 @@ class AttendanceChart extends StatelessWidget {
             'Monthly Attendance',
             style: TextStyle(
               fontSize: 18,
-              color: putih,
+              color: AppColors.putih,
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontWeight: FontWeight.bold,
             ),
@@ -29,7 +29,7 @@ class AttendanceChart extends StatelessWidget {
             height: 220,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: primary,
+              color: AppColors.primary,
               borderRadius: BorderRadius.circular(12),
             ),
             child: LineChart(
@@ -47,7 +47,8 @@ class AttendanceChart extends StatelessWidget {
                       interval: 1,
                       getTitlesWidget: (value, meta) => Text(
                         value.toInt().toString(),
-                        style: GoogleFonts.poppins(color: putih, fontSize: 10),
+                        style: GoogleFonts.poppins(
+                            color: AppColors.putih, fontSize: 10),
                       ),
                     ),
                   ),
@@ -67,7 +68,8 @@ class AttendanceChart extends StatelessWidget {
                         ];
                         return Text(
                           labels[value.toInt()],
-                          style: TextStyle(color: putih, fontSize: 10),
+                          style:
+                              TextStyle(color: AppColors.putih, fontSize: 10),
                         );
                       },
                     ),
@@ -167,7 +169,7 @@ class _LegendItem extends StatelessWidget {
             height: 12,
             decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 6),
-        Text(label, style: TextStyle(color: Colors.white, fontSize: 12)),
+        Text(label, style: TextStyle(color: AppColors.putih, fontSize: 12)),
       ],
     );
   }

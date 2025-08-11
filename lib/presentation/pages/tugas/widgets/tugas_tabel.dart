@@ -16,7 +16,7 @@ class TugasTabel extends StatelessWidget {
   ];
 
   final List<String> values = const [
-    "Perbaikan Tesla",
+    "Perbaikan Tesla, Perbaikan Tesla, Perbaikan Tesla, Perbaikan Tesla",
     "Elon Musk",
     "20/10/2025",
     "08 : 00",
@@ -24,8 +24,59 @@ class TugasTabel extends StatelessWidget {
     "2",
     "N / A",
   ];
-  Widget buildValueCell(String value, int index) {
-    // Index ke-5 adalah status: 0, 1, 2
+  Widget buildValueCell(BuildContext context, String value, int index) {
+    if (index == 0) {
+      String displayText =
+          value.length > 10 ? value.substring(0, 15) + "..." : value;
+
+      return GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: AppColors.primary, // background sesuai tema
+              title: Text(
+                "Detail Judul",
+                style: TextStyle(
+                  color: AppColors.putih, // warna teks judul tema kamu
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              content: Text(
+                value,
+                style: TextStyle(
+                  color: AppColors.putih, // warna teks konten sesuai tema
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontSize: 16,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.putih, // warna teks tombol
+                  ),
+                  child: const Text("Tutup"),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+        },
+        child: Text(
+          displayText,
+          style: TextStyle(
+            color: AppColors.putih,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            decoration: TextDecoration.underline,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
+
+    // index 5 status tetap sama
     if (index == 5) {
       String statusText;
       Color bgColor;
@@ -79,11 +130,10 @@ class TugasTabel extends StatelessWidget {
       );
     }
 
-    // Untuk value biasa
     return Text(
       value,
       style: TextStyle(
-        color: Colors.white,
+        color: AppColors.putih,
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
     );
@@ -98,13 +148,13 @@ class TugasTabel extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: primary,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              color: const Color.fromARGB(56, 5, 5, 5),
+              blurRadius: 5,
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -120,15 +170,15 @@ class TugasTabel extends StatelessWidget {
                     Checkbox(
                       value: false,
                       onChanged: (value) {},
-                      side: const BorderSide(color: Colors.white),
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
+                      side: BorderSide(color: AppColors.putih),
+                      checkColor: AppColors.hitam,
+                      activeColor: AppColors.putih,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '123', // No ID absen
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.putih,
                           fontFamily: GoogleFonts.poppins().fontFamily),
                     ),
                   ],
@@ -136,8 +186,8 @@ class TugasTabel extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.eye,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.eye,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -147,8 +197,8 @@ class TugasTabel extends StatelessWidget {
                         width: MediaQuery.of(context).size.width *
                             0.02), // jarak proporsional
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.trash,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.trash,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -156,8 +206,8 @@ class TugasTabel extends StatelessWidget {
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.pen,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.pen,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 16,
                       padding: EdgeInsets.zero,
@@ -187,7 +237,7 @@ class TugasTabel extends StatelessWidget {
                   const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
               itemCount: headers.length,
               separatorBuilder: (_, __) =>
-                  const Divider(color: Colors.grey, thickness: 1),
+                  Divider(color: Colors.grey, thickness: 1),
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -199,14 +249,14 @@ class TugasTabel extends StatelessWidget {
                         child: Text(
                           headers[index],
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontWeight: FontWeight.bold,
                               fontFamily: GoogleFonts.poppins().fontFamily),
                         ),
                       ),
                       Expanded(
                         flex: 3,
-                        child: buildValueCell(values[index], index),
+                        child: buildValueCell(context, values[index], index),
                       ),
                     ],
                   ),

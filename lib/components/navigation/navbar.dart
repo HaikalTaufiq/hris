@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hr/core/theme.dart';
 
 class NavBar extends StatefulWidget {
   final int selectedIndex;
@@ -26,9 +25,9 @@ class _NavBarState extends State<NavBar> {
           hoverColor: Colors.transparent,
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
             elevation: 0,
-            backgroundColor: hitam,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: putih,
+            backgroundColor: Color(0xFF040404),
+            selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+            unselectedItemColor: Color.fromARGB(255, 255, 255, 255),
             type: BottomNavigationBarType.fixed,
           ),
         ),

@@ -14,24 +14,24 @@ class _AbsenKeluarPageState extends State<AbsenKeluarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
         title: Text(
           'Form Absen Keluar',
           style: TextStyle(
-              color: Colors.white,
+              color: AppColors.putih,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               fontFamily: GoogleFonts.poppins().fontFamily),
         ),
-        backgroundColor: bg,
+        backgroundColor: AppColors.bg,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios), // atau CupertinoIcons.back
-          color: Colors.white,
+          color: AppColors.putih,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        iconTheme: const IconThemeData(
-          color: Colors.white, // warna ikon back
+        iconTheme: IconThemeData(
+          color: AppColors.putih, // warna ikon back
         ),
       ),
       body: ListView(children: [

@@ -5,7 +5,9 @@ import 'widgets/logo_text.dart';
 import 'widgets/subtitle_desc.dart';
 
 class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+  const LandingPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

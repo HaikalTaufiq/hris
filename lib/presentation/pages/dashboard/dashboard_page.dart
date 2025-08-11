@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/data/model/dahsboard_menu_item.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 import 'package:hr/presentation/pages/dashboard/widget/dashboard_card.dart';
@@ -27,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
           items: [
             DashboardMenuItem(
               label: "Karyawan",
-              icon: Icons.people_alt,
+              icon: FontAwesomeIcons.userGroup,
               onTap: () {
                 Navigator.push(
                   context,
@@ -40,7 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Gaji",
-              icon: Icons.attach_money,
+              icon: FontAwesomeIcons.moneyBill,
               onTap: () {
                 Navigator.push(
                   context,
@@ -52,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Departemen",
-              icon: Icons.location_city,
+              icon: FontAwesomeIcons.landmark,
               onTap: () {
                 Navigator.push(
                   context,
@@ -64,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Jabatan",
-              icon: Icons.stairs,
+              icon: FontAwesomeIcons.sitemap,
               onTap: () {
                 Navigator.push(
                   context,
@@ -76,7 +77,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Hak Akses",
-              icon: Icons.accessibility,
+              icon: FontAwesomeIcons.fileShield,
               onTap: () {
                 Navigator.push(
                   context,
@@ -88,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Tentang",
-              icon: Icons.info,
+              icon: FontAwesomeIcons.infoCircle,
               onTap: () {
                 Navigator.push(
                   context,
@@ -100,7 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Log Aktivitas",
-              icon: Icons.history,
+              icon: FontAwesomeIcons.history,
               onTap: () {
                 Navigator.push(
                   context,
@@ -112,7 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Pengaturan",
-              icon: Icons.settings,
+              icon: FontAwesomeIcons.gear,
               onTap: () {
                 Navigator.push(
                   context,

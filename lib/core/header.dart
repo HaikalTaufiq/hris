@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 
 class Header extends StatelessWidget {
@@ -18,7 +19,8 @@ class Header extends StatelessWidget {
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
-          color: putih,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+          color: AppColors.putih,
         ),
       ),
     );

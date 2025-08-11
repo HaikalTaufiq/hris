@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/core/theme.dart';
+
 import 'package:hr/presentation/layouts/main_layout.dart';
 
 class LoginButton extends StatelessWidget {
@@ -20,7 +20,7 @@ class LoginButton extends StatelessWidget {
         width: screenWidth * 0.85,
         height: 60,
         decoration: BoxDecoration(
-          color: blue,
+          color: const Color.fromRGBO(19, 33, 75, 1),
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
@@ -36,7 +36,7 @@ class LoginButton extends StatelessWidget {
             style: TextStyle(
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontSize: 14,
-              color: putih,
+              color: const Color.fromRGBO(224, 224, 224, 1),
               fontWeight: FontWeight.w400,
             ),
           ),

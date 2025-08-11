@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/core/header.dart';
+import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_form.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_search.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_tabel.dart';
@@ -39,9 +40,9 @@ class _TugasPageState extends State<TugasPage> {
                 ),
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.bg,
             shape: const CircleBorder(),
-            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
+            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),
         ),
       ],

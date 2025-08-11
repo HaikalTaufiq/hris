@@ -38,13 +38,13 @@ class JabatanTabel extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: primary,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              color: const Color.fromARGB(56, 5, 5, 5),
+              blurRadius: 5,
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -62,7 +62,7 @@ class JabatanTabel extends StatelessWidget {
                       child: Text(
                         'Nama Jabatan', // No ID absen
                         style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.putih,
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             fontFamily: GoogleFonts.poppins().fontFamily),
@@ -75,7 +75,7 @@ class JabatanTabel extends StatelessWidget {
                   child: Text(
                     'Aksi', // No ID absen
                     style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.putih,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         fontFamily: GoogleFonts.poppins().fontFamily),
@@ -88,7 +88,7 @@ class JabatanTabel extends StatelessWidget {
               child: FractionallySizedBox(
                 widthFactor: 1.09, // lebih dari 1 = lebar penuh + lebih
                 child: Divider(
-                  color: Colors.grey,
+                  color: AppColors.secondary,
                   thickness: 1,
                 ),
               ),
@@ -103,7 +103,7 @@ class JabatanTabel extends StatelessWidget {
                   const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
               itemCount: headers.length,
               separatorBuilder: (_, __) =>
-                  const Divider(color: Colors.grey, thickness: 1),
+                  Divider(color: AppColors.secondary, thickness: 1),
               itemBuilder: (context, index) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -115,7 +115,7 @@ class JabatanTabel extends StatelessWidget {
                           child: Text(
                             headers[index],
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontWeight: FontWeight.w400,
                               fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
@@ -132,9 +132,9 @@ class JabatanTabel extends StatelessWidget {
                                   onTap: () {
                                     // Aksi delete
                                   },
-                                  child: const FaIcon(
+                                  child: FaIcon(
                                     FontAwesomeIcons.trash,
-                                    color: Colors.white,
+                                    color: AppColors.putih,
                                     size: 15,
                                   ),
                                 ),
@@ -143,9 +143,9 @@ class JabatanTabel extends StatelessWidget {
                                   onTap: () {
                                     // Aksi edit
                                   },
-                                  child: const FaIcon(
+                                  child: FaIcon(
                                     FontAwesomeIcons.pen,
-                                    color: Colors.white,
+                                    color: AppColors.putih,
                                     size: 15,
                                   ),
                                 ),

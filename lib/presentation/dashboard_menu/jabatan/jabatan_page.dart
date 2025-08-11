@@ -36,7 +36,7 @@ class _JabatanPageState extends State<JabatanPage> {
                 context: context,
                 builder: (context) {
                   return Dialog(
-                    backgroundColor: primary, // Latar belakang custom
+                    backgroundColor: AppColors.primary, // Latar belakang custom
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
                     child: Padding(
@@ -48,7 +48,7 @@ class _JabatanPageState extends State<JabatanPage> {
                             'Tambah Jabatan',
                             style: TextStyle(
                               fontSize: 20,
-                              color: putih,
+                              color: AppColors.putih,
                               fontWeight: FontWeight.w600,
                               fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
@@ -56,17 +56,17 @@ class _JabatanPageState extends State<JabatanPage> {
                           const SizedBox(height: 24),
                           TextField(
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: putih),
-                            cursorColor: putih,
+                            style: TextStyle(color: AppColors.putih),
+                            cursorColor: AppColors.putih,
                             decoration: InputDecoration(
                               hintText: 'Nama Jabatan',
                               hintStyle: TextStyle(
-                                color: const Color.fromARGB(164, 189, 189, 189),
+                                color: AppColors.putih,
                                 fontFamily: GoogleFonts.poppins().fontFamily,
                                 fontSize: 14,
                               ),
                               filled: true,
-                              fillColor: secondary,
+                              fillColor: AppColors.secondary,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide.none,
@@ -83,7 +83,7 @@ class _JabatanPageState extends State<JabatanPage> {
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: grey,
+                                  backgroundColor: AppColors.grey,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -99,7 +99,7 @@ class _JabatanPageState extends State<JabatanPage> {
                                   child: Text(
                                     'Cancel',
                                     style: TextStyle(
-                                      color: putih,
+                                      color: Colors.white,
                                       fontFamily:
                                           GoogleFonts.poppins().fontFamily,
                                     ),
@@ -109,7 +109,7 @@ class _JabatanPageState extends State<JabatanPage> {
                               const SizedBox(width: 12), // spasi antar tombol
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: blue,
+                                  backgroundColor: AppColors.blue,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -129,7 +129,7 @@ class _JabatanPageState extends State<JabatanPage> {
                                   child: Text(
                                     'Submit',
                                     style: TextStyle(
-                                      color: putih,
+                                      color: Colors.white,
                                       fontFamily:
                                           GoogleFonts.poppins().fontFamily,
                                     ),
@@ -145,9 +145,9 @@ class _JabatanPageState extends State<JabatanPage> {
                 },
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.bg,
             shape: const CircleBorder(),
-            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
+            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),
         )
       ],

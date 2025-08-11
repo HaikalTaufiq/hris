@@ -37,13 +37,13 @@ class AbsenTabel extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: primary,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              color: const Color.fromARGB(56, 5, 5, 5),
+              blurRadius: 5,
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -59,7 +59,7 @@ class AbsenTabel extends StatelessWidget {
                     Checkbox(
                       value: false,
                       onChanged: (value) {},
-                      side: const BorderSide(color: Colors.white),
+                      side: BorderSide(color: AppColors.putih),
                       checkColor: Colors.black,
                       activeColor: Colors.white,
                     ),
@@ -67,7 +67,7 @@ class AbsenTabel extends StatelessWidget {
                     Text(
                       '123', // No ID absen
                       style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.putih,
                           fontFamily: GoogleFonts.poppins().fontFamily),
                     ),
                   ],
@@ -75,8 +75,8 @@ class AbsenTabel extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.eye,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.eye,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -86,8 +86,8 @@ class AbsenTabel extends StatelessWidget {
                         width: MediaQuery.of(context).size.width *
                             0.02), // jarak proporsional
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.trash,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.trash,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 20,
                       padding: EdgeInsets.zero,
@@ -95,8 +95,8 @@ class AbsenTabel extends StatelessWidget {
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.pen,
-                          color: Colors.white, size: 20),
+                      icon: FaIcon(FontAwesomeIcons.pen,
+                          color: AppColors.putih, size: 20),
                       onPressed: () {},
                       iconSize: 16,
                       padding: EdgeInsets.zero,
@@ -138,7 +138,7 @@ class AbsenTabel extends StatelessWidget {
                         child: Text(
                           headers[index],
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontWeight: FontWeight.bold,
                               fontFamily: GoogleFonts.poppins().fontFamily),
                         ),
@@ -148,7 +148,7 @@ class AbsenTabel extends StatelessWidget {
                         child: Text(
                           values[index],
                           style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontFamily: GoogleFonts.poppins().fontFamily),
                         ),
                       ),

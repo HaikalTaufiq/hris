@@ -27,7 +27,7 @@ class _TentangPageState extends State<TentangPage> {
               width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: putih,
+                color: AppColors.putih,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -40,7 +40,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "PT Kreatif System Indonesia",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -48,7 +48,7 @@ class _TentangPageState extends State<TentangPage> {
                         ),
                         FaIcon(
                           FontAwesomeIcons.pen,
-                          color: bg,
+                          color: AppColors.bg,
                           size: 15,
                         ),
                       ],
@@ -58,7 +58,7 @@ class _TentangPageState extends State<TentangPage> {
                       child: Text(
                         "Ruko, Jl. Palm Spring No.B3 No 15, Taman Baloi, Batam Kota, Batam City, Riau Islands",
                         style: TextStyle(
-                          color: bg,
+                          color: AppColors.bg,
                           fontSize: 12,
                           fontWeight: FontWeight.w200,
                           fontFamily: GoogleFonts.poppins().fontFamily,
@@ -74,7 +74,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "About this Company",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -83,7 +83,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "PT. KREATIF SYSTEM INDONESIA (KREASII), is a company engaged in Information Technology (IT) that serves small, medium and large companies, both private and government as well as various other industries. As a service company engaged in IT, we provide trusted service and consulting solutions to companies that use our services, where we always prioritize quality and trust and the best service for a harmonious and sustainable business continuity.",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 11,
                             fontWeight: FontWeight.w200,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -100,7 +100,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "Our Service",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -109,7 +109,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "CCTV, HDCVI, Audio Paging, IP Camera, PBAX System",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 12,
                             fontWeight: FontWeight.w200,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -126,7 +126,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "Total Employee",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -135,7 +135,7 @@ class _TentangPageState extends State<TentangPage> {
                         Text(
                           "30",
                           style: TextStyle(
-                            color: bg,
+                            color: AppColors.bg,
                             fontSize: 12,
                             fontWeight: FontWeight.w200,
                             fontFamily: GoogleFonts.poppins().fontFamily,

@@ -40,7 +40,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                   final screenWidth = MediaQuery.of(context).size.width;
 
                   return Dialog(
-                    backgroundColor: primary,
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -59,7 +59,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                               'Tambah Department',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: putih,
+                                color: AppColors.putih,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
@@ -67,18 +67,18 @@ class _DepartemenPageState extends State<DepartemenPage> {
                             const SizedBox(height: 24),
                             TextField(
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: putih),
-                              cursorColor: putih,
+                              style: TextStyle(color: AppColors.putih),
+                              cursorColor: AppColors.putih,
                               decoration: InputDecoration(
                                 hintText: 'Nama Department',
                                 hintStyle: TextStyle(
-                                  color:
-                                      const Color.fromARGB(164, 189, 189, 189),
-                                  fontFamily: GoogleFonts.poppins().fontFamily,
-                                  fontSize: 14,
-                                ),
+                                    color: AppColors.putih,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w100),
                                 filled: true,
-                                fillColor: secondary,
+                                fillColor: AppColors.secondary,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   borderSide: BorderSide.none,
@@ -96,7 +96,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: grey,
+                                      backgroundColor: AppColors.grey,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -111,7 +111,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                                       child: Text(
                                         'Cancel',
                                         style: TextStyle(
-                                          color: putih,
+                                          color: Colors.white,
                                           fontFamily:
                                               GoogleFonts.poppins().fontFamily,
                                         ),
@@ -123,7 +123,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: blue,
+                                      backgroundColor: AppColors.blue,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -144,7 +144,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                                       child: Text(
                                         'Submit',
                                         style: TextStyle(
-                                          color: putih,
+                                          color: Colors.white,
                                           fontFamily:
                                               GoogleFonts.poppins().fontFamily,
                                         ),
@@ -162,9 +162,9 @@ class _DepartemenPageState extends State<DepartemenPage> {
                 },
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.bg,
             shape: const CircleBorder(),
-            child: const FaIcon(FontAwesomeIcons.plus, color: Colors.white),
+            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),
         )
       ],

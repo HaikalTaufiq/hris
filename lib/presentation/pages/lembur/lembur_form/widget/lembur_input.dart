@@ -40,23 +40,23 @@ class _LemburInputState extends State<LemburInput> {
   @override
   Widget build(BuildContext context) {
     final inputStyle = InputDecoration(
-      hintStyle: const TextStyle(color: Colors.white70),
+      hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: AppColors.grey),
       ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.putih),
       ),
     );
 
     final labelStyle = GoogleFonts.poppins(
       fontWeight: FontWeight.bold,
-      color: putih,
+      color: AppColors.putih,
       fontSize: 16,
     );
 
     final textStyle = GoogleFonts.poppins(
-      color: Colors.white,
+      color: AppColors.putih,
       fontSize: 14,
     );
     return Padding(
@@ -78,7 +78,7 @@ class _LemburInputState extends State<LemburInput> {
             label: "Tanggal Lembur",
             hint: "dd / mm / yyyy",
             controller: _tanggalController,
-            suffixIcon: const Icon(Icons.calendar_today, color: Colors.white),
+            suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
             onTapIcon: () async {
               final pickedDate = await showDatePicker(
                 context: context,
@@ -104,7 +104,7 @@ class _LemburInputState extends State<LemburInput> {
             label: "Jam Mulai",
             hint: "--:--",
             controller: _jamMulaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
             onTapIcon: () => _onTapIcon(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -114,7 +114,7 @@ class _LemburInputState extends State<LemburInput> {
             label: "Jam Selesai",
             hint: "--:--",
             controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
             onTapIcon: () => _onTapIcon(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -135,7 +135,7 @@ class _LemburInputState extends State<LemburInput> {
                 // TODO: handle submit
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
+                backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -144,7 +144,7 @@ class _LemburInputState extends State<LemburInput> {
               child: Text(
                 'Submit',
                 style: GoogleFonts.poppins(
-                  color: putih,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
