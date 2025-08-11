@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiService {
-  static const String baseUrl = 'http://localhost:8000/api/cuti';
+  static const String baseUrl = 'http://192.168.20.50:8000/api/cuti';
 
   // Ambil token dari SharedPreferences
   static Future<String?> _getToken() async {

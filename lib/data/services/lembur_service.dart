@@ -7,7 +7,7 @@ import 'package:hr/data/models/lembur_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LemburService {
-  static const String baseUrl = 'http://localhost:8000/api/lembur';
+  static const String baseUrl = 'http://192.168.20.50:8000/api/lembur';
 
   // Ambil token dari SharedPreferences
   static Future<String?> _getToken() async {
