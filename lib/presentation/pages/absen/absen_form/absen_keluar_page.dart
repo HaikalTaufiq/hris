@@ -17,7 +17,7 @@ class _AbsenKeluarPageState extends State<AbsenKeluarPage> {
       backgroundColor: AppColors.bg,
       appBar: AppBar(
         title: Text(
-          'Form Absen Keluar',
+          'Absen Keluar',
           style: TextStyle(
               color: AppColors.putih,
               fontSize: 22,

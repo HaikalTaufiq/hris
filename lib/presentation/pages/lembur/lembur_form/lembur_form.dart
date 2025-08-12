@@ -12,7 +12,7 @@ class LemburForm extends StatelessWidget {
       backgroundColor: AppColors.bg,
       appBar: AppBar(
         title: Text(
-          'Form Pengajuan Lembur',
+          'Pengajuan Lembur',
           style: TextStyle(
               color: AppColors.putih,
               fontSize: 22,

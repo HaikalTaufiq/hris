@@ -12,7 +12,7 @@ class CutiForm extends StatelessWidget {
       backgroundColor: AppColors.bg,
       appBar: AppBar(
         title: Text(
-          'Form Pengajuan Cuti',
+          'Pengajuan Cuti',
           style: TextStyle(
               color: AppColors.putih,
               fontSize: 22,
