@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/services/auth_service.dart';
-import 'package:hr/data/models/user_model.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 

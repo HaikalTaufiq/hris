@@ -2,7 +2,7 @@
 
 class DepartemenModel {
   final String id;
-  final String nama_departemen;  // ini harus sama dengan JSON
+  final String nama_departemen;
 
   DepartemenModel({
     required this.id,
@@ -19,7 +19,7 @@ class DepartemenModel {
 
 class UserModel {
   final String id;
-  final String nama;   // ini nama user, bukan nama_departemen
+  final String nama;   
   final DepartemenModel? departemen;
 
   UserModel({

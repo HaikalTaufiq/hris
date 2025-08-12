@@ -1,10 +1,10 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-
 class CustomDropDownField extends StatefulWidget {
   final String label;
   final String hint;
   final List<String> items;
+  final String? value; // ✅ Tambahan
   final Function(String?)? onChanged;
   final String? Function(String?)? validator;
   final TextStyle labelStyle;
@@ -20,6 +20,7 @@ class CustomDropDownField extends StatefulWidget {
     required this.label,
     required this.hint,
     required this.items,
+    this.value, 
     this.onChanged,
     this.validator,
     required this.labelStyle,
@@ -42,6 +43,7 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
       label: widget.label,
       hint: widget.hint,
       items: widget.items,
+      value: widget.value, 
       onChanged: widget.onChanged,
       validator: widget.validator,
       labelStyle: widget.labelStyle,
@@ -59,6 +61,7 @@ class _DropDownFieldBody extends StatefulWidget {
   final String label;
   final String hint;
   final List<String> items;
+  final String? value; 
   final Function(String?)? onChanged;
   final String? Function(String?)? validator;
   final TextStyle labelStyle;
@@ -73,6 +76,7 @@ class _DropDownFieldBody extends StatefulWidget {
     required this.label,
     required this.hint,
     required this.items,
+    this.value,
     this.onChanged,
     this.validator,
     required this.labelStyle,
@@ -90,6 +94,20 @@ class _DropDownFieldBody extends StatefulWidget {
 
 class _DropDownFieldBodyState extends State<_DropDownFieldBody> {
   String? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.value; 
+  }
+
+  @override
+  void didUpdateWidget(covariant _DropDownFieldBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      selectedValue = widget.value; 
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +143,7 @@ class _DropDownFieldBodyState extends State<_DropDownFieldBody> {
                   ),
                 )
                 .toList(),
-            value: selectedValue,
+            value: selectedValue, 
             onChanged: (value) {
               setState(() {
                 selectedValue = value;

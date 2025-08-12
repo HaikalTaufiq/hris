@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiService {
-  static const String baseUrl = 'http://192.168.20.50:8000/api/cuti';
+  static const String baseUrl = 'http://192.168.20.50:8000';
 
   // Ambil token dari SharedPreferences
   static Future<String?> _getToken() async {
@@ -22,7 +22,7 @@ class CutiService {
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.get(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/api/cuti'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -39,6 +39,7 @@ class CutiService {
     }
   }
   
+  // Buat cuti
   static Future<bool> createCuti({
     required String nama,
     required String tipeCuti,
@@ -55,7 +56,7 @@ class CutiService {
       final formattedSelesai = DateFormat('dd / MM / yyyy').parse(tanggalSelesai).toIso8601String().split('T')[0];
 
       final response = await http.post(
-        Uri.parse(baseUrl),
+        Uri.parse('$baseUrl/api/cuti'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -88,7 +89,7 @@ class CutiService {
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/approve'),
+      Uri.parse('$baseUrl/api/cuti/$id/approve'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -109,7 +110,7 @@ class CutiService {
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/decline'),
+      Uri.parse('$baseUrl/api/cuti/$id/decline'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -117,7 +118,7 @@ class CutiService {
     );
 
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
+      json.decode(response.body);
       return json.decode(response.body)['message'];
     } else {
       print('Gagal menolak cuti: ${response.statusCode} ${response.body}');
