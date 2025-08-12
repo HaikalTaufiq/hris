@@ -93,7 +93,7 @@ class _TugasPageState extends State<TugasPage> {
                 });
               }
             },
-            backgroundColor: AppColors.bg,
+            backgroundColor: AppColors.secondary,
             shape: const CircleBorder(),
             child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),

@@ -126,7 +126,7 @@ class _AbsenPageState extends State<AbsenPage> {
                 },
               );
             },
-            backgroundColor: AppColors.bg,
+            backgroundColor: AppColors.secondary,
             shape: const CircleBorder(),
             child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),

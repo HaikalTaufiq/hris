@@ -170,7 +170,7 @@ class _DepartemenPageState extends State<DepartemenPage> {
                 },
               );
             },
-            backgroundColor: AppColors.bg,
+            backgroundColor: AppColors.secondary,
             shape: const CircleBorder(),
             child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),

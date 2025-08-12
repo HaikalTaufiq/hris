@@ -47,7 +47,7 @@ class _PeranAksesPageState extends State<PeranAksesPage> {
                 ),
               );
             },
-            backgroundColor: AppColors.bg,
+            backgroundColor: AppColors.secondary,
             shape: const CircleBorder(),
             child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),

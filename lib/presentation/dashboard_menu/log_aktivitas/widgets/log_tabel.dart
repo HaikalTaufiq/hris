@@ -23,6 +23,70 @@ class LogTabel extends StatelessWidget {
     "Absen",
     "Android (Samsung J2 Prime)",
   ];
+  void _showDetailDialog(BuildContext context, List<String> values) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.primary,
+        title: Text(
+          'Details',
+          style: TextStyle(
+            color: AppColors.putih,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(headers.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        headers[index],
+                        style: TextStyle(
+                          color: AppColors.putih,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        values[index],
+                        style: TextStyle(
+                          color: AppColors.putih,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Tutup',
+              style: TextStyle(
+                color: AppColors.putih,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,31 +137,63 @@ class LogTabel extends StatelessWidget {
                     IconButton(
                       icon: FaIcon(FontAwesomeIcons.eye,
                           color: AppColors.putih, size: 20),
-                      onPressed: () {},
-                      iconSize: 20,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.02), // jarak proporsional
-                    IconButton(
-                      icon: FaIcon(FontAwesomeIcons.trash,
-                          color: AppColors.putih, size: 20),
-                      onPressed: () {},
-                      iconSize: 20,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                      onPressed: () => _showDetailDialog(context, values),
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     IconButton(
-                      icon: FaIcon(FontAwesomeIcons.pen,
+                      icon: FaIcon(FontAwesomeIcons.trash,
                           color: AppColors.putih, size: 20),
-                      onPressed: () {},
-                      iconSize: 16,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              'Hapus',
+                              style: TextStyle(
+                                color: AppColors.putih,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                              ),
+                            ),
+                            backgroundColor: AppColors.primary,
+                            content: Text(
+                              'Yakin mau hapus item ini?',
+                              style: TextStyle(
+                                color: AppColors.putih,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text(
+                                  'Batal',
+                                  style: TextStyle(
+                                    color: AppColors.putih,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // TODO: logika hapus di sini
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Hapus',
+                                  style: TextStyle(
+                                    color: AppColors.putih,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   ],
                 )
               ],

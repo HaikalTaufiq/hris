@@ -154,7 +154,7 @@ class _JabatanPageState extends State<JabatanPage> {
                 },
               );
             },
-            backgroundColor: AppColors.bg,
+            backgroundColor: AppColors.secondary,
             shape: const CircleBorder(),
             child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
           ),

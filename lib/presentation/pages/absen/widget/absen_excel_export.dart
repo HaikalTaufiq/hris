@@ -60,19 +60,22 @@ class AbsenExcelExport extends StatelessWidget {
     );
   }
 
-  /// Widget untuk kartu tanggal
   Widget _buildDateCard({
     required String title,
     required String subtitle,
     required IconData icon,
+    VoidCallback? onPressed, // optional, kalau mau kasih fungsi klik
   }) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.primary,
+    return ElevatedButton(
+      onPressed: onPressed ?? () {}, // default no-op kalau gak dikasih
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+        minimumSize: Size(double.infinity, 48),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -162,7 +162,7 @@ class CutiCard extends StatelessWidget {
                         '${cuti.status}',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.bold,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                           color: getStatusColor(cuti.status),
                         ),

@@ -20,7 +20,6 @@ class _TugasInputState extends State<TugasInput> {
   final TextEditingController _tanggalSelesaiController =
       TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
-  final TextEditingController _jamSelesaiController = TextEditingController();
 
   String? _assignmentMode;
   String? _selectedPerson;
@@ -76,7 +75,6 @@ class _TugasInputState extends State<TugasInput> {
     _tanggalMulaiController.dispose();
     _tanggalSelesaiController.dispose();
     _jamMulaiController.dispose();
-    _jamSelesaiController.dispose();
     super.dispose();
   }
 
@@ -122,18 +120,8 @@ class _TugasInputState extends State<TugasInput> {
             label: "Jam Mulai",
             hint: "--:--",
             controller: _jamMulaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
             onTapIcon: () => _onTapIconTime(_jamMulaiController),
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            inputStyle: inputStyle,
-          ),
-          CustomInputField(
-            label: "Jam Selesai",
-            hint: "--:--",
-            controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIconTime(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,

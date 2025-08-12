@@ -31,35 +31,41 @@ class SearchingBar extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: controller, // ← pakai controller dari luar
-              cursorColor: AppColors.putih,
-              style: TextStyle(color: AppColors.putih),
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-                hintText: hintText,
-                hintStyle: TextStyle(
-                  color: AppColors.putih.withOpacity(0.5),
-                  fontFamily: GoogleFonts.poppins().fontFamily,
-                ),
-                filled: true,
-                fillColor: AppColors.primary,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: FaIcon(
-                    FontAwesomeIcons.magnifyingGlass,
+            child: Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(30),
+              shadowColor: const Color.fromARGB(164, 0, 0, 0)
+                  .withOpacity(0.24), // warna shadow ElevatedButton kira2
+              child: TextField(
+                controller: controller,
+                cursorColor: AppColors.putih,
+                style: TextStyle(color: AppColors.putih),
+                onChanged: onChanged,
+                decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  hintText: hintText,
+                  hintStyle: TextStyle(
                     color: AppColors.putih.withOpacity(0.5),
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: AppColors.primary),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: AppColors.grey),
+                  filled: true,
+                  fillColor: AppColors.primary,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: FaIcon(
+                      FontAwesomeIcons.magnifyingGlass,
+                      color: AppColors.putih.withOpacity(0.5),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: AppColors.primary),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: AppColors.grey),
+                  ),
                 ),
               ),
             ),

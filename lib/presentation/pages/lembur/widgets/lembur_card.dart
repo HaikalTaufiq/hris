@@ -158,7 +158,7 @@ class LemburCard extends StatelessWidget {
                         '${lembur.status}',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.bold,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                           color: getStatusColor(lembur.status),
                         ),

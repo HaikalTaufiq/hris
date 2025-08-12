@@ -25,8 +25,9 @@ class AbsenTabel extends StatelessWidget {
     "17 : 00",
     "198.12039.1123",
     "See Photo",
-    "See Details",
+    "jadi tadi telat dikit trus blablabla",
   ];
+
   void _showDetailDialog(BuildContext context, List<String> values) {
     showDialog(
       context: context,
@@ -240,11 +241,18 @@ class AbsenTabel extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Text(
-                          values[index],
-                          style: TextStyle(
-                              color: AppColors.putih,
-                              fontFamily: GoogleFonts.poppins().fontFamily),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showDetailDialog(context, values);
+                          },
+                          child: Text(
+                            index == 7 && values[index].length > 15
+                                ? '${values[index].substring(0, 15)}...'
+                                : values[index],
+                            style: TextStyle(
+                                color: AppColors.putih,
+                                fontFamily: GoogleFonts.poppins().fontFamily),
+                          ),
                         ),
                       ),
                     ],
