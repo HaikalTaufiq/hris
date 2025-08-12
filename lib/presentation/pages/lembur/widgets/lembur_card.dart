@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/lembur_model.dart';
+import 'package:intl/intl.dart';
 
 class LemburCard extends StatelessWidget {
   final LemburModel lembur;
@@ -91,7 +92,10 @@ class LemburCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Tannggal: ${lembur.tanggal}',
+              lembur.tanggal.isNotEmpty
+                  ? DateFormat('dd/MM/yyyy')
+                      .format(DateTime.parse(lembur.tanggal))
+                  : '',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -101,7 +105,9 @@ class LemburCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Jam: ${lembur.jamMulai} - ${lembur.jamSelesai}',
+              '${lembur.jamMulai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamMulai)) : ''} '
+              '- '
+              '${lembur.jamSelesai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamSelesai)) : ''}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -112,13 +118,47 @@ class LemburCard extends StatelessWidget {
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'Deskripsi: ${lembur.deskripsi}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                    color: AppColors.putih,
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: AppColors.primary,
+                        title: Text(
+                          'Detail Alasan Cuti',
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            color: AppColors.putih,
+                          ),
+                        ),
+                        content: Text(
+                          lembur.deskripsi,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14, color: AppColors.putih),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Tutup',
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                  color: AppColors.putih,
+                                )),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Text(
+                    lembur.deskripsi.length > 15
+                        ? '${lembur.deskripsi.substring(0, 15)}...'
+                        : lembur.deskripsi,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      color: AppColors.putih,
+                    ),
                   ),
                 ),
               ],
@@ -151,7 +191,7 @@ class LemburCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: AppColors.putih,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -181,7 +221,7 @@ class LemburCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: AppColors.putih,
+                        color: Colors.white,
                       ),
                     ),
                   ),

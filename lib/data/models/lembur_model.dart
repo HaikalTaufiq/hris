@@ -6,7 +6,7 @@ class LemburModel {
   final String jamSelesai;
   final String deskripsi;
   final String status;
-  final Map<String, dynamic> user; 
+  final Map<String, dynamic> user;
 
   LemburModel({
     required this.id,

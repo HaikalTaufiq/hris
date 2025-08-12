@@ -168,7 +168,7 @@ class _CutiInputState extends State<CutiInput> {
                   if (context.mounted) {
                     NotificationHelper.showSnackBar(
                         context, 'Lembur berhasil diajukan');
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(true);
                   }
                 } else {
                   if (context.mounted) {

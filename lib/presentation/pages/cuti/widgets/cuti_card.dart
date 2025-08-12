@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/cuti_model.dart';
+import 'package:intl/intl.dart';
 
 class CutiCard extends StatelessWidget {
   final CutiModel cuti;
@@ -101,7 +102,8 @@ class CutiCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '${cuti.tanggal_mulai} - ${cuti.tanggal_selesai}',
+              '${cuti.tanggal_mulai.isNotEmpty ? DateFormat('dd/MM/yyyy').format(DateTime.parse(cuti.tanggal_mulai)) : ''} - '
+              '${cuti.tanggal_selesai.isNotEmpty ? DateFormat('dd/MM/yyyy').format(DateTime.parse(cuti.tanggal_selesai)) : ''}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -112,13 +114,51 @@ class CutiCard extends StatelessWidget {
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  '${cuti.alasan}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                    color: AppColors.putih,
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: AppColors.primary,
+                        title: Text(
+                          'Detail Alasan Cuti',
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            color: AppColors.putih,
+                          ),
+                        ),
+                        content: Text(
+                          cuti.alasan,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: AppColors.putih,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(
+                              'Tutup',
+                              style: TextStyle(
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                                color: AppColors.putih,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Text(
+                    cuti.alasan.length > 15
+                        ? '${cuti.alasan.substring(0, 15)}...'
+                        : cuti.alasan,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      color: AppColors.putih,
+                    ),
                   ),
                 ),
               ],
@@ -151,7 +191,7 @@ class CutiCard extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontFamily: GoogleFonts.poppins().fontFamily,
-                          color: AppColors.putih,
+                          color: Colors.white,
                         ),
                       ),
                     )),
@@ -180,7 +220,7 @@ class CutiCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: AppColors.putih,
+                        color: Colors.white,
                       ),
                     ),
                   ),

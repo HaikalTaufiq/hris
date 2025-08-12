@@ -1,0 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      // Pastikan selalu di tengah layar
+      child: Lottie.asset(
+        'assets/lottie/loading.json',
+        width: 400, // Lebih proporsional
+        height: 400,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+}

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/tugas_model.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_edit_form.dart';
+import 'package:intl/intl.dart';
 
 class TugasTabel extends StatelessWidget {
   final List<TugasModel> tugasList;
@@ -183,9 +184,19 @@ class TugasTabel extends StatelessWidget {
           final List<String> values = [
             tugas.nama_tugas,
             tugas.user?.nama ?? 'Unknown',
-            tugas.jam_mulai,
-            tugas.tanggal_mulai,
-            tugas.tanggal_selesai,
+            tugas.jam_mulai.isNotEmpty
+                ? DateFormat('HH:mm').format(
+                    DateFormat('HH:mm:ss').parse(tugas.jam_mulai),
+                  )
+                : '',
+            tugas.tanggal_mulai.isNotEmpty
+                ? DateFormat('dd/MM/yyyy')
+                    .format(DateTime.parse(tugas.tanggal_mulai))
+                : '',
+            tugas.tanggal_selesai.isNotEmpty
+                ? DateFormat('dd/MM/yyyy')
+                    .format(DateTime.parse(tugas.tanggal_selesai))
+                : '',
             tugas.lokasi,
             tugas.note,
             tugas.status,
@@ -197,11 +208,11 @@ class TugasTabel extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
+                    color: const Color.fromARGB(56, 5, 5, 5),
+                    blurRadius: 5,
+                    offset: Offset(0, 1),
                   ),
                 ],
               ),
@@ -218,15 +229,15 @@ class TugasTabel extends StatelessWidget {
                           Checkbox(
                             value: false,
                             onChanged: (value) {},
-                            side: const BorderSide(color: Colors.white),
+                            side: BorderSide(color: AppColors.putih),
                             checkColor: Colors.black,
-                            activeColor: Colors.white,
+                            activeColor: AppColors.putih,
                           ),
                           const SizedBox(width: 8),
                           Text(
                             '${tugas.user?.departemen?.nama_departemen ?? 'Unknown'}',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.putih,
                               fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
                           ),
@@ -299,8 +310,8 @@ class TugasTabel extends StatelessWidget {
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.02),
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.pen,
-                                color: Colors.white, size: 20),
+                            icon: FaIcon(FontAwesomeIcons.pen,
+                                color: AppColors.putih, size: 20),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -345,7 +356,7 @@ class TugasTabel extends StatelessWidget {
                               child: Text(
                                 headers[index],
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.putih,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),

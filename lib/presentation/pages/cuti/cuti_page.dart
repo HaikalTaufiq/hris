@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom/loading.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
@@ -46,11 +48,26 @@ class _CutiPageState extends State<CutiPage> {
               future: _cutiList,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: const Center(
+                      child: LoadingWidget(),
+                    ),
+                  );
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('Tidak ada data cuti'));
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Text(
+                      'Tidak ada data cuti',
+                      style: TextStyle(
+                        color: AppColors.putih,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
+                    )),
+                  );
                 } else {
                   final cutiData = snapshot.data!;
                   return ListView.builder(
@@ -103,10 +120,16 @@ class _CutiPageState extends State<CutiPage> {
           bottom: 16,
           right: 16,
           child: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
+            onPressed: () async {
+              final result = await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const CutiForm()),
               );
+
+              if (result == true) {
+                setState(() {
+                  _cutiList = CutiService.fetchCuti(); // refresh data
+                });
+              }
             },
             backgroundColor: AppColors.bg,
             shape: const CircleBorder(),

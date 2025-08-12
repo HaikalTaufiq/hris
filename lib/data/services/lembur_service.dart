@@ -18,7 +18,8 @@ class LemburService {
   // Fetch lembur
   static Future<List<LemburModel>> fetchLembur() async {
     final token = await _getToken();
-    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+    if (token == null)
+      throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/api/lembur'),
@@ -46,16 +47,21 @@ class LemburService {
     required String deskripsi,
   }) async {
     final token = await _getToken();
-    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+    if (token == null)
+      throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     try {
-      tanggal = DateFormat('dd / MM / yyyy').parse(tanggal).toIso8601String().split('T')[0];
+      tanggal = DateFormat('dd / MM / yyyy')
+          .parse(tanggal)
+          .toIso8601String()
+          .split('T')[0];
     } catch (e) {
       print('❌ Format tanggal tidak valid: $tanggal');
       return false;
     }
 
-    if (!RegExp(r'^\d{2}:\d{2}$').hasMatch(jamMulai) || !RegExp(r'^\d{2}:\d{2}$').hasMatch(jamSelesai)) {
+    if (!RegExp(r'^\d{2}:\d{2}$').hasMatch(jamMulai) ||
+        !RegExp(r'^\d{2}:\d{2}$').hasMatch(jamSelesai)) {
       print('❌ Format jam tidak valid: $jamMulai - $jamSelesai');
       return false;
     }
@@ -86,10 +92,11 @@ class LemburService {
   // Fungsi menyetuji lembur
   static Future<String?> approveLembur(int id) async {
     final token = await _getToken();
-    if (token == null) return 'Token tidak ditemukan. Harap login ulang.';
+    if (token == null)
+      throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/api/lembur$id/approve'),
+      Uri.parse('$baseUrl/api/lembur/$id/approve'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -97,10 +104,9 @@ class LemburService {
     );
 
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      return jsonResponse['message'];
+      return json.decode(response.body)['message'];
     } else {
-      print('❌ Gagal menyetujui lembur: ${response.statusCode} ${response.body}');
+      print('Gagal menyetujui cuti: ${response.statusCode} ${response.body}');
       return null;
     }
   }
@@ -108,7 +114,8 @@ class LemburService {
   // Fungsi menolak lembur
   static Future<String?> declineLembur(int id) async {
     final token = await _getToken();
-    if (token == null) return 'Token tidak ditemukan. Harap login ulang.';
+    if (token == null)
+      throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
       Uri.parse('$baseUrl/api/lembur/$id/decline'),
@@ -119,12 +126,12 @@ class LemburService {
     );
 
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      return jsonResponse['message'];
+      json.decode(response.body);
+      json.decode(response.body);
+      return json.decode(response.body)['message'];
     } else {
-      print('❌ Gagal menolak lembur: ${response.statusCode} ${response.body}');
+      print('Gagal menolak cuti: ${response.statusCode} ${response.body}');
       return null;
     }
   }
-
 }

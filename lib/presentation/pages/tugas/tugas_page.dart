@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/custom/loading.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/data/models/tugas_model.dart';
@@ -46,11 +48,26 @@ class _TugasPageState extends State<TugasPage> {
               future: tugasFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: const Center(
+                      child: LoadingWidget(),
+                    ),
+                  );
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text('Data tugas kosong');
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Text(
+                      'Data tugas kosong',
+                      style: TextStyle(
+                        color: AppColors.putih,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
+                    )),
+                  );
                 } else {
                   // Kirim data tugas ke widget TugasTabel
                   return TugasTabel(tugasList: snapshot.data!);
@@ -65,12 +82,16 @@ class _TugasPageState extends State<TugasPage> {
           bottom: 16,
           right: 16,
           child: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const TugasForm(),
-                ),
+            onPressed: () async {
+              final result = await Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const TugasForm()),
               );
+
+              if (result == true) {
+                setState(() {
+                  tugasFuture = TugasService.fetchTugas(); // refresh data
+                });
+              }
             },
             backgroundColor: AppColors.bg,
             shape: const CircleBorder(),

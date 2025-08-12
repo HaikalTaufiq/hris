@@ -150,7 +150,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
             label: "Jam Mulai",
             hint: "--:--",
             controller: _jamMulaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
             onTapIcon: () => _onTapIconTime(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,

@@ -19,7 +19,7 @@ class DepartemenModel {
 
 class UserModel {
   final String id;
-  final String nama;   
+  final String nama;
   final DepartemenModel? departemen;
 
   UserModel({

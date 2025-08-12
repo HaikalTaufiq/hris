@@ -176,7 +176,7 @@ class _LemburInputState extends State<LemburInput> {
                     NotificationHelper.showSnackBar(
                         context, 'Lembur berhasil diajukan');
                     if (mounted) {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(true);
                     }
                   } else {
                     NotificationHelper.showSnackBar(
