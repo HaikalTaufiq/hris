@@ -6,21 +6,25 @@ import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
+import 'package:hr/data/models/tugas_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
 
-class TugasInput extends StatefulWidget {
-  const TugasInput({super.key});
+class TugasInputEdit extends StatefulWidget {
+  final TugasModel tugas;
+  const TugasInputEdit({super.key, required this.tugas});
 
   @override
-  State<TugasInput> createState() => _TugasInputState();
+  State<TugasInputEdit> createState() => _TugasInputEditState();
 }
 
-class _TugasInputState extends State<TugasInput> {
+class _TugasInputEditState extends State<TugasInputEdit> {
+  final TextEditingController _namaTugasController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
   final TextEditingController _tanggalSelesaiController =
       TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
-  final TextEditingController _jamSelesaiController = TextEditingController();
+  final TextEditingController _lokasiController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
 
   String? _assignmentMode;
   String? _selectedPerson;
@@ -32,6 +36,27 @@ class _TugasInputState extends State<TugasInput> {
   @override
   void initState() {
     super.initState();
+    // Isi controller dari data awal
+    _namaTugasController.text = widget.tugas.nama_tugas;
+    _jamMulaiController.text = widget.tugas.jam_mulai;
+    _tanggalMulaiController.text = widget.tugas.tanggal_mulai;
+    _tanggalSelesaiController.text = widget.tugas.tanggal_selesai;
+    _lokasiController.text = widget.tugas.lokasi;
+    _noteController.text = widget.tugas.note;
+
+    // Assignment mode
+    if (widget.tugas.user != null) {
+      _assignmentMode = 'Per Orang';
+      _selectedPerson = widget.tugas.user!.nama;
+    } else if (widget.tugas.user?.departemen != null) {
+      _assignmentMode = 'Per Departemen';
+      _selectedDepartment = widget.tugas.user!.departemen as Departemen?;
+    }
+
+    // TODO: kalau ada lokasi & note
+    // _lokasiController.text = widget.tugas.lokasi;
+    // _noteController.text = widget.tugas.note;
+
     _loadDepartemen();
   }
 
@@ -73,10 +98,12 @@ class _TugasInputState extends State<TugasInput> {
 
   @override
   void dispose() {
+    _namaTugasController.dispose();
     _tanggalMulaiController.dispose();
     _tanggalSelesaiController.dispose();
     _jamMulaiController.dispose();
-    _jamSelesaiController.dispose();
+    _noteController.dispose();
+    _lokasiController.dispose();
     super.dispose();
   }
 
@@ -114,6 +141,7 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Judul Tugas",
             hint: "",
+            controller: _namaTugasController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -124,16 +152,6 @@ class _TugasInputState extends State<TugasInput> {
             controller: _jamMulaiController,
             suffixIcon: const Icon(Icons.access_time, color: Colors.white),
             onTapIcon: () => _onTapIconTime(_jamMulaiController),
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            inputStyle: inputStyle,
-          ),
-          CustomInputField(
-            label: "Jam Selesai",
-            hint: "--:--",
-            controller: _jamSelesaiController,
-            suffixIcon: const Icon(Icons.access_time, color: Colors.white),
-            onTapIcon: () => _onTapIconTime(_jamSelesaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -219,7 +237,8 @@ class _TugasInputState extends State<TugasInput> {
                   ),
           CustomInputField(
             label: "Lokasi",
-            hint: 'Masukkan lokasi tugas',
+            hint: '',
+            controller: _lokasiController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -227,6 +246,7 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Note",
             hint: "",
+            controller: _noteController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,

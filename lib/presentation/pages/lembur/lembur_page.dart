@@ -32,70 +32,73 @@ class _LemburPageState extends State<LemburPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder<List<LemburModel>>(
-          future: _lemburList,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('Belum ada data lembur.'));
-            } else {
-              final lemburData = snapshot.data!;
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: lemburData.length + 2,
-                itemBuilder: (context, index) {
-                  if (index == 0)
-                    return const Header(title: 'Pengajuan Lembur');
-                  if (index == 1)
-                    return SearchingBar(
-                      controller: searchController,
-                      onChanged: (value) {
-                        print("Search Halaman A: $value");
-                      },
-                      onFilter1Tap: () => print("Filter1 Halaman A"),
-                      onFilter2Tap: () => print("Filter2 Halaman A"),
-                    );
-                  final lembur = lemburData[index - 2];
-                  return LemburCard(
-                    lembur: lembur,
-                    onApprove: () async {
-                      final message =
-                          await LemburService.approveLembur(lembur.id);
-                      if (message != null) {
-                        setState(() {
-                          _lemburList = LemburService.fetchLembur();
-                        });
-                        NotificationHelper.showSnackBar(context, message,
-                            isSuccess: true);
-                      } else {
-                        NotificationHelper.showSnackBar(
-                            context, 'Gagal menyetujui lembur',
-                            isSuccess: false);
-                      }
-                    },
-                    onDecline: () async {
-                      final message =
-                          await LemburService.declineLembur(lembur.id);
-                      if (message != null) {
-                        setState(() {
-                          _lemburList = LemburService.fetchLembur();
-                        });
-                        NotificationHelper.showSnackBar(context, message,
-                            isSuccess: true);
-                      } else {
-                        NotificationHelper.showSnackBar(
-                            context, 'Gagal menolak lembur',
-                            isSuccess: false);
-                      }
+        ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            const Header(title: 'Pengajuan Lembur'),
+            SearchingBar(
+              controller: searchController,
+              onChanged: (value) {
+                print("Search Halaman A: $value");
+              },
+              onFilter1Tap: () => print("Filter1 Halaman A"),
+              onFilter2Tap: () => print("Filter2 Halaman A"),
+            ),
+            FutureBuilder<List<LemburModel>>(
+              future: _lemburList,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Belum ada data lembur.'));
+                } else {
+                  final lemburData = snapshot.data!;
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: lemburData.length + 2,
+                    itemBuilder: (context, index) {
+                      final lembur = lemburData[index - 2];
+                      return LemburCard(
+                        lembur: lembur,
+                        onApprove: () async {
+                          final message =
+                              await LemburService.approveLembur(lembur.id);
+                          if (message != null) {
+                            setState(() {
+                              _lemburList = LemburService.fetchLembur();
+                            });
+                            NotificationHelper.showSnackBar(context, message,
+                                isSuccess: true);
+                          } else {
+                            NotificationHelper.showSnackBar(
+                                context, 'Gagal menyetujui lembur',
+                                isSuccess: false);
+                          }
+                        },
+                        onDecline: () async {
+                          final message =
+                              await LemburService.declineLembur(lembur.id);
+                          if (message != null) {
+                            setState(() {
+                              _lemburList = LemburService.fetchLembur();
+                            });
+                            NotificationHelper.showSnackBar(context, message,
+                                isSuccess: true);
+                          } else {
+                            NotificationHelper.showSnackBar(
+                                context, 'Gagal menolak lembur',
+                                isSuccess: false);
+                          }
+                        },
+                      );
                     },
                   );
-                },
-              );
-            }
-          },
+                }
+              },
+            ),
+          ],
         ),
 
         // FAB (Floating Button)

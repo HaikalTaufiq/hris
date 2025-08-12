@@ -77,7 +77,7 @@ class CutiCard extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      '${cuti.status}',
+                      '${cuti.tipe_cuti}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -91,7 +91,7 @@ class CutiCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '${cuti.alasan}',
+              '${cuti.tipe_cuti}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,

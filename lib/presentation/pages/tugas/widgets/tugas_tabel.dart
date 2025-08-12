@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/tugas_model.dart';
+import 'package:hr/presentation/pages/tugas/tugas_form/tugas_edit_form.dart';
 
 class TugasTabel extends StatelessWidget {
   final List<TugasModel> tugasList;
@@ -10,63 +11,97 @@ class TugasTabel extends StatelessWidget {
   const TugasTabel({super.key, required this.tugasList});
 
   final List<String> headers = const [
-    "Judul",
+    "Judul ",
     "Kepada",
     "Jam Mulai",
     "Tanggal Mulai",
-    "Batas Tanggal Penyelesaian",
+    "Batas Submit",
     "Lokasi",
     "Note",
     "Status",
   ];
+  void _showDetailDialog(BuildContext context, List<String> values) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.primary,
+        title: Text(
+          'Detail Tugas',
+          style: TextStyle(
+            color: AppColors.putih,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(headers.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        headers[index],
+                        style: TextStyle(
+                          color: AppColors.putih,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        values[index],
+                        style: TextStyle(
+                          color: AppColors.putih,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Tutup',
+              style: TextStyle(
+                color: AppColors.putih,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  Widget buildValueCell(BuildContext context, String value, int index) {
+  Widget buildValueCell(
+    BuildContext context,
+    String value,
+    int index,
+    List<String> values,
+  ) {
     if (index == 0) {
       String displayText =
           value.length > 10 ? value.substring(0, 15) + "..." : value;
 
       return GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              backgroundColor: AppColors.primary, // background sesuai tema
-              title: Text(
-                "Detail Judul",
-                style: TextStyle(
-                  color: AppColors.putih, // warna teks judul tema kamu
-                  fontFamily: GoogleFonts.poppins().fontFamily,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              content: Text(
-                value,
-                style: TextStyle(
-                  color: AppColors.putih, // warna teks konten sesuai tema
-                  fontFamily: GoogleFonts.poppins().fontFamily,
-                  fontSize: 16,
-                ),
-              ),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.putih, // warna teks tombol
-                  ),
-                  child: const Text("Tutup"),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        },
+        onTap: () => _showDetailDialog(context, values), // sekarang aman
         child: Text(
           displayText,
           style: TextStyle(
             color: AppColors.putih,
             fontFamily: GoogleFonts.poppins().fontFamily,
-            decoration: TextDecoration.underline,
-            fontWeight: FontWeight.w500,
           ),
         ),
       );
@@ -200,23 +235,82 @@ class TugasTabel extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.eye,
-                                color: Colors.white, size: 20),
-                            onPressed: () {},
+                            icon: FaIcon(FontAwesomeIcons.eye,
+                                color: AppColors.putih, size: 20),
+                            onPressed: () => _showDetailDialog(context, values),
                           ),
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.02),
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.trash,
-                                color: Colors.white, size: 20),
-                            onPressed: () {},
+                            icon: FaIcon(FontAwesomeIcons.trash,
+                                color: AppColors.putih, size: 20),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    'Hapus',
+                                    style: TextStyle(
+                                      color: AppColors.putih,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
+                                  ),
+                                  backgroundColor: AppColors.primary,
+                                  content: Text(
+                                    'Yakin mau hapus item ini?',
+                                    style: TextStyle(
+                                      color: AppColors.putih,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        'Batal',
+                                        style: TextStyle(
+                                          color: AppColors.putih,
+                                          fontFamily:
+                                              GoogleFonts.poppins().fontFamily,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        // TODO: logika hapus di sini
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'Hapus',
+                                        style: TextStyle(
+                                          color: AppColors.putih,
+                                          fontFamily:
+                                              GoogleFonts.poppins().fontFamily,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.02),
                           IconButton(
                             icon: const FaIcon(FontAwesomeIcons.pen,
                                 color: Colors.white, size: 20),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => TugasEditForm(
+                                    tugas: tugas, // kirim model tugas langsung
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       )
@@ -259,8 +353,8 @@ class TugasTabel extends StatelessWidget {
                             ),
                             Expanded(
                               flex: 3,
-                              child:
-                                  buildValueCell(context, values[index], index),
+                              child: buildValueCell(
+                                  context, values[index], index, values),
                             ),
                           ],
                         ),
