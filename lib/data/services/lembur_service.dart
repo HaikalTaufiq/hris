@@ -7,7 +7,7 @@ import 'package:hr/data/models/lembur_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LemburService {
-  static const String baseUrl = 'http://192.168.20.50:8000/api/lembur';
+  static const String baseUrl = 'http://192.168.20.50:8000';
 
   // Ambil token dari SharedPreferences
   static Future<String?> _getToken() async {
@@ -21,7 +21,7 @@ class LemburService {
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.get(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/api/lembur'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -61,7 +61,7 @@ class LemburService {
     }
 
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/api/lembur'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -89,7 +89,7 @@ class LemburService {
     if (token == null) return 'Token tidak ditemukan. Harap login ulang.';
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/approve'),
+      Uri.parse('$baseUrl/api/lembur$id/approve'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -111,7 +111,7 @@ class LemburService {
     if (token == null) return 'Token tidak ditemukan. Harap login ulang.';
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/decline'),
+      Uri.parse('$baseUrl/api/lembur/$id/decline'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',

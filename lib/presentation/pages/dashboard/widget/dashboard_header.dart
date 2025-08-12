@@ -41,7 +41,7 @@ class _DashboardHeaderState extends State<DashboardHeader>
     _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
     );
-
+  
     _loadUserData();
   }
 

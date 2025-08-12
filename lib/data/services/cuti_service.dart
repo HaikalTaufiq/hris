@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiService {
-  static const String baseUrl = 'http://192.168.20.50:8000/api/cuti';
+  static const String baseUrl = 'http://192.168.20.50:8000';
 
   // Ambil token dari SharedPreferences
   static Future<String?> _getToken() async {
@@ -23,7 +23,7 @@ class CutiService {
       throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.get(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/api/cuti'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -63,7 +63,7 @@ class CutiService {
           .split('T')[0];
 
       final response = await http.post(
-        Uri.parse(baseUrl),
+        Uri.parse('$baseUrl/api/cuti'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -97,7 +97,7 @@ class CutiService {
       throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/approve'),
+      Uri.parse('$baseUrl/api/cuti/$id/approve'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -119,7 +119,7 @@ class CutiService {
       throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/$id/decline'),
+      Uri.parse('$baseUrl/api/cuti/$id/decline'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -127,6 +127,7 @@ class CutiService {
     );
 
     if (response.statusCode == 200) {
+      json.decode(response.body);
       json.decode(response.body);
       return json.decode(response.body)['message'];
     } else {
