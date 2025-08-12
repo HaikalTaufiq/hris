@@ -28,6 +28,32 @@ class LemburCard extends StatelessWidget {
     }
   }
 
+  Widget _buildDetailItem(String label, String value, {Color? color}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6.0),
+      child: RichText(
+        text: TextSpan(
+          text: '$label: ',
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: AppColors.putih,
+          ),
+          children: [
+            TextSpan(
+              text: value,
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: color ?? AppColors.putih,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,105 +77,125 @@ class LemburCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${lembur.user['nama']}',
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: AppColors.primary,
+                title: Text(
+                  'Detail Lembur',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
                     fontFamily: GoogleFonts.poppins().fontFamily,
                     color: AppColors.putih,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                Row(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 15,
-                      height: 15,
-                      decoration: BoxDecoration(
-                        color: getStatusColor(lembur.status),
-                        shape: BoxShape.circle,
-                      ),
+                    _buildDetailItem('Nama', lembur.user['nama']),
+                    _buildDetailItem('Status', lembur.status,
+                        color: getStatusColor(lembur.status)),
+                    _buildDetailItem(
+                      'Tanggal',
+                      lembur.tanggal.isNotEmpty
+                          ? DateFormat('dd/MM/yyyy')
+                              .format(DateTime.parse(lembur.tanggal))
+                          : '-',
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      '${lembur.status}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: getStatusColor(lembur.status),
-                      ),
+                    _buildDetailItem(
+                      'Jam',
+                      '${lembur.jamMulai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamMulai)) : ''} - '
+                          '${lembur.jamSelesai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamSelesai)) : ''}',
                     ),
+                    _buildDetailItem('Keterangan', lembur.deskripsi),
                   ],
                 ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Text(
-              lembur.tanggal.isNotEmpty
-                  ? DateFormat('dd/MM/yyyy')
-                      .format(DateTime.parse(lembur.tanggal))
-                  : '',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                color: AppColors.putih,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '${lembur.jamMulai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamMulai)) : ''} '
-              '- '
-              '${lembur.jamSelesai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamSelesai)) : ''}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                color: AppColors.putih,
-              ),
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        backgroundColor: AppColors.primary,
-                        title: Text(
-                          'Detail Alasan Cuti',
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            color: AppColors.putih,
-                          ),
-                        ),
-                        content: Text(
-                          lembur.deskripsi,
-                          style: GoogleFonts.poppins(
-                              fontSize: 14, color: AppColors.putih),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('Tutup',
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.poppins().fontFamily,
-                                  color: AppColors.putih,
-                                )),
-                          ),
-                        ],
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      'Tutup',
+                      style: TextStyle(
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        color: AppColors.putih,
                       ),
-                    );
-                  },
-                  child: Text(
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${lembur.user['nama']}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      color: AppColors.putih,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          color: getStatusColor(lembur.status),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '${lembur.status}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: getStatusColor(lembur.status),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                lembur.tanggal.isNotEmpty
+                    ? DateFormat('dd/MM/yyyy')
+                        .format(DateTime.parse(lembur.tanggal))
+                    : '',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  color: AppColors.putih,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                '${lembur.jamMulai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamMulai)) : ''} '
+                '- '
+                '${lembur.jamSelesai.isNotEmpty ? DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(lembur.jamSelesai)) : ''}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  color: AppColors.putih,
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
                     lembur.deskripsi.length > 15
                         ? '${lembur.deskripsi.substring(0, 15)}...'
                         : lembur.deskripsi,
@@ -160,75 +206,75 @@ class LemburCard extends StatelessWidget {
                       color: AppColors.putih,
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: onDecline,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04,
-                      vertical: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.red,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(66, 0, 0, 0),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: onDecline,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.04,
+                        vertical: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.red,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(66, 0, 0, 0),
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'Decline',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      'Decline',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: Colors.white,
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: onApprove,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.02,
-                      vertical: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.green,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(66, 0, 0, 0),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
+                  GestureDetector(
+                    onTap: onApprove,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.02,
+                        vertical: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.green,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(66, 0, 0, 0),
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'Approve',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      'Approve',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        color: Colors.white,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
