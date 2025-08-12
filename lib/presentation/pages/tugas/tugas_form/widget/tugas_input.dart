@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/components/custom_dropdown.dart';
-import 'package:hr/components/custom_input.dart';
+import 'package:hr/components/custom/custom_dropdown.dart';
+import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
 import 'package:hr/data/services/departemen_service.dart';

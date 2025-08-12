@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/data/models/lembur_model.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form.dart';
 import 'package:hr/presentation/pages/lembur/widgets/lembur_card.dart';
-import 'package:hr/presentation/pages/lembur/widgets/lembur_search.dart';
 import 'package:hr/data/services/lembur_service.dart';
 
 class LemburPage extends StatefulWidget {
@@ -20,6 +20,7 @@ class LemburPage extends StatefulWidget {
 
 class _LemburPageState extends State<LemburPage> {
   late Future<List<LemburModel>> _lemburList;
+  final searchController = TextEditingController(); // value awal
 
   @override
   void initState() {
@@ -48,7 +49,15 @@ class _LemburPageState extends State<LemburPage> {
                 itemBuilder: (context, index) {
                   if (index == 0)
                     return const Header(title: 'Pengajuan Lembur');
-                  if (index == 1) return const LemburSearch();
+                  if (index == 1)
+                    return SearchingBar(
+                      controller: searchController,
+                      onChanged: (value) {
+                        print("Search Halaman A: $value");
+                      },
+                      onFilter1Tap: () => print("Filter1 Halaman A"),
+                      onFilter2Tap: () => print("Filter2 Halaman A"),
+                    );
                   final lembur = lemburData[index - 2];
                   return LemburCard(
                     lembur: lembur,

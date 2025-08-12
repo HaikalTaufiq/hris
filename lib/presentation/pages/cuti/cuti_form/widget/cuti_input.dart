@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/components/custom_dropdown.dart';
-import 'package:hr/components/custom_input.dart';
+import 'package:hr/components/custom/custom_dropdown.dart';
+import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/services/cuti_service.dart';
@@ -18,9 +18,9 @@ class _CutiInputState extends State<CutiInput> {
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController = TextEditingController();
+  final TextEditingController _tanggalSelesaiController =
+      TextEditingController();
   final TextEditingController _alasanController = TextEditingController();
-  
 
   @override
   void initState() {
@@ -35,7 +35,6 @@ class _CutiInputState extends State<CutiInput> {
       _namaController.text = nama;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -167,12 +166,15 @@ class _CutiInputState extends State<CutiInput> {
                 );
                 if (success) {
                   if (context.mounted) {
-                    NotificationHelper.showSnackBar(context, 'Lembur berhasil diajukan');
+                    NotificationHelper.showSnackBar(
+                        context, 'Lembur berhasil diajukan');
                     Navigator.of(context).pop();
                   }
                 } else {
                   if (context.mounted) {
-                    NotificationHelper.showSnackBar(context, 'Gagal mengajukan lembur', isSuccess: false);
+                    NotificationHelper.showSnackBar(
+                        context, 'Gagal mengajukan lembur',
+                        isSuccess: false);
                   }
                 }
               },

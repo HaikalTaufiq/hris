@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/presentation/dashboard_menu/departemen/widgets/department_search.dart';
 import 'package:hr/presentation/dashboard_menu/departemen/widgets/department_tabel.dart';
 
 class DepartemenPage extends StatefulWidget {
@@ -14,6 +14,7 @@ class DepartemenPage extends StatefulWidget {
 }
 
 class _DepartemenPageState extends State<DepartemenPage> {
+  final searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -22,7 +23,14 @@ class _DepartemenPageState extends State<DepartemenPage> {
           padding: const EdgeInsets.all(16),
           children: [
             Header(title: 'Manajemen Departemen'),
-            DepartmenSearch(),
+            SearchingBar(
+              controller: searchController,
+              onChanged: (value) {
+                print("Search Halaman A: $value");
+              },
+              onFilter1Tap: () => print("Filter1 Halaman A"),
+              onFilter2Tap: () => print("Filter2 Halaman A"),
+            ),
             DepartmentTabel(),
           ],
         ),

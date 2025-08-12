@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/data/models/cuti_model.dart';
@@ -7,7 +8,6 @@ import 'package:hr/data/services/cuti_service.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/cuti/cuti_form/cuti_form.dart';
 import 'package:hr/presentation/pages/cuti/widgets/cuti_card.dart';
-import 'package:hr/presentation/pages/cuti/widgets/cuti_search.dart';
 
 class CutiPage extends StatefulWidget {
   const CutiPage({super.key});
@@ -18,6 +18,7 @@ class CutiPage extends StatefulWidget {
 
 class _CutiPageState extends State<CutiPage> {
   late Future<List<CutiModel>> _cutiList;
+  final searchController = TextEditingController(); // value awal
 
   @override
   void initState() {
@@ -33,7 +34,14 @@ class _CutiPageState extends State<CutiPage> {
           padding: const EdgeInsets.all(16),
           children: [
             Header(title: 'Manajemen Cuti'),
-            CutiSearch(),
+            SearchingBar(
+              controller: searchController,
+              onChanged: (value) {
+                print("Search Halaman A: $value");
+              },
+              onFilter1Tap: () => print("Filter1 Halaman A"),
+              onFilter2Tap: () => print("Filter2 Halaman A"),
+            ),
             FutureBuilder<List<CutiModel>>(
               future: _cutiList,
               builder: (context, snapshot) {

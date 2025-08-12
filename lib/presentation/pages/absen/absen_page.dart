@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_keluar_page.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_masuk_page.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_excel_export.dart';
-import 'package:hr/presentation/pages/absen/widget/absen_search.dart';
 import 'package:hr/presentation/pages/absen/widget/absen_tabel.dart';
 
 class AbsenPage extends StatefulWidget {
@@ -17,6 +17,8 @@ class AbsenPage extends StatefulWidget {
 }
 
 class _AbsenPageState extends State<AbsenPage> {
+  final searchController = TextEditingController(); // value awal
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -25,7 +27,14 @@ class _AbsenPageState extends State<AbsenPage> {
           padding: const EdgeInsets.all(16),
           children: [
             Header(title: "Attendance Management"),
-            AbsenSearch(),
+            SearchingBar(
+              controller: searchController,
+              onChanged: (value) {
+                print("Search Halaman A: $value");
+              },
+              onFilter1Tap: () => print("Filter1 Halaman A"),
+              onFilter2Tap: () => print("Filter2 Halaman A"),
+            ),
             AbsenExcelExport(),
             AbsenTabel(),
             AbsenTabel(),

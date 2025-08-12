@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
-import 'package:hr/presentation/dashboard_menu/log_aktivitas/widgets/log_search.dart';
 import 'package:hr/presentation/dashboard_menu/log_aktivitas/widgets/log_tabel.dart';
 
 class LogPage extends StatefulWidget {
@@ -11,16 +11,25 @@ class LogPage extends StatefulWidget {
 }
 
 class _LogPageState extends State<LogPage> {
+  final searchController = TextEditingController(); // value awal
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: const [
-        Header(title: 'Log Aktivitas'),
-        LogSearch(),
-        LogTabel(),
-        LogTabel(),
-        LogTabel(),
+      children: [
+        const Header(title: 'Log Aktivitas'),
+        SearchingBar(
+          controller: searchController,
+          onChanged: (value) {
+            print("Search Halaman A: $value");
+          },
+          onFilter1Tap: () => print("Filter1 Halaman A"),
+          onFilter2Tap: () => print("Filter2 Halaman A"),
+        ),
+        const LogTabel(),
+        const LogTabel(),
+        const LogTabel(),
       ],
     );
   }

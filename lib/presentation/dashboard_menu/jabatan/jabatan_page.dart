@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/core/header.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/presentation/dashboard_menu/jabatan/widgets/jabatan_search.dart';
 import 'package:hr/presentation/dashboard_menu/jabatan/widgets/jabatan_tabel.dart';
 
 class JabatanPage extends StatefulWidget {
@@ -14,15 +14,24 @@ class JabatanPage extends StatefulWidget {
 }
 
 class _JabatanPageState extends State<JabatanPage> {
+  final searchController = TextEditingController(); // value awal
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ListView(
           padding: const EdgeInsets.all(16),
-          children: const [
+          children: [
             Header(title: 'Manajemen Jabatan'),
-            JabatanSearch(),
+            SearchingBar(
+              controller: searchController,
+              onChanged: (value) {
+                print("Search Halaman A: $value");
+              },
+              onFilter1Tap: () => print("Filter1 Halaman A"),
+              onFilter2Tap: () => print("Filter2 Halaman A"),
+            ),
             JabatanTabel(),
           ],
         ),
