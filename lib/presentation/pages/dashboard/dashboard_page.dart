@@ -10,7 +10,10 @@ import 'package:hr/presentation/pages/dashboard/widget/status_task_chart.dart';
 import 'package:hr/presentation/pages/dashboard/widget/tech_task_chart.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+
+  const DashboardPage({
+    super.key,
+  });
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -22,7 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const DashboardHeader(),
+        DashboardHeader(),
         const DashboardCard(),
         DashboardMenu(
           items: [

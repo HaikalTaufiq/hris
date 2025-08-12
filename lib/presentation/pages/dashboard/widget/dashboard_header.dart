@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardHeader extends StatefulWidget {
   const DashboardHeader({super.key});
@@ -18,9 +19,39 @@ class _DashboardHeaderState extends State<DashboardHeader>
   late Animation<double> _sizeAnimation;
   late Animation<double> _fadeAnimation;
 
-  final GlobalKey _menuKey = GlobalKey();
+  String _nama = "";
+  String _peran = "";
 
+  final GlobalKey _menuKey = GlobalKey();
   OverlayEntry? _dropdownOverlay;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+
+    _sizeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _nama = prefs.getString('nama') ?? '';
+      _peran = prefs.getString('peran') ?? '';
+    });
+  }
 
   void _toggleDropdown() {
     if (_showDropdown) {
@@ -38,7 +69,6 @@ class _DashboardHeaderState extends State<DashboardHeader>
     _dropdownOverlay = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          // Klik di luar = tutup dropdown
           GestureDetector(
             onTap: _hideDropdown,
             behavior: HitTestBehavior.translucent,
@@ -48,8 +78,6 @@ class _DashboardHeaderState extends State<DashboardHeader>
               color: Colors.transparent,
             ),
           ),
-
-          // Dropdown
           Positioned(
             top: offset.dy,
             right: MediaQuery.of(context).size.width * 0.04,
@@ -59,7 +87,7 @@ class _DashboardHeaderState extends State<DashboardHeader>
                 opacity: _fadeAnimation,
                 child: SizeTransition(
                   sizeFactor: _sizeAnimation,
-                  axisAlignment: -1.0, // buka ke bawah
+                  axisAlignment: -1.0,
                   child: Container(
                     width: 200,
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -140,25 +168,6 @@ class _DashboardHeaderState extends State<DashboardHeader>
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-
-    _sizeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -197,13 +206,13 @@ class _DashboardHeaderState extends State<DashboardHeader>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Elon Musk',
+                    Text(_nama,
                         style: TextStyle(
                             fontSize: 24,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.bold,
                             color: AppColors.putih)),
-                    Text('Super Admin',
+                    Text(_peran,
                         style: TextStyle(
                             fontSize: 14,
                             fontFamily: GoogleFonts.poppins().fontFamily,

@@ -17,9 +17,14 @@ import 'package:hr/presentation/pages/profile/profile_page.dart';
 import 'package:hr/presentation/pages/tugas/tugas_page.dart';
 
 class MainLayout extends StatefulWidget {
-  final int? initialIndex; // untuk halaman navbar
-  final int? externalPageIndex; // untuk halaman luar navbar
-  const MainLayout({super.key, this.initialIndex, this.externalPageIndex});
+  final int? initialIndex;
+  final int? externalPageIndex;
+
+  const MainLayout({
+    super.key,
+    this.initialIndex,
+    this.externalPageIndex,
+  });
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
