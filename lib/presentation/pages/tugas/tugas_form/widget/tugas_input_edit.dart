@@ -20,42 +20,47 @@ class TugasInputEdit extends StatefulWidget {
 class _TugasInputEditState extends State<TugasInputEdit> {
   final TextEditingController _namaTugasController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
+  final TextEditingController _tanggalSelesaiController = TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _lokasiController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   String? _assignmentMode;
   String? _selectedPerson;
-  Departemen? _selectedDepartment;
+  DepartemenModel? _selectedDepartment;
 
   bool _isLoadingDepartemen = true;
-  List<Departemen> _departemenList = [];
+  List<DepartemenModel> _departemenList = [];
 
   @override
   void initState() {
     super.initState();
     // Isi controller dari data awal
-    _namaTugasController.text = widget.tugas.nama_tugas;
-    _jamMulaiController.text = widget.tugas.jam_mulai;
-    _tanggalMulaiController.text = widget.tugas.tanggal_mulai;
-    _tanggalSelesaiController.text = widget.tugas.tanggal_selesai;
+    _namaTugasController.text = widget.tugas.namaTugas;
+    _jamMulaiController.text = widget.tugas.jamMulai;
+    _tanggalMulaiController.text = widget.tugas.tanggalMulai;
+    _tanggalSelesaiController.text = widget.tugas.tanggalSelesai;
     _lokasiController.text = widget.tugas.lokasi;
     _noteController.text = widget.tugas.note;
 
     // Assignment mode
-    if (widget.tugas.user != null) {
-      _assignmentMode = 'Per Orang';
-      _selectedPerson = widget.tugas.user!.nama;
-    } else if (widget.tugas.user?.departemen != null) {
-      _assignmentMode = 'Per Departemen';
-      _selectedDepartment = widget.tugas.user!.departemen as Departemen?;
+    if (widget.tugas.users.isNotEmpty) {
+      if (widget.tugas.users.length == 1) {
+        // Mode per orang
+        _assignmentMode = 'Per Orang';
+        _selectedPerson = widget.tugas.users.first.nama;
+      } else {
+        // Mode per departemen (atau multi-user)
+        _assignmentMode = 'Per Departemen';
+        // Ambil departemen dari user pertama (asumsi semua user dari departemen yang sama)
+        _selectedDepartment = widget.tugas.users.first.departemen;
+      }
     }
+
 
     // TODO: kalau ada lokasi & note
     // _lokasiController.text = widget.tugas.lokasi;
-    // _noteController.text = widget.tugas.note;
+    // _noteController.text = widget.tugas.not  e;
 
     _loadDepartemen();
   }
@@ -219,7 +224,10 @@ class _TugasInputEditState extends State<TugasInputEdit> {
                     label: 'Departemen',
                     hint: 'Pilih departemen',
                     items:
-                        _departemenList.map((d) => d.namaDepartemen).toList(),
+                        _departemenList
+                            .map((d) => d.namaDepartemen)
+                            .where((name) => name.isNotEmpty)
+                            .toList(),
                     value: _selectedDepartment?.namaDepartemen,
                     onChanged: (val) {
                       setState(() {

@@ -24,10 +24,10 @@ class _TugasInputState extends State<TugasInput> {
 
   String? _assignmentMode;
   String? _selectedPerson;
-  Departemen? _selectedDepartment;
+  DepartemenModel? _selectedDepartment;
 
   bool _isLoadingDepartemen = true;
-  List<Departemen> _departemenList = [];
+  List<DepartemenModel> _departemenList = [];
 
   @override
   void initState() {
@@ -201,7 +201,10 @@ class _TugasInputState extends State<TugasInput> {
                     label: 'Departemen',
                     hint: 'Pilih departemen',
                     items:
-                        _departemenList.map((d) => d.namaDepartemen).toList(),
+                        _departemenList
+                            .map((d) => d.namaDepartemen)
+                            .where((name) => name.isNotEmpty)
+                            .toList(),
                     value: _selectedDepartment?.namaDepartemen,
                     onChanged: (val) {
                       setState(() {

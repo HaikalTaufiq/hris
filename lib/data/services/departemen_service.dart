@@ -11,7 +11,7 @@ class DepartemenService {
     return prefs.getString('token');
   }
 
-  static Future<List<Departemen>> fetchDepartemen() async {
+  static Future<List<DepartemenModel>> fetchDepartemen() async {
     final token = await getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
@@ -27,7 +27,7 @@ class DepartemenService {
       final jsonData = json.decode(response.body);
       final List dataList = jsonData['data'];
 
-      return dataList.map((json) => Departemen.fromJson(json)).toList();
+      return dataList.map((json) => DepartemenModel.fromJson(json)).toList();
     } else {
       throw Exception('Gagal memuat data departemen: ${response.statusCode}');
     }
