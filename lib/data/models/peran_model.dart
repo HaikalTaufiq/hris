@@ -1,5 +1,5 @@
 class PeranModel {
-  final int id;
+  final int? id;
   final String namaPeran;
 
   PeranModel({

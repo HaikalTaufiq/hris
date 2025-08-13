@@ -10,7 +10,6 @@ import 'package:hr/presentation/pages/dashboard/widget/status_task_chart.dart';
 import 'package:hr/presentation/pages/dashboard/widget/tech_task_chart.dart';
 
 class DashboardPage extends StatefulWidget {
-
   const DashboardPage({
     super.key,
   });

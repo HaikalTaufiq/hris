@@ -10,6 +10,7 @@ import 'package:hr/data/services/cuti_service.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/cuti/cuti_form/cuti_form.dart';
 import 'package:hr/presentation/pages/cuti/widgets/cuti_card.dart';
+import 'package:hr/provider/features/features_guard.dart';
 
 class CutiPage extends StatefulWidget {
   const CutiPage({super.key});
@@ -35,7 +36,7 @@ class _CutiPageState extends State<CutiPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Header(title: 'Manajemen Cuti'),
+            Header(title: 'Pengajuan Cuti'),
             SearchingBar(
               controller: searchController,
               onChanged: (value) {
@@ -116,24 +117,27 @@ class _CutiPageState extends State<CutiPage> {
             ),
           ],
         ),
-        Positioned(
-          bottom: 16,
-          right: 16,
-          child: FloatingActionButton(
-            onPressed: () async {
-              final result = await Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const CutiForm()),
-              );
+        FeatureGuard(
+          featureId: "add_cuti",
+          child: Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const CutiForm()),
+                );
 
-              if (result == true) {
-                setState(() {
-                  _cutiList = CutiService.fetchCuti(); // refresh data
-                });
-              }
-            },
-            backgroundColor: AppColors.secondary,
-            shape: const CircleBorder(),
-            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+                if (result == true) {
+                  setState(() {
+                    _cutiList = CutiService.fetchCuti(); // refresh data
+                  });
+                }
+              },
+              backgroundColor: AppColors.secondary,
+              shape: const CircleBorder(),
+              child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+            ),
           ),
         ),
       ],

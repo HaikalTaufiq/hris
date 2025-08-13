@@ -203,7 +203,10 @@ class TugasTabel extends StatelessWidget {
           ];
 
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.02,
+              vertical: MediaQuery.of(context).size.height * 0.01,
+            ),
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.primary,

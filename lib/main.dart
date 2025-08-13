@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hr/presentation/pages/landing/landing_page.dart';
+import 'package:hr/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {

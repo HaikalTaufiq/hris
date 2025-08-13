@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/data/services/auth_service.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
+import 'package:hr/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginButton extends StatelessWidget {
   final TextEditingController emailController;
@@ -29,6 +31,8 @@ class LoginButton extends StatelessWidget {
         final result = await auth.login(email, password);
 
         if (result['success']) {
+          final userProvider = context.read<UserProvider>();
+          userProvider.setUser(result['user']);
           NotificationHelper.showSnackBar(context, result['message'],
               isSuccess: true);
           Navigator.pushReplacement(
