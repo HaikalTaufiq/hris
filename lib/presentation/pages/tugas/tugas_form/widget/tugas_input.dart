@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
+import 'package:hr/data/models/user_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
+import 'package:hr/data/services/tugas_service.dart';
+import 'package:hr/data/services/user_service.dart';
 
 class TugasInput extends StatefulWidget {
   const TugasInput({super.key});
@@ -17,21 +21,39 @@ class TugasInput extends StatefulWidget {
 
 class _TugasInputState extends State<TugasInput> {
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
+  final TextEditingController _tanggalSelesaiController = TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
+  final TextEditingController _lokasiController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _judulTugasController = TextEditingController();
+  
 
   String? _assignmentMode;
-  String? _selectedPerson;
+  UserModel? _selectedUser;
   DepartemenModel? _selectedDepartment;
-
-  bool _isLoadingDepartemen = true;
+  List<UserModel> _userList = [];
   List<DepartemenModel> _departemenList = [];
+  bool _isLoadingUser = true;
+  bool _isLoadingDepartemen = true;
 
   @override
   void initState() {
     super.initState();
     _loadDepartemen();
+    _loadUsers();
+  }
+
+  Future<void> _loadUsers() async {
+    try {
+      final userData = await UserService.fetchUsers();
+      setState(() {
+        _userList = userData;
+        _isLoadingUser = false;
+      });
+    } catch (e) {
+      print("Error fetch users: $e");
+      setState(() => _isLoadingUser = false);
+    }
   }
 
   Future<void> _loadDepartemen() async {
@@ -71,12 +93,17 @@ class _TugasInputState extends State<TugasInput> {
   }
 
   @override
+  @override
   void dispose() {
     _tanggalMulaiController.dispose();
     _tanggalSelesaiController.dispose();
     _jamMulaiController.dispose();
+    _lokasiController.dispose();
+    _noteController.dispose();
+    _judulTugasController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +139,7 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Judul Tugas",
             hint: "",
+            controller: _judulTugasController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -154,7 +182,7 @@ class _TugasInputState extends State<TugasInput> {
             onChanged: (val) {
               setState(() {
                 _assignmentMode = val!;
-                _selectedPerson = null;
+                _selectedUser = null;
                 _selectedDepartment = null;
               });
             },
@@ -167,21 +195,29 @@ class _TugasInputState extends State<TugasInput> {
           ),
           const SizedBox(height: 10),
           if (_assignmentMode == 'Per Orang')
-            CustomDropDownField(
-              label: 'Tugaskan Kepada',
-              hint: '',
-              items: ['Budi', 'Elon', 'Nelo'],
-              value: _selectedPerson,
-              onChanged: (val) {
-                setState(() => _selectedPerson = val);
-              },
-              labelStyle: labelStyle,
-              textStyle: textStyle,
-              dropdownColor: AppColors.secondary,
-              dropdownTextColor: AppColors.putih,
-              dropdownIconColor: AppColors.putih,
-              inputStyle: inputStyle,
-            )
+            _isLoadingUser
+                ? const CircularProgressIndicator()
+                : CustomDropDownField(
+                    label: 'Karyawan',
+                    hint: 'Pilih user',
+                    items: _userList
+                        .map((user) => user.nama)
+                        .where((name) => name.isNotEmpty)
+                        .toList(),
+                    value: _selectedUser?.nama,
+                    onChanged: (val) {
+                      setState(() {
+                        _selectedUser = _userList.firstWhere((user) => user.nama == val);
+                      });
+                    },
+
+                    labelStyle: labelStyle,
+                    textStyle: textStyle,
+                    dropdownColor: AppColors.secondary,
+                    dropdownTextColor: AppColors.putih,
+                    dropdownIconColor: AppColors.putih,
+                    inputStyle: inputStyle,
+                  )
           else if (_assignmentMode == 'Per Departemen')
             _isLoadingDepartemen
                 ? const CircularProgressIndicator()
@@ -211,6 +247,7 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Lokasi",
             hint: 'Masukkan lokasi tugas',
+            controller: _lokasiController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -218,6 +255,7 @@ class _TugasInputState extends State<TugasInput> {
           CustomInputField(
             label: "Note",
             hint: "",
+            controller: _noteController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -226,17 +264,44 @@ class _TugasInputState extends State<TugasInput> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                if (_assignmentMode == 'Per Orang') {
-                  print("Mode: Per Orang");
-                  print("User: $_selectedPerson");
-                } else {
-                  print("Mode: Per Departemen");
-                  print("Departemen ID: ${_selectedDepartment?.id}");
-                  print(
-                      "Departemen Nama: ${_selectedDepartment?.namaDepartemen}");
+              onPressed: () async {
+                if (_judulTugasController.text.isEmpty ||
+                    _jamMulaiController.text.isEmpty ||
+                    _tanggalMulaiController.text.isEmpty ||
+                    _tanggalSelesaiController.text.isEmpty ||
+                    _assignmentMode == null ||
+                    _lokasiController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Harap isi semua data wajib")),
+                  );
+                  return;
                 }
+
+                final result = await TugasService.createTugas(
+                  judul: _judulTugasController.text,
+                  jamMulai: _jamMulaiController.text,
+                  tanggalMulai: _tanggalMulaiController.text,
+                  tanggalSelesai: _tanggalSelesaiController.text,
+                  assignmentMode: _assignmentMode!,
+                  person: _assignmentMode == "Per Orang" 
+                      ? _selectedUser?.id
+                      : null,
+                  departmentId: _assignmentMode == "Per Departemen"
+                      ? _selectedDepartment?.id
+                      : null,
+                  lokasi: _lokasiController.text,
+                  note: _noteController.text,
+                );
+
+                if (!mounted) return;
+
+                NotificationHelper.showSnackBar(
+                  context,
+                  result['message'],
+                  isSuccess: true,
+                );
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),

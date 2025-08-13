@@ -18,15 +18,16 @@ class UserModel {
     required this.statusPernikahan,
     required this.peran,
     required this.departemen,
+
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      nama: json['nama'],
-      email: json['email'],
-      jenisKelamin: json['jenis_kelamin'],
-      statusPernikahan:json ['status_pernikahan'],
+      id: json['id'] ?? 0,
+      nama: json['nama'] ?? '',
+      email: json['email'] ?? '',
+      jenisKelamin: json['jenis_kelamin'] ?? '',
+      statusPernikahan:json ['status_pernikahan'] ?? '',
       peran: PeranModel.fromJson(json['peran']),
       departemen: DepartemenModel.fromJson(json['departemen']),
     );

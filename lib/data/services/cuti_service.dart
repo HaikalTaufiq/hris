@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, curly_braces_in_flow_control_structures
 
 import 'dart:convert';
 // import 'package:intl/intl.dart';
@@ -40,6 +40,7 @@ class CutiService {
     }
   }
 
+  // Tambah cuti
   static Future<bool> createCuti({
     required String nama,
     required String tipeCuti,
@@ -52,7 +53,6 @@ class CutiService {
       throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     try {
-      // Asumsikan input tanggal format "dd / MM / yyyy" seperti yang kamu tampilkan di UI
       final formattedMulai = DateFormat('dd / MM / yyyy')
           .parse(tanggalMulai)
           .toIso8601String()
