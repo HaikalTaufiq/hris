@@ -60,7 +60,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
                   style: TextStyle(
                     fontFamily: GoogleFonts.poppins().fontFamily,
                     fontSize: width * 0.04,
-                    color: AppColors.putih,
+                    color: Colors.white,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

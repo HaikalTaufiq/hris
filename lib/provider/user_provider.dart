@@ -23,12 +23,14 @@ class UserProvider extends ChangeNotifier {
     if (roleName == "Super Admin") {
       features = [
         ...FeatureIds.manageCuti,
+        ...FeatureIds.manageLembur,
       ];
     }
     // Kalau bukan Super Admin, load dari database
     else {
       features = [
         ...FeatureIds.userCuti,
+        ...FeatureIds.userLembur,
       ];
       // features = await getRoleFeaturesFromDB(user.peran.id);
     }

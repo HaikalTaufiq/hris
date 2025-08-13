@@ -10,6 +10,7 @@ import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form.dart';
 import 'package:hr/presentation/pages/lembur/widgets/lembur_card.dart';
 import 'package:hr/data/services/lembur_service.dart';
+import 'package:hr/provider/features/features_guard.dart';
 
 class LemburPage extends StatefulWidget {
   const LemburPage({super.key});
@@ -118,24 +119,27 @@ class _LemburPageState extends State<LemburPage> {
         ),
 
         // FAB (Floating Button)
-        Positioned(
-          bottom: 16,
-          right: 16,
-          child: FloatingActionButton(
-            onPressed: () async {
-              final result = await Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const LemburForm()),
-              );
+        FeatureGuard(
+          featureId: "add_lembur",
+          child: Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const LemburForm()),
+                );
 
-              if (result == true) {
-                setState(() {
-                  _lemburList = LemburService.fetchLembur(); // refresh data
-                });
-              }
-            },
-            backgroundColor: AppColors.secondary,
-            shape: const CircleBorder(),
-            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+                if (result == true) {
+                  setState(() {
+                    _lemburList = LemburService.fetchLembur(); // refresh data
+                  });
+                }
+              },
+              backgroundColor: AppColors.secondary,
+              shape: const CircleBorder(),
+              child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+            ),
           ),
         ),
       ],

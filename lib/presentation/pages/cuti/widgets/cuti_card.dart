@@ -64,7 +64,8 @@ class CutiCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(left: 8),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        width: 80, // Fixed width for consistency
+        height: 38, // Fixed height for consistency
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(8),
@@ -76,13 +77,16 @@ class CutiCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            fontFamily: GoogleFonts.poppins().fontFamily,
-            color: Colors.white,
+        child: Center(
+          // Center the text
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

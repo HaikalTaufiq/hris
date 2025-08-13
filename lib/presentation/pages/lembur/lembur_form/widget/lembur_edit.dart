@@ -1,39 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/data/services/cuti_service.dart';
+import 'package:hr/data/models/lembur_model.dart';
+import 'package:hr/data/services/lembur_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CutiInput extends StatefulWidget {
-  const CutiInput({super.key});
+class LemburEdit extends StatefulWidget {
+  final LemburModel lembur;
+
+  const LemburEdit({super.key, required this.lembur});
 
   @override
-  State<CutiInput> createState() => _CutiInputState();
+  State<LemburEdit> createState() => _LemburEditState();
 }
 
-class _CutiInputState extends State<CutiInput> {
+class _LemburEditState extends State<LemburEdit> {
   final TextEditingController _namaController = TextEditingController();
-  final TextEditingController _tipeCutiController = TextEditingController();
-  final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
-  final TextEditingController _alasanController = TextEditingController();
+  final TextEditingController _tanggalController = TextEditingController();
+  final TextEditingController _jamMulaiController = TextEditingController();
+  final TextEditingController _jamSelesaiController = TextEditingController();
+  final TextEditingController _deskripsiController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _tanggalController.text = widget.lembur.tanggal;
+    _jamMulaiController.text = widget.lembur.jamMulai;
+    _jamSelesaiController.text = widget.lembur.jamSelesai;
+    _deskripsiController.text = widget.lembur.deskripsi;
     _loadNamaUser();
   }
 
   void _loadNamaUser() async {
     final prefs = await SharedPreferences.getInstance();
     final nama = prefs.getString('nama') ?? '';
-    setState(() {
-      _namaController.text = nama;
-    });
+    if (mounted) {
+      setState(() {
+        _namaController.text = nama;
+      });
+    }
+  }
+
+  void _onTapIcon(TextEditingController controller) async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null && mounted) {
+      final jam = pickedTime.hour.toString().padLeft(2, '0');
+      final menit = pickedTime.minute.toString().padLeft(2, '0');
+      final formattedTime = '$jam:$menit';
+
+      setState(() {
+        controller.text = formattedTime;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _namaController.dispose();
+    _tanggalController.dispose();
+    _jamMulaiController.dispose();
+    _jamSelesaiController.dispose();
+    _deskripsiController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,6 +92,7 @@ class _CutiInputState extends State<CutiInput> {
       color: AppColors.putih,
       fontSize: 14,
     );
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: MediaQuery.of(context).size.width * 0.05,
@@ -73,29 +108,12 @@ class _CutiInputState extends State<CutiInput> {
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
-          ),
-          CustomDropDownField(
-            label: 'Tipe Cuti',
-            hint: '',
-            items: ['Tahunan', 'Cuti Sakit', 'Cuti Bersama', 'Izin'],
-            labelStyle: labelStyle,
-            textStyle: textStyle,
-            dropdownColor: AppColors.secondary,
-            dropdownTextColor: AppColors.putih,
-            dropdownIconColor: AppColors.putih,
-            inputStyle: inputStyle,
-            onChanged: (String? val) {
-              if (val != null) {
-                setState(() {
-                  _tipeCutiController.text = val;
-                });
-              }
-            },
+            readOnly: true,
           ),
           CustomInputField(
-            label: "Tanggal Mulai",
+            label: "Tanggal Lembur",
             hint: "dd / mm / yyyy",
-            controller: _tanggalMulaiController,
+            controller: _tanggalController,
             suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
             onTapIcon: () async {
               final pickedDate = await showDatePicker(
@@ -104,13 +122,13 @@ class _CutiInputState extends State<CutiInput> {
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
               );
-              if (pickedDate != null) {
+              if (pickedDate != null && mounted) {
                 final formatted =
                     "${pickedDate.day.toString().padLeft(2, '0')} / "
                     "${pickedDate.month.toString().padLeft(2, '0')} / "
                     "${pickedDate.year}";
                 setState(() {
-                  _tanggalMulaiController.text = formatted;
+                  _tanggalController.text = formatted;
                 });
               }
             },
@@ -119,35 +137,29 @@ class _CutiInputState extends State<CutiInput> {
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Tanggal Selesai",
-            hint: "dd / mm / yyyy",
-            controller: _tanggalSelesaiController,
-            suffixIcon: Icon(Icons.calendar_today, color: AppColors.putih),
-            onTapIcon: () async {
-              final pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2101),
-              );
-              if (pickedDate != null) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                setState(() {
-                  _tanggalSelesaiController.text = formatted;
-                });
-              }
-            },
+            label: "Jam Mulai",
+            hint: "--:--",
+            controller: _jamMulaiController,
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
+            onTapIcon: () => _onTapIcon(_jamMulaiController),
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Alasan",
+            label: "Jam Selesai",
+            hint: "--:--",
+            controller: _jamSelesaiController,
+            suffixIcon: Icon(Icons.access_time, color: AppColors.putih),
+            onTapIcon: () => _onTapIcon(_jamSelesaiController),
+            labelStyle: labelStyle,
+            textStyle: textStyle,
+            inputStyle: inputStyle,
+          ),
+          CustomInputField(
+            label: "Keterangan",
             hint: "",
-            controller: _alasanController,
+            controller: _deskripsiController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -157,25 +169,32 @@ class _CutiInputState extends State<CutiInput> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                final success = await CutiService.createCuti(
-                  nama: _namaController.text,
-                  tipeCuti: _tipeCutiController.text,
-                  tanggalMulai: _tanggalMulaiController.text,
-                  tanggalSelesai: _tanggalSelesaiController.text,
-                  alasan: _alasanController.text,
-                );
-                if (success) {
-                  if (context.mounted) {
+                try {
+                  final success = await LemburService.createLembur(
+                    tanggal: _tanggalController.text,
+                    jamMulai: _jamMulaiController.text,
+                    jamSelesai: _jamSelesaiController.text,
+                    deskripsi: _deskripsiController.text,
+                  );
+
+                  if (!mounted) return;
+
+                  if (success) {
                     NotificationHelper.showSnackBar(
-                        context, 'Cuti berhasil diajukan');
-                    Navigator.of(context).pop(true);
-                  }
-                } else {
-                  if (context.mounted) {
+                        context, 'Lembur berhasil diajukan');
+                    if (mounted) {
+                      Navigator.of(context).pop(true);
+                    }
+                  } else {
                     NotificationHelper.showSnackBar(
-                        context, 'Gagal mengajukan Cuti',
+                        context, 'Gagal mengajukan lembur',
                         isSuccess: false);
                   }
+                } catch (e) {
+                  if (!mounted) return;
+                  NotificationHelper.showSnackBar(
+                      context, 'Terjadi kesalahan: $e',
+                      isSuccess: false);
                 }
               },
               style: ElevatedButton.styleFrom(
