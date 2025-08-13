@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,12 +23,49 @@ class CutiPage extends StatefulWidget {
 
 class _CutiPageState extends State<CutiPage> {
   late Future<List<CutiModel>> _cutiList;
-  final searchController = TextEditingController(); // value awal
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _cutiList = CutiService.fetchCuti();
+  }
+
+  Future<void> _deleteCuti(CutiModel cuti) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Konfirmasi Hapus"),
+        content: const Text("Apakah Anda yakin ingin menghapus cuti ini?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Batal"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              "Hapus",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      final result = await CutiService.deleteCuti(cuti.id);
+      final message = result['message'] ?? 'Gagal menghapus cuti';
+      final isSuccess = message.toLowerCase().contains('berhasil');
+
+      NotificationHelper.showSnackBar(context, message, isSuccess: isSuccess);
+
+      if (isSuccess) {
+        setState(() {
+          _cutiList = CutiService.fetchCuti();
+        });
+      }
+    }
   }
 
   @override
@@ -39,11 +78,9 @@ class _CutiPageState extends State<CutiPage> {
             Header(title: 'Pengajuan Cuti'),
             SearchingBar(
               controller: searchController,
-              onChanged: (value) {
-                print("Search Halaman A: $value");
-              },
-              onFilter1Tap: () => print("Filter1 Halaman A"),
-              onFilter2Tap: () => print("Filter2 Halaman A"),
+              onChanged: (value) => print("Search: $value"),
+              onFilter1Tap: () => print("Filter1"),
+              onFilter2Tap: () => print("Filter2"),
             ),
             FutureBuilder<List<CutiModel>>(
               future: _cutiList,
@@ -51,9 +88,7 @@ class _CutiPageState extends State<CutiPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
-                    child: const Center(
-                      child: LoadingWidget(),
-                    ),
+                    child: const Center(child: LoadingWidget()),
                   );
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -61,13 +96,14 @@ class _CutiPageState extends State<CutiPage> {
                   return Padding(
                     padding: const EdgeInsets.all(16),
                     child: Center(
-                        child: Text(
-                      'Tidak ada data cuti',
-                      style: TextStyle(
-                        color: AppColors.putih,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      child: Text(
+                        'Tidak ada data cuti',
+                        style: TextStyle(
+                          color: AppColors.putih,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
-                    )),
+                    ),
                   );
                 } else {
                   final cutiData = snapshot.data!;
@@ -109,6 +145,9 @@ class _CutiPageState extends State<CutiPage> {
                                 isSuccess: false);
                           }
                         },
+                        onDelete: () async {
+                          await _deleteCuti(cuti);
+                        },
                       );
                     },
                   );
@@ -130,7 +169,7 @@ class _CutiPageState extends State<CutiPage> {
 
                 if (result == true) {
                   setState(() {
-                    _cutiList = CutiService.fetchCuti(); // refresh data
+                    _cutiList = CutiService.fetchCuti();
                   });
                 }
               },

@@ -135,4 +135,27 @@ class CutiService {
       return null;
     }
   }
+
+  // Hapus cuti
+  static Future<Map<String, dynamic>> deleteCuti(int id) async {
+    final token = await _getToken();
+    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/cuti/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+        final body = json.decode(response.body);
+    
+    return {
+      'message': body['message'] ??
+          (response.statusCode == 200
+              ? 'Tugas berhasil dihapus'
+              : 'Gagal menghapus tugas'),
+    };
+  }
 }
