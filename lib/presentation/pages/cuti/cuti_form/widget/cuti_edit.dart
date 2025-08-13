@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
@@ -21,8 +23,7 @@ class _CutiEditState extends State<CutiEdit> {
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
+  final TextEditingController _tanggalSelesaiController = TextEditingController();
   final TextEditingController _alasanController = TextEditingController();
 
   @override
@@ -84,7 +85,7 @@ class _CutiEditState extends State<CutiEdit> {
           CustomDropDownField(
             label: 'Tipe Cuti',
             hint: '',
-            items: ['Tahunan', 'Cuti Sakit', 'Cuti Bersama', 'Izin'],
+            items: ['Tahunan', 'Sakit', 'Cuti Bersama', 'Izin'],
             labelStyle: labelStyle,
             textStyle: textStyle,
             dropdownColor: AppColors.secondary,
@@ -164,25 +165,23 @@ class _CutiEditState extends State<CutiEdit> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                final success = await CutiService.createCuti(
+                final result = await CutiService.editCuti(
+                  id: widget.cuti.id,
                   nama: _namaController.text,
                   tipeCuti: _tipeCutiController.text,
                   tanggalMulai: _tanggalMulaiController.text,
                   tanggalSelesai: _tanggalSelesaiController.text,
                   alasan: _alasanController.text,
                 );
-                if (success) {
-                  if (context.mounted) {
-                    NotificationHelper.showSnackBar(
-                        context, 'Lembur berhasil diajukan');
-                    Navigator.of(context).pop(true);
-                  }
-                } else {
-                  if (context.mounted) {
-                    NotificationHelper.showSnackBar(
-                        context, 'Gagal mengajukan lembur',
-                        isSuccess: false);
-                  }
+                
+                NotificationHelper.showSnackBar(
+                  context,
+                  result['message'],
+                  isSuccess: result['success'],
+                );
+
+                if (result['success']) {
+                  Navigator.pop(context, true); // kembalikan true agar halaman sebelumnya bisa refresh
                 }
               },
               style: ElevatedButton.styleFrom(

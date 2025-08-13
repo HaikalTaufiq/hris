@@ -90,6 +90,86 @@ class CutiService {
     }
   }
 
+  // Edit cuti
+  static Future<Map<String, dynamic>> editCuti({
+    required int id,
+    required String nama,
+    required String tipeCuti,
+    required String tanggalMulai,
+    required String tanggalSelesai,
+    required String alasan,
+  }) async {
+    final token = await _getToken();
+    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+
+    // Format tanggal untuk API
+    String _formatDateForApi(String input) {
+      input = input.trim();
+      // Jika format sudah YYYY-MM-DD, kembalikan apa adanya
+      if (RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(input)) return input;
+
+      // Jika format dd / mm / yyyy
+      final parts = input.split(RegExp(r'\s*/\s*')); // split dengan / dan hilangkan spasi
+      if (parts.length == 3) {
+        return "${parts[2]}-${parts[1].padLeft(2,'0')}-${parts[0].padLeft(2,'0')}";
+      }
+      return input;
+    }
+
+    final requestBody = {
+      'nama': nama,
+      'tipe_cuti': tipeCuti,
+      'tanggal_mulai': _formatDateForApi(tanggalMulai),
+      'tanggal_selesai': _formatDateForApi(tanggalSelesai),
+      'alasan': alasan,
+    };
+
+    // Debug: lihat data yang dikirim
+    print("DATA KIRIM: $requestBody");
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/api/cuti/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    final responseBody = json.decode(response.body);
+    print("RESPON API: $responseBody"); 
+
+    return {
+      'success': response.statusCode == 200,
+      'message': responseBody['message'] ?? 'Gagal update tugas',
+    };
+
+  }
+
+  // Hapus cuti
+  static Future<Map<String, dynamic>> deleteCuti(int id) async {
+    final token = await _getToken();
+    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/cuti/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    final body = json.decode(response.body);
+    
+    return {
+      'message': body['message'] ??
+          (response.statusCode == 200
+              ? 'Tugas berhasil dihapus'
+              : 'Gagal menghapus tugas'),
+    };
+  }
+
   // Approve cuti
   static Future<String?> approveCuti(int id) async {
     final token = await _getToken();
@@ -136,26 +216,4 @@ class CutiService {
     }
   }
 
-  // Hapus cuti
-  static Future<Map<String, dynamic>> deleteCuti(int id) async {
-    final token = await _getToken();
-    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
-
-    final response = await http.delete(
-      Uri.parse('$baseUrl/api/cuti/$id'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
-
-        final body = json.decode(response.body);
-    
-    return {
-      'message': body['message'] ??
-          (response.statusCode == 200
-              ? 'Tugas berhasil dihapus'
-              : 'Gagal menghapus tugas'),
-    };
-  }
 }

@@ -18,8 +18,7 @@ class _CutiInputState extends State<CutiInput> {
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController =
-      TextEditingController();
+  final TextEditingController _tanggalSelesaiController = TextEditingController();
   final TextEditingController _alasanController = TextEditingController();
 
   @override
@@ -77,7 +76,7 @@ class _CutiInputState extends State<CutiInput> {
           CustomDropDownField(
             label: 'Tipe Cuti',
             hint: '',
-            items: ['Tahunan', 'Cuti Sakit', 'Cuti Bersama', 'Izin'],
+            items: ['Tahunan', 'Sakit', 'Cuti Bersama', 'Izin'],
             labelStyle: labelStyle,
             textStyle: textStyle,
             dropdownColor: AppColors.secondary,

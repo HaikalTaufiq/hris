@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +30,41 @@ class _LemburPageState extends State<LemburPage> {
     super.initState();
     _lemburList = LemburService.fetchLembur();
   }
+
+  Future<void> _deleteLembur(LemburModel lembur) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Konfirmasi Hapus"),
+        content: const Text("Apakah Anda yakin ingin menghapus lembur ini?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Batal"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      final result = await LemburService.deleteLembur(lembur.id);
+      final message = result['message'] ?? 'Gagal menghapus lembur';
+      final isSuccess = message.toLowerCase().contains('berhasil');
+
+      NotificationHelper.showSnackBar(context, message, isSuccess: isSuccess);
+
+      if (isSuccess) {
+        setState(() {
+          _lemburList = LemburService.fetchLembur(); // refresh list
+        });
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +145,9 @@ class _LemburPageState extends State<LemburPage> {
                                 context, 'Gagal menolak lembur',
                                 isSuccess: false);
                           }
+                        },
+                        onDelete: () async {
+                          await _deleteLembur(lembur);
                         },
                       );
                     },
