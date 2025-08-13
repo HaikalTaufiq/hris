@@ -12,12 +12,14 @@ class CutiCard extends StatelessWidget {
   final CutiModel cuti;
   final VoidCallback onApprove;
   final VoidCallback onDecline;
+  final VoidCallback onDelete;
 
   const CutiCard({
     super.key,
     required this.cuti,
     required this.onApprove,
     required this.onDecline,
+    required this.onDelete,
   });
 
   // ======================= HELPERS =======================
@@ -257,7 +259,7 @@ class CutiCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'user_delete_cuti',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete),
                         ),
                         FeatureGuard(
                           featureId: 'user_edit_cuti',
@@ -293,7 +295,8 @@ class CutiCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'user_delete_cuti',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete
+                              ),
                         ),
                         FeatureGuard(
                           featureId: 'user_edit_cuti',
@@ -313,7 +316,7 @@ class CutiCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'delete_cuti',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete),
                         ),
                         FeatureGuard(
                           featureId: 'edit_cuti',
