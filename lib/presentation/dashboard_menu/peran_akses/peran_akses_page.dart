@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
-import 'package:hr/core/header.dart';
+import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/dashboard_menu/peran_akses/peran_form/peran_form.dart';
 import 'package:hr/presentation/dashboard_menu/peran_akses/widgets/peran_tabel.dart';

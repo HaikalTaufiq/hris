@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hr/core/header.dart';
+import 'package:hr/components/custom/header.dart';
 import 'package:hr/presentation/pages/profile/widget/profile_edit.dart';
 
 class ProfilePage extends StatefulWidget {

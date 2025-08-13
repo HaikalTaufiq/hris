@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
-import 'package:hr/core/header.dart';
+import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_keluar_page.dart';
 import 'package:hr/presentation/pages/absen/absen_form/absen_masuk_page.dart';
