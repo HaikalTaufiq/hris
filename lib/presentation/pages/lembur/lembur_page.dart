@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/loading.dart';
+import 'package:hr/components/custom/show_confirmation.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
@@ -27,6 +30,60 @@ class _LemburPageState extends State<LemburPage> {
   void initState() {
     super.initState();
     _lemburList = LemburService.fetchLembur();
+  }
+
+  Future<void> _approveLembur(LemburModel lembur) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Persetujuan",
+      content: "Apakah Anda yakin ingin menyetujui lembur ini?",
+      confirmText: "Setuju",
+      cancelText: "Batal",
+      confirmColor: AppColors.green,
+    );
+
+    if (confirmed) {
+      final message = await LemburService.approveLembur(lembur.id);
+      if (message != null) {
+        setState(() {
+          _lemburList = LemburService.fetchLembur();
+        });
+        NotificationHelper.showSnackBar(context, message, isSuccess: true);
+      } else {
+        NotificationHelper.showSnackBar(
+          context,
+          'Gagal menyetujui lembur',
+          isSuccess: false,
+        );
+      }
+    }
+  }
+
+  Future<void> _declineLembur(LemburModel lembur) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Penolakan",
+      content: "Apakah Anda yakin ingin menolak lembur ini?",
+      confirmText: "Tolak",
+      cancelText: "Batal",
+      confirmColor: AppColors.red,
+    );
+
+    if (confirmed) {
+      final message = await LemburService.declineLembur(lembur.id);
+      if (message != null) {
+        setState(() {
+          _lemburList = LemburService.fetchLembur();
+        });
+        NotificationHelper.showSnackBar(context, message, isSuccess: true);
+      } else {
+        NotificationHelper.showSnackBar(
+          context,
+          'Gagal menolak lembur',
+          isSuccess: false,
+        );
+      }
+    }
   }
 
   @override
@@ -79,36 +136,8 @@ class _LemburPageState extends State<LemburPage> {
                       final lembur = lemburData[index];
                       return LemburCard(
                         lembur: lembur,
-                        onApprove: () async {
-                          final message =
-                              await LemburService.approveLembur(lembur.id);
-                          if (message != null) {
-                            setState(() {
-                              _lemburList = LemburService.fetchLembur();
-                            });
-                            NotificationHelper.showSnackBar(context, message,
-                                isSuccess: true);
-                          } else {
-                            NotificationHelper.showSnackBar(
-                                context, 'Gagal menyetujui lembur',
-                                isSuccess: false);
-                          }
-                        },
-                        onDecline: () async {
-                          final message =
-                              await LemburService.declineLembur(lembur.id);
-                          if (message != null) {
-                            setState(() {
-                              _lemburList = LemburService.fetchLembur();
-                            });
-                            NotificationHelper.showSnackBar(context, message,
-                                isSuccess: true);
-                          } else {
-                            NotificationHelper.showSnackBar(
-                                context, 'Gagal menolak lembur',
-                                isSuccess: false);
-                          }
-                        },
+                        onApprove: () => _approveLembur(lembur),
+                        onDecline: () => _declineLembur(lembur),
                       );
                     },
                   );

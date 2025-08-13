@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/loading.dart';
+import 'package:hr/components/custom/show_confirmation.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
@@ -32,28 +33,16 @@ class _CutiPageState extends State<CutiPage> {
   }
 
   Future<void> _deleteCuti(CutiModel cuti) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Konfirmasi Hapus"),
-        content: const Text("Apakah Anda yakin ingin menghapus cuti ini?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Batal"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text(
-              "Hapus",
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Hapus",
+      content: "Apakah Anda yakin ingin menghapus cuti ini?",
+      confirmText: "Hapus",
+      cancelText: "Batal",
+      confirmColor: AppColors.red,
     );
 
-    if (confirmed == true) {
+    if (confirmed) {
       final result = await CutiService.deleteCuti(cuti.id);
       final message = result['message'] ?? 'Gagal menghapus cuti';
       final isSuccess = message.toLowerCase().contains('berhasil');
@@ -64,6 +53,60 @@ class _CutiPageState extends State<CutiPage> {
         setState(() {
           _cutiList = CutiService.fetchCuti();
         });
+      }
+    }
+  }
+
+  Future<void> _approveCuti(CutiModel cuti) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Persetujuan",
+      content: "Apakah Anda yakin ingin menyetujui cuti ini?",
+      confirmText: "Setuju",
+      cancelText: "Batal",
+      confirmColor: AppColors.green,
+    );
+
+    if (confirmed) {
+      final message = await CutiService.approveCuti(cuti.id);
+      if (message != null) {
+        setState(() {
+          _cutiList = CutiService.fetchCuti();
+        });
+        NotificationHelper.showSnackBar(context, message, isSuccess: true);
+      } else {
+        NotificationHelper.showSnackBar(
+          context,
+          'Gagal menyetujui cuti',
+          isSuccess: false,
+        );
+      }
+    }
+  }
+
+  Future<void> _declineCuti(CutiModel cuti) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Penolakan",
+      content: "Apakah Anda yakin ingin menolak cuti ini?",
+      confirmText: "Tolak",
+      cancelText: "Batal",
+      confirmColor: AppColors.red,
+    );
+
+    if (confirmed) {
+      final message = await CutiService.declineCuti(cuti.id);
+      if (message != null) {
+        setState(() {
+          _cutiList = CutiService.fetchCuti();
+        });
+        NotificationHelper.showSnackBar(context, message, isSuccess: true);
+      } else {
+        NotificationHelper.showSnackBar(
+          context,
+          'Gagal menolak cuti',
+          isSuccess: false,
+        );
       }
     }
   }
@@ -115,39 +158,9 @@ class _CutiPageState extends State<CutiPage> {
                       final cuti = cutiData[index];
                       return CutiCard(
                         cuti: cuti,
-                        onApprove: () async {
-                          final message =
-                              await CutiService.approveCuti(cuti.id);
-                          if (message != null) {
-                            setState(() {
-                              _cutiList = CutiService.fetchCuti();
-                            });
-                            NotificationHelper.showSnackBar(context, message,
-                                isSuccess: true);
-                          } else {
-                            NotificationHelper.showSnackBar(
-                                context, 'Gagal menyetujui cuti',
-                                isSuccess: false);
-                          }
-                        },
-                        onDecline: () async {
-                          final message =
-                              await CutiService.declineCuti(cuti.id);
-                          if (message != null) {
-                            setState(() {
-                              _cutiList = CutiService.fetchCuti();
-                            });
-                            NotificationHelper.showSnackBar(context, message,
-                                isSuccess: true);
-                          } else {
-                            NotificationHelper.showSnackBar(
-                                context, 'Gagal menolak cuti',
-                                isSuccess: false);
-                          }
-                        },
-                        onDelete: () async {
-                          await _deleteCuti(cuti);
-                        },
+                        onApprove: () => _approveCuti(cuti),
+                        onDecline: () => _declineCuti(cuti),
+                        onDelete: () => _deleteCuti(cuti),
                       );
                     },
                   );

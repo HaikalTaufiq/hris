@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/model/dahsboard_menu_item.dart';
+import 'package:provider/provider.dart';
+import 'package:hr/provider/user_provider.dart';
 
 class DashboardMenu extends StatelessWidget {
   final List<DashboardMenuItem> items;
@@ -10,8 +12,17 @@ class DashboardMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double iconSize = MediaQuery.of(context).size.width * 0.07; // responsif
-    double fontSize = MediaQuery.of(context).size.width * 0.028; // responsif
+    final userProvider = context.watch<UserProvider>();
+
+    double iconSize = MediaQuery.of(context).size.width * 0.07;
+    double fontSize = MediaQuery.of(context).size.width * 0.028;
+
+    // filter menu yang user punya akses
+    final accessibleItems = items.where((item) {
+      // kalau featureId null berarti semua bisa akses
+      if (item.featureId == null) return true;
+      return userProvider.hasFeature(item.featureId!);
+    }).toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -32,14 +43,12 @@ class DashboardMenu extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           GridView.count(
-            crossAxisCount: MediaQuery.of(context).size.width < 360
-                ? 3
-                : 4, // lebih rapat untuk hp kecil
+            crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : 4,
             crossAxisSpacing: 12,
             mainAxisSpacing: 24,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            children: items.map((item) {
+            children: accessibleItems.map((item) {
               return GestureDetector(
                 onTap: item.onTap,
                 child: Column(
@@ -73,7 +82,7 @@ class DashboardMenu extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2, // maksimal 2 baris
+                        maxLines: 2,
                         softWrap: true,
                       ),
                     ),

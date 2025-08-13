@@ -24,6 +24,7 @@ class UserProvider extends ChangeNotifier {
       features = [
         ...FeatureIds.manageCuti,
         ...FeatureIds.manageLembur,
+        ...FeatureIds.dashboard,
       ];
     }
     // Kalau bukan Super Admin, load dari database
@@ -31,6 +32,7 @@ class UserProvider extends ChangeNotifier {
       features = [
         ...FeatureIds.userCuti,
         ...FeatureIds.userLembur,
+        ...FeatureIds.dashboardUser,
       ];
       // features = await getRoleFeaturesFromDB(user.peran.id);
     }

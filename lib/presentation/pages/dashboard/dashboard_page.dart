@@ -30,6 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
           items: [
             DashboardMenuItem(
               label: "Karyawan",
+              featureId: "management_karyawan",
               icon: FontAwesomeIcons.userGroup,
               onTap: () {
                 Navigator.push(
@@ -43,6 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Gaji",
+              featureId: "gaji",
               icon: FontAwesomeIcons.moneyBill,
               onTap: () {
                 Navigator.push(
@@ -55,6 +57,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Departemen",
+              featureId: "department",
               icon: FontAwesomeIcons.landmark,
               onTap: () {
                 Navigator.push(
@@ -67,6 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Jabatan",
+              featureId: "jabatan",
               icon: FontAwesomeIcons.sitemap,
               onTap: () {
                 Navigator.push(
@@ -79,6 +83,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Hak Akses",
+              featureId: "hak_akses",
               icon: FontAwesomeIcons.fileShield,
               onTap: () {
                 Navigator.push(
@@ -91,6 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Tentang",
+              featureId: "tentang",
               icon: FontAwesomeIcons.infoCircle,
               onTap: () {
                 Navigator.push(
@@ -103,6 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Log Aktivitas",
+              featureId: "log_aktivitas",
               icon: FontAwesomeIcons.history,
               onTap: () {
                 Navigator.push(
@@ -115,6 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             DashboardMenuItem(
               label: "Pengaturan",
+              featureId: "pengaturan",
               icon: FontAwesomeIcons.gear,
               onTap: () {
                 Navigator.push(

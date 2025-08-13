@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 
 class LemburCard extends StatelessWidget {
   final LemburModel lembur;
-  final VoidCallback onApprove;
-  final VoidCallback onDecline;
+  final Future<void> Function() onApprove;
+  final Future<void> Function() onDecline;
 
   const LemburCard({
     super.key,
@@ -361,8 +361,8 @@ class LemburCard extends StatelessWidget {
                                         ),
                                         elevation: 2,
                                       ),
-                                      onPressed: () {
-                                        onApprove();
+                                      onPressed: () async {
+                                        await onApprove();
                                         Navigator.pop(context);
                                       },
                                       label: Text(
@@ -385,8 +385,8 @@ class LemburCard extends StatelessWidget {
                                         ),
                                         elevation: 2,
                                       ),
-                                      onPressed: () {
-                                        onDecline();
+                                      onPressed: () async {
+                                        await onDecline();
                                         Navigator.pop(context);
                                       },
                                       label: Text(
@@ -402,7 +402,7 @@ class LemburCard extends StatelessWidget {
                               ),
                             );
                           }),
-                        ),
+                        )
                       ],
               ),
             ],

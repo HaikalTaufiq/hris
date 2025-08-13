@@ -47,6 +47,39 @@ class FeatureIds {
     userEditLembur,
   ];
 
+// ====================== Fitur Dashboard ======================
+  static const karyawan = "management_karyawan";
+  static const gaji = "gaji";
+  static const department = "department";
+  static const jabatan = "jabatan";
+  static const hakAkses = "hak_akses";
+  static const tentang = "tentang";
+  static const logAktivitas = "log_aktivitas";
+  static const pengaturan = "pengaturan";
+
+  // ====================== Modul fitur cuti ======================
+  // Super Admin
+  static const dashboard = [
+    karyawan,
+    gaji,
+    department,
+    jabatan,
+    hakAkses,
+    tentang,
+    logAktivitas,
+    pengaturan,
+  ];
+
+  static const dashboardUser = [
+    karyawan,
+    gaji,
+    department,
+    jabatan,
+    hakAkses,
+    tentang,
+    logAktivitas,
+    pengaturan,
+  ];
   // Contoh paket lain bisa dibuat seperti ini
   // static const ManageLembur = [approveLembur, declineLembur];
 }
