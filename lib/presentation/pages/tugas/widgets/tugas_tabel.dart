@@ -182,20 +182,20 @@ class TugasTabel extends StatelessWidget {
         itemBuilder: (context, tugasIndex) {
           final tugas = tugasList[tugasIndex];
           final List<String> values = [
-            tugas.nama_tugas,
-            tugas.user?.nama ?? 'Unknown',
-            tugas.jam_mulai.isNotEmpty
+            tugas.namaTugas,
+            tugas.users.map((u) => u.nama).join(', '),
+            tugas.jamMulai.isNotEmpty
                 ? DateFormat('HH:mm').format(
-                    DateFormat('HH:mm:ss').parse(tugas.jam_mulai),
+                    DateFormat('HH:mm:ss').parse(tugas.jamMulai),
                   )
                 : '',
-            tugas.tanggal_mulai.isNotEmpty
+            tugas.tanggalMulai.isNotEmpty
                 ? DateFormat('dd/MM/yyyy')
-                    .format(DateTime.parse(tugas.tanggal_mulai))
+                    .format(DateTime.parse(tugas.tanggalMulai))
                 : '',
-            tugas.tanggal_selesai.isNotEmpty
+            tugas.tanggalSelesai.isNotEmpty
                 ? DateFormat('dd/MM/yyyy')
-                    .format(DateTime.parse(tugas.tanggal_selesai))
+                    .format(DateTime.parse(tugas.tanggalSelesai))
                 : '',
             tugas.lokasi,
             tugas.note,
@@ -235,7 +235,7 @@ class TugasTabel extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '${tugas.user?.departemen?.nama_departemen ?? 'Unknown'}',
+                            tugas.users.map((u) => u.nama).join(', '),
                             style: TextStyle(
                               color: AppColors.putih,
                               fontFamily: GoogleFonts.poppins().fontFamily,

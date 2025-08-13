@@ -1,14 +1,14 @@
-class Departemen {
+class DepartemenModel {
   final int id;
   final String namaDepartemen;
 
-  Departemen({
+  DepartemenModel({
     required this.id,
     required this.namaDepartemen,
   });
 
-  factory Departemen.fromJson(Map<String, dynamic> json) {
-    return Departemen(
+  factory DepartemenModel.fromJson(Map<String, dynamic> json) {
+    return DepartemenModel(
       id: json['id'],
       namaDepartemen: json['nama_departemen'],
     );

@@ -126,8 +126,6 @@ class LemburService {
     );
 
     if (response.statusCode == 200) {
-      json.decode(response.body);
-      json.decode(response.body);
       return json.decode(response.body)['message'];
     } else {
       print('Gagal menolak cuti: ${response.statusCode} ${response.body}');

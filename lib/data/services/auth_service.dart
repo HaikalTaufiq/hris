@@ -18,12 +18,16 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final user = UserModel.fromJson(data['user']);
+      final user = UserModel.fromJson(data['data']);
 
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', data['token']); // simpan token
-      await prefs.setString('nama', user.nama); // simpan nama
-      await prefs.setString('peran', user.peran); // simpan peran
+      await prefs.setString('token', data['token']); 
+      await prefs.setString('nama', user.nama); 
+      await prefs.setString('email', user.email);
+      await prefs.setString('jenis_kelamin', user.jenisKelamin);
+      await prefs.setString('status_pernikahan', user.statusPernikahan);
+      await prefs.setString('peran', user.peran.namaPeran);
+      await prefs.setString('departemen',user.departemen.namaDepartemen);
 
       return {
         'success': true,

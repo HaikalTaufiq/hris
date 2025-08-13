@@ -36,4 +36,28 @@ class TugasService {
       throw Exception('Gagal memuat data tugas');
     }
   }
+
+  // lib/data/services/tugas_service.dart
+  static Future<Map<String, dynamic>> deleteTugas(int id) async {
+    final token = await _getToken();
+    if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/tugas/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    final body = json.decode(response.body);
+
+    return {
+      'success': response.statusCode == 200,
+      'message': body['message'] ??
+          (response.statusCode == 200
+              ? 'Tugas berhasil dihapus'
+              : 'Gagal menghapus tugas'),
+    };
+  }
 }
