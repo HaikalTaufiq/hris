@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/tugas_model.dart';
+import 'package:hr/data/services/tugas_service.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_edit_form.dart';
 import 'package:intl/intl.dart';
 
@@ -292,10 +296,18 @@ class TugasTabel extends StatelessWidget {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        // TODO: logika hapus di sini
-                                        Navigator.pop(context);
+                                      onPressed: () async {
+                                        final result = await TugasService.deleteTugas(tugas.id);
+
+                                        NotificationHelper.showSnackBar(
+                                          context,
+                                          result['message'],
+                                          isSuccess: true,
+                                        );
+
+                                        Navigator.pop(context); 
                                       },
+
                                       child: Text(
                                         'Hapus',
                                         style: TextStyle(

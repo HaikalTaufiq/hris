@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
 import 'package:hr/data/models/tugas_model.dart';
+import 'package:hr/data/models/user_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
+import 'package:hr/data/services/tugas_service.dart';
+import 'package:hr/data/services/user_service.dart';
 
 class TugasInputEdit extends StatefulWidget {
   final TugasModel tugas;
@@ -18,25 +22,27 @@ class TugasInputEdit extends StatefulWidget {
 }
 
 class _TugasInputEditState extends State<TugasInputEdit> {
-  final TextEditingController _namaTugasController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
   final TextEditingController _tanggalSelesaiController = TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _lokasiController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _judulTugasController = TextEditingController();
+  
 
   String? _assignmentMode;
-  String? _selectedPerson;
+  UserModel? _selectedUser;
   DepartemenModel? _selectedDepartment;
-
-  bool _isLoadingDepartemen = true;
+  List<UserModel> _userList = [];
   List<DepartemenModel> _departemenList = [];
+  bool _isLoadingUser = true;
+  bool _isLoadingDepartemen = true;
 
   @override
   void initState() {
     super.initState();
     // Isi controller dari data awal
-    _namaTugasController.text = widget.tugas.namaTugas;
+    _judulTugasController.text = widget.tugas.namaTugas;
     _jamMulaiController.text = widget.tugas.jamMulai;
     _tanggalMulaiController.text = widget.tugas.tanggalMulai;
     _tanggalSelesaiController.text = widget.tugas.tanggalSelesai;
@@ -48,7 +54,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
       if (widget.tugas.users.length == 1) {
         // Mode per orang
         _assignmentMode = 'Per Orang';
-        _selectedPerson = widget.tugas.users.first.nama;
+        _selectedUser = widget.tugas.users.first;
       } else {
         // Mode per departemen (atau multi-user)
         _assignmentMode = 'Per Departemen';
@@ -63,7 +69,23 @@ class _TugasInputEditState extends State<TugasInputEdit> {
     // _noteController.text = widget.tugas.not  e;
 
     _loadDepartemen();
+    _loadUsers();
+
   }
+
+  Future<void> _loadUsers() async {
+    try {
+      final userData = await UserService.fetchUsers();
+      setState(() {
+        _userList = userData;
+        _isLoadingUser = false;
+      });
+    } catch (e) {
+      print("Error fetch users: $e");
+      setState(() => _isLoadingUser = false);
+    }
+  }
+
 
   Future<void> _loadDepartemen() async {
     try {
@@ -103,7 +125,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
 
   @override
   void dispose() {
-    _namaTugasController.dispose();
+    _judulTugasController.dispose();
     _tanggalMulaiController.dispose();
     _tanggalSelesaiController.dispose();
     _jamMulaiController.dispose();
@@ -146,7 +168,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
           CustomInputField(
             label: "Judul Tugas",
             hint: "",
-            controller: _namaTugasController,
+            controller: _judulTugasController,
             labelStyle: labelStyle,
             textStyle: textStyle,
             inputStyle: inputStyle,
@@ -189,7 +211,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
             onChanged: (val) {
               setState(() {
                 _assignmentMode = val!;
-                _selectedPerson = null;
+                _selectedUser = null;
                 _selectedDepartment = null;
               });
             },
@@ -202,21 +224,29 @@ class _TugasInputEditState extends State<TugasInputEdit> {
           ),
           const SizedBox(height: 10),
           if (_assignmentMode == 'Per Orang')
-            CustomDropDownField(
-              label: 'Tugaskan Kepada',
-              hint: '',
-              items: ['Budi', 'Elon', 'Nelo'],
-              value: _selectedPerson,
-              onChanged: (val) {
-                setState(() => _selectedPerson = val);
-              },
-              labelStyle: labelStyle,
-              textStyle: textStyle,
-              dropdownColor: AppColors.secondary,
-              dropdownTextColor: AppColors.putih,
-              dropdownIconColor: AppColors.putih,
-              inputStyle: inputStyle,
-            )
+            _isLoadingUser
+                ? const CircularProgressIndicator()
+                : CustomDropDownField(
+                    label: 'Karyawan',
+                    hint: 'Pilih user',
+                    items: _userList
+                        .map((user) => user.nama)
+                        .where((name) => name.isNotEmpty)
+                        .toList(),
+                    value: _selectedUser?.nama,
+                    onChanged: (val) {
+                      setState(() {
+                        _selectedUser = _userList.firstWhere((user) => user.nama == val);
+                      });
+                    },
+
+                    labelStyle: labelStyle,
+                    textStyle: textStyle,
+                    dropdownColor: AppColors.secondary,
+                    dropdownTextColor: AppColors.putih,
+                    dropdownIconColor: AppColors.putih,
+                    inputStyle: inputStyle,
+                  )
           else if (_assignmentMode == 'Per Departemen')
             _isLoadingDepartemen
                 ? const CircularProgressIndicator()
@@ -263,17 +293,45 @@ class _TugasInputEditState extends State<TugasInputEdit> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                if (_assignmentMode == 'Per Orang') {
-                  print("Mode: Per Orang");
-                  print("User: $_selectedPerson");
-                } else {
-                  print("Mode: Per Departemen");
-                  print("Departemen ID: ${_selectedDepartment?.id}");
-                  print(
-                      "Departemen Nama: ${_selectedDepartment?.namaDepartemen}");
+              onPressed: () async {
+                if (_judulTugasController.text.isEmpty ||
+                    _jamMulaiController.text.isEmpty ||
+                    _tanggalMulaiController.text.isEmpty ||
+                    _tanggalSelesaiController.text.isEmpty ||
+                    _assignmentMode == null ||
+                    _lokasiController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Harap isi semua data wajib")),
+                  );
+                  return;
+                }
+
+                final result = await TugasService.updateTugas(
+                  id: widget.tugas.id,
+                  judul: _judulTugasController.text,
+                  jamMulai: _jamMulaiController.text,
+                  tanggalMulai: _tanggalMulaiController.text,
+                  tanggalSelesai: _tanggalSelesaiController.text,
+                  assignmentMode: _assignmentMode!,
+                  person: _assignmentMode == "Per Orang" ? _selectedUser?.id : null,
+                  departmentId: _assignmentMode == "Per Departemen" ? _selectedDepartment?.id : null,
+                  lokasi: _lokasiController.text,
+                  note: _noteController.text,
+                );
+
+                if (!mounted) return;
+
+                NotificationHelper.showSnackBar(
+                  context,
+                  result['message'],
+                  isSuccess: result['success'],
+                );
+
+                if (result['success']) {
+                  Navigator.pop(context, true); // kembalikan true agar halaman sebelumnya bisa refresh
                 }
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
