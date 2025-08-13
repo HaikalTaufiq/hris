@@ -86,6 +86,31 @@ class _LemburPageState extends State<LemburPage> {
     }
   }
 
+  Future<void> _deleteLembur(LemburModel lembur) async {
+    final confirmed = await showConfirmationDialog(
+      context,
+      title: "Konfirmasi Hapus",
+      content: "Apakah Anda yakin ingin menghapus cuti ini?",
+      confirmText: "Hapus",
+      cancelText: "Batal",
+      confirmColor: AppColors.red,
+    );
+
+    if (confirmed) {
+      final result = await LemburService.deleteLembur(lembur.id);
+      final message = result['message'] ?? 'Gagal menghapus cuti';
+      final isSuccess = message.toLowerCase().contains('berhasil');
+
+      NotificationHelper.showSnackBar(context, message, isSuccess: isSuccess);
+
+      if (isSuccess) {
+        setState(() {
+          _lemburList = LemburService.fetchLembur();
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -138,6 +163,7 @@ class _LemburPageState extends State<LemburPage> {
                         lembur: lembur,
                         onApprove: () => _approveLembur(lembur),
                         onDecline: () => _declineLembur(lembur),
+                        onDelete: () => _deleteLembur(lembur),
                       );
                     },
                   );

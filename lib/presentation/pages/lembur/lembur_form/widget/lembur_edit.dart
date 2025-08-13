@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_input.dart';
@@ -169,34 +171,25 @@ class _LemburEditState extends State<LemburEdit> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                try {
-                  final success = await LemburService.createLembur(
-                    tanggal: _tanggalController.text,
-                    jamMulai: _jamMulaiController.text,
-                    jamSelesai: _jamSelesaiController.text,
-                    deskripsi: _deskripsiController.text,
-                  );
+                final result = await LemburService.editLembur(
+                  id: widget.lembur.id,
+                  tanggal: _tanggalController.text,
+                  jamMulai: _jamMulaiController.text,
+                  jamSelesai: _jamSelesaiController.text,
+                  deskripsi: _deskripsiController.text,
+                );
 
-                  if (!mounted) return;
+                NotificationHelper.showSnackBar(
+                  context,
+                  result['message'],
+                  isSuccess: result['success'],
+                );
 
-                  if (success) {
-                    NotificationHelper.showSnackBar(
-                        context, 'Lembur berhasil diajukan');
-                    if (mounted) {
-                      Navigator.of(context).pop(true);
-                    }
-                  } else {
-                    NotificationHelper.showSnackBar(
-                        context, 'Gagal mengajukan lembur',
-                        isSuccess: false);
-                  }
-                } catch (e) {
-                  if (!mounted) return;
-                  NotificationHelper.showSnackBar(
-                      context, 'Terjadi kesalahan: $e',
-                      isSuccess: false);
+                if (result['success']) {
+                  Navigator.pop(context, true); // kembalikan true agar halaman sebelumnya bisa refresh
                 }
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),

@@ -12,12 +12,14 @@ class LemburCard extends StatelessWidget {
   final LemburModel lembur;
   final Future<void> Function() onApprove;
   final Future<void> Function() onDecline;
+  final VoidCallback onDelete;
 
   const LemburCard({
     super.key,
     required this.lembur,
     required this.onApprove,
     required this.onDecline,
+    required this.onDelete,
   });
 
   // ======================= HELPERS =======================
@@ -270,7 +272,7 @@ class LemburCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'user_delete_lembur',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete),
                         ),
                         FeatureGuard(
                           featureId: 'user_edit_lembur',
@@ -306,7 +308,7 @@ class LemburCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'user_delete_lembur',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete),
                         ),
                         FeatureGuard(
                           featureId: 'user_edit_lembur',
@@ -326,7 +328,7 @@ class LemburCard extends StatelessWidget {
                         FeatureGuard(
                           featureId: 'delete_lembur',
                           child: _buildActionButton(
-                              'Delete', AppColors.red, () {}),
+                              'Delete', AppColors.red, onDelete),
                         ),
                         FeatureGuard(
                           featureId: 'edit_lembur',
