@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/data/services/lembur_service.dart';
+import 'package:hr/provider/lembur_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LemburInput extends StatefulWidget {
@@ -45,11 +46,7 @@ class _LemburInputState extends State<LemburInput> {
     if (pickedTime != null && mounted) {
       final jam = pickedTime.hour.toString().padLeft(2, '0');
       final menit = pickedTime.minute.toString().padLeft(2, '0');
-      final formattedTime = '$jam:$menit';
-
-      setState(() {
-        controller.text = formattedTime;
-      });
+      controller.text = '$jam:$menit';
     }
   }
 
@@ -65,6 +62,7 @@ class _LemburInputState extends State<LemburInput> {
 
   @override
   Widget build(BuildContext context) {
+    final lemburProvider = context.read<LemburProvider>();
     final inputStyle = InputDecoration(
       hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
@@ -120,9 +118,7 @@ class _LemburInputState extends State<LemburInput> {
                     "${pickedDate.day.toString().padLeft(2, '0')} / "
                     "${pickedDate.month.toString().padLeft(2, '0')} / "
                     "${pickedDate.year}";
-                setState(() {
-                  _tanggalController.text = formatted;
-                });
+                _tanggalController.text = formatted;
               }
             },
             labelStyle: labelStyle,
@@ -163,7 +159,7 @@ class _LemburInputState extends State<LemburInput> {
             child: ElevatedButton(
               onPressed: () async {
                 try {
-                  final success = await LemburService.createLembur(
+                  final success = await lemburProvider.createLembur(
                     tanggal: _tanggalController.text,
                     jamMulai: _jamMulaiController.text,
                     jamSelesai: _jamSelesaiController.text,
@@ -175,9 +171,7 @@ class _LemburInputState extends State<LemburInput> {
                   if (success) {
                     NotificationHelper.showSnackBar(
                         context, 'Lembur berhasil diajukan');
-                    if (mounted) {
-                      Navigator.of(context).pop(true);
-                    }
+                    Navigator.of(context).pop(true);
                   } else {
                     NotificationHelper.showSnackBar(
                         context, 'Gagal mengajukan lembur',
@@ -191,7 +185,7 @@ class _LemburInputState extends State<LemburInput> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF1F1F1F),
+                backgroundColor: const Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

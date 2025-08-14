@@ -351,8 +351,9 @@ class CutiCard extends StatelessWidget {
                                         elevation: 2,
                                       ),
                                       onPressed: () async {
-                                        await onApprove();
                                         Navigator.pop(context);
+
+                                        await onApprove();
                                       },
                                       label: Text(
                                         "Approve",
@@ -375,8 +376,9 @@ class CutiCard extends StatelessWidget {
                                         elevation: 2,
                                       ),
                                       onPressed: () async {
-                                        await onDecline();
                                         Navigator.pop(context);
+
+                                        await onDecline();
                                       },
                                       label: Text(
                                         "Decline",

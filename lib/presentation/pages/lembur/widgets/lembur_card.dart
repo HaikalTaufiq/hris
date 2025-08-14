@@ -364,8 +364,8 @@ class LemburCard extends StatelessWidget {
                                         elevation: 2,
                                       ),
                                       onPressed: () async {
+                                        Navigator.of(context).pop();
                                         await onApprove();
-                                        Navigator.pop(context);
                                       },
                                       label: Text(
                                         "Approve",
@@ -388,8 +388,8 @@ class LemburCard extends StatelessWidget {
                                         elevation: 2,
                                       ),
                                       onPressed: () async {
+                                        Navigator.of(context).pop();
                                         await onDecline();
-                                        Navigator.pop(context);
                                       },
                                       label: Text(
                                         "Decline",

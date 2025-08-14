@@ -87,7 +87,7 @@ class _AbsenPageState extends State<AbsenPage> {
                             Icons.login,
                             color: Colors.white,
                           ),
-                          label: Text("Check In",
+                          label: Text("Clock In",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily:
@@ -115,7 +115,7 @@ class _AbsenPageState extends State<AbsenPage> {
                               Icons.logout,
                               color: Colors.white,
                             ),
-                            label: Text("Check Out",
+                            label: Text("Clock Out",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontFamily:

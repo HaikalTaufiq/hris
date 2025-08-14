@@ -7,7 +7,8 @@ import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/cuti_model.dart';
-import 'package:hr/data/services/cuti_service.dart';
+import 'package:hr/provider/cuti_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiEdit extends StatefulWidget {
@@ -23,7 +24,8 @@ class _CutiEditState extends State<CutiEdit> {
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController = TextEditingController();
+  final TextEditingController _tanggalSelesaiController =
+      TextEditingController();
   final TextEditingController _alasanController = TextEditingController();
 
   @override
@@ -46,6 +48,8 @@ class _CutiEditState extends State<CutiEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final cutiProvider = context.read<CutiProvider>();
+
     final inputStyle = InputDecoration(
       hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
@@ -165,7 +169,7 @@ class _CutiEditState extends State<CutiEdit> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                final result = await CutiService.editCuti(
+                final result = await cutiProvider.editCuti(
                   id: widget.cuti.id,
                   nama: _namaController.text,
                   tipeCuti: _tipeCutiController.text,
@@ -173,7 +177,7 @@ class _CutiEditState extends State<CutiEdit> {
                   tanggalSelesai: _tanggalSelesaiController.text,
                   alasan: _alasanController.text,
                 );
-                
+
                 NotificationHelper.showSnackBar(
                   context,
                   result['message'],
@@ -181,7 +185,7 @@ class _CutiEditState extends State<CutiEdit> {
                 );
 
                 if (result['success']) {
-                  Navigator.pop(context, true); // kembalikan true agar halaman sebelumnya bisa refresh
+                  Navigator.pop(context, true);
                 }
               },
               style: ElevatedButton.styleFrom(

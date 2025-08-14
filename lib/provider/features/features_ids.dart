@@ -48,6 +48,8 @@ class FeatureIds {
   ];
 
 // ====================== Fitur Dashboard ======================
+  static const cardAdmin = "card_admin";
+  static const cardUser = "card_user";
   static const karyawan = "management_karyawan";
   static const gaji = "gaji";
   static const department = "department";
@@ -60,6 +62,7 @@ class FeatureIds {
   // ====================== Modul fitur cuti ======================
   // Super Admin
   static const dashboard = [
+    cardAdmin,
     karyawan,
     gaji,
     department,
@@ -72,6 +75,7 @@ class FeatureIds {
 
   static const dashboardUser = [
     karyawan,
+    cardUser,
     gaji,
     department,
     jabatan,

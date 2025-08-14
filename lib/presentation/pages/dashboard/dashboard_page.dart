@@ -4,10 +4,12 @@ import 'package:hr/data/model/dahsboard_menu_item.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 import 'package:hr/presentation/pages/dashboard/widget/dashboard_card.dart';
 import 'package:hr/presentation/pages/dashboard/widget/attendance_chart.dart';
+import 'package:hr/presentation/pages/dashboard/widget/dashboard_card_user.dart';
 import 'package:hr/presentation/pages/dashboard/widget/dashboard_header.dart';
 import 'package:hr/presentation/pages/dashboard/widget/dashboard_menu.dart';
 import 'package:hr/presentation/pages/dashboard/widget/status_task_chart.dart';
 import 'package:hr/presentation/pages/dashboard/widget/tech_task_chart.dart';
+import 'package:hr/provider/features/features_guard.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({
@@ -25,7 +27,14 @@ class _DashboardPageState extends State<DashboardPage> {
       padding: const EdgeInsets.all(16),
       children: [
         DashboardHeader(),
-        const DashboardCard(),
+        FeatureGuard(
+          featureId: "card_admin",
+          child: const DashboardCard(),
+        ),
+        FeatureGuard(
+          featureId: "card_user",
+          child: const DashboardCardUser(),
+        ),
         DashboardMenu(
           items: [
             DashboardMenuItem(

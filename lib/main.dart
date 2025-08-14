@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hr/presentation/pages/landing/landing_page.dart';
+import 'package:hr/provider/cuti_provider.dart';
+import 'package:hr/provider/lembur_provider.dart';
 import 'package:hr/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => UserProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => LemburProvider()),
+        ChangeNotifierProvider(create: (_) => CutiProvider()),
+      ],
       child: const MainApp(),
     ),
   );

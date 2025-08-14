@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,8 +10,9 @@ import 'package:hr/data/models/lembur_model.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form.dart';
 import 'package:hr/presentation/pages/lembur/widgets/lembur_card.dart';
-import 'package:hr/data/services/lembur_service.dart';
 import 'package:hr/provider/features/features_guard.dart';
+import 'package:hr/provider/lembur_provider.dart';
+import 'package:provider/provider.dart';
 
 class LemburPage extends StatefulWidget {
   const LemburPage({super.key});
@@ -23,13 +22,14 @@ class LemburPage extends StatefulWidget {
 }
 
 class _LemburPageState extends State<LemburPage> {
-  late Future<List<LemburModel>> _lemburList;
-  final searchController = TextEditingController(); // value awal
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _lemburList = LemburService.fetchLembur();
+    Future.microtask(() {
+      context.read<LemburProvider>().fetchLembur();
+    });
   }
 
   Future<void> _approveLembur(LemburModel lembur) async {
@@ -43,19 +43,13 @@ class _LemburPageState extends State<LemburPage> {
     );
 
     if (confirmed) {
-      final message = await LemburService.approveLembur(lembur.id);
-      if (message != null) {
-        setState(() {
-          _lemburList = LemburService.fetchLembur();
-        });
-        NotificationHelper.showSnackBar(context, message, isSuccess: true);
-      } else {
-        NotificationHelper.showSnackBar(
-          context,
-          'Gagal menyetujui lembur',
-          isSuccess: false,
-        );
-      }
+      final message =
+          await context.read<LemburProvider>().approveLembur(lembur.id);
+      NotificationHelper.showSnackBar(
+        context,
+        message ?? 'Gagal menyetujui lembur',
+        isSuccess: message != null,
+      );
     }
   }
 
@@ -70,19 +64,13 @@ class _LemburPageState extends State<LemburPage> {
     );
 
     if (confirmed) {
-      final message = await LemburService.declineLembur(lembur.id);
-      if (message != null) {
-        setState(() {
-          _lemburList = LemburService.fetchLembur();
-        });
-        NotificationHelper.showSnackBar(context, message, isSuccess: true);
-      } else {
-        NotificationHelper.showSnackBar(
-          context,
-          'Gagal menolak lembur',
-          isSuccess: false,
-        );
-      }
+      final message =
+          await context.read<LemburProvider>().declineLembur(lembur.id);
+      NotificationHelper.showSnackBar(
+        context,
+        message ?? 'Gagal menolak lembur',
+        isSuccess: message != null,
+      );
     }
   }
 
@@ -90,29 +78,27 @@ class _LemburPageState extends State<LemburPage> {
     final confirmed = await showConfirmationDialog(
       context,
       title: "Konfirmasi Hapus",
-      content: "Apakah Anda yakin ingin menghapus cuti ini?",
+      content: "Apakah Anda yakin ingin menghapus lembur ini?",
       confirmText: "Hapus",
       cancelText: "Batal",
       confirmColor: AppColors.red,
     );
 
     if (confirmed) {
-      final result = await LemburService.deleteLembur(lembur.id);
-      final message = result['message'] ?? 'Gagal menghapus cuti';
-      final isSuccess = message.toLowerCase().contains('berhasil');
-
-      NotificationHelper.showSnackBar(context, message, isSuccess: isSuccess);
-
-      if (isSuccess) {
-        setState(() {
-          _lemburList = LemburService.fetchLembur();
-        });
-      }
+      final message =
+          await context.read<LemburProvider>().deleteLembur(lembur.id);
+      NotificationHelper.showSnackBar(
+        context,
+        message ?? 'Gagal menghapus lembur',
+        isSuccess: message != null,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final lemburProvider = context.watch<LemburProvider>();
+
     return Stack(
       children: [
         ListView(
@@ -121,59 +107,47 @@ class _LemburPageState extends State<LemburPage> {
             const Header(title: 'Pengajuan Lembur'),
             SearchingBar(
               controller: searchController,
-              onChanged: (value) {
-                print("Search Halaman A: $value");
-              },
-              onFilter1Tap: () => print("Filter1 Halaman A"),
-              onFilter2Tap: () => print("Filter2 Halaman A"),
+              onChanged: (value) {},
+              onFilter1Tap: () {},
+              onFilter2Tap: () {},
             ),
-            FutureBuilder<List<LemburModel>>(
-              future: _lemburList,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: const Center(
-                      child: LoadingWidget(),
+            if (lemburProvider.isLoading)
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: const Center(child: LoadingWidget()),
+              )
+            else if (lemburProvider.errorMessage != null)
+              Center(child: Text('Error: ${lemburProvider.errorMessage}'))
+            else if (lemburProvider.lemburList.isEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Belum ada data lembur.',
+                    style: TextStyle(
+                      color: AppColors.putih,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
+                  ),
+                ),
+              )
+            else
+              ListView.builder(
+                itemCount: lemburProvider.lemburList.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final lembur = lemburProvider.lemburList[index];
+                  return LemburCard(
+                    lembur: lembur,
+                    onApprove: () => _approveLembur(lembur),
+                    onDecline: () => _declineLembur(lembur),
+                    onDelete: () => _deleteLembur(lembur),
                   );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                        child: Text(
-                      'Belum ada data lembur.',
-                      style: TextStyle(
-                        color: AppColors.putih,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                      ),
-                    )),
-                  );
-                } else {
-                  final lemburData = snapshot.data!;
-                  return ListView.builder(
-                    itemCount: lemburData.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final lembur = lemburData[index];
-                      return LemburCard(
-                        lembur: lembur,
-                        onApprove: () => _approveLembur(lembur),
-                        onDecline: () => _declineLembur(lembur),
-                        onDelete: () => _deleteLembur(lembur),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
+                },
+              ),
           ],
         ),
-
-        // FAB (Floating Button)
         FeatureGuard(
           featureId: "add_lembur",
           child: Positioned(
@@ -186,9 +160,7 @@ class _LemburPageState extends State<LemburPage> {
                 );
 
                 if (result == true) {
-                  setState(() {
-                    _lemburList = LemburService.fetchLembur(); // refresh data
-                  });
+                  context.read<LemburProvider>().fetchLembur();
                 }
               },
               backgroundColor: AppColors.secondary,

@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/lembur_model.dart';
-import 'package:hr/data/services/lembur_service.dart';
+import 'package:hr/provider/lembur_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LemburEdit extends StatefulWidget {
@@ -54,11 +53,7 @@ class _LemburEditState extends State<LemburEdit> {
     if (pickedTime != null && mounted) {
       final jam = pickedTime.hour.toString().padLeft(2, '0');
       final menit = pickedTime.minute.toString().padLeft(2, '0');
-      final formattedTime = '$jam:$menit';
-
-      setState(() {
-        controller.text = formattedTime;
-      });
+      controller.text = '$jam:$menit';
     }
   }
 
@@ -74,6 +69,7 @@ class _LemburEditState extends State<LemburEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final lemburProvider = context.read<LemburProvider>();
     final inputStyle = InputDecoration(
       hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
@@ -129,9 +125,7 @@ class _LemburEditState extends State<LemburEdit> {
                     "${pickedDate.day.toString().padLeft(2, '0')} / "
                     "${pickedDate.month.toString().padLeft(2, '0')} / "
                     "${pickedDate.year}";
-                setState(() {
-                  _tanggalController.text = formatted;
-                });
+                _tanggalController.text = formatted;
               }
             },
             labelStyle: labelStyle,
@@ -171,7 +165,7 @@ class _LemburEditState extends State<LemburEdit> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                final result = await LemburService.editLembur(
+                final result = await lemburProvider.editLembur(
                   id: widget.lembur.id,
                   tanggal: _tanggalController.text,
                   jamMulai: _jamMulaiController.text,
@@ -186,10 +180,10 @@ class _LemburEditState extends State<LemburEdit> {
                 );
 
                 if (result['success']) {
-                  Navigator.pop(context, true); // kembalikan true agar halaman sebelumnya bisa refresh
+                  Navigator.pop(context,
+                      true); // kembalikan true agar halaman sebelumnya bisa refresh
                 }
               },
-
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),

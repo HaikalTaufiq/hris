@@ -4,7 +4,8 @@ import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/data/services/cuti_service.dart';
+import 'package:hr/provider/cuti_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CutiInput extends StatefulWidget {
@@ -18,7 +19,8 @@ class _CutiInputState extends State<CutiInput> {
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tipeCutiController = TextEditingController();
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController = TextEditingController();
+  final TextEditingController _tanggalSelesaiController =
+      TextEditingController();
   final TextEditingController _alasanController = TextEditingController();
 
   @override
@@ -37,6 +39,8 @@ class _CutiInputState extends State<CutiInput> {
 
   @override
   Widget build(BuildContext context) {
+    final cutiProvider = context.read<CutiProvider>();
+
     final inputStyle = InputDecoration(
       hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
@@ -156,7 +160,7 @@ class _CutiInputState extends State<CutiInput> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                final success = await CutiService.createCuti(
+                final success = await cutiProvider.createCuti(
                   nama: _namaController.text,
                   tipeCuti: _tipeCutiController.text,
                   tanggalMulai: _tanggalMulaiController.text,
