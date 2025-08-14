@@ -2,27 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/models/departemen_model.dart';
 
 class DepartmentTabel extends StatelessWidget {
-  const DepartmentTabel({super.key});
+  final List<DepartemenModel> departemenList;
+  final Function(DepartemenModel) onEdit;
+  final Function(int) onDelete;
 
-  final List<String> headers = const [
-    "HRD",
-    "Accounting",
-    "Logistic",
-    "Technician",
-    "Engineer",
-    "HRD",
-    "Accounting",
-    "Logistic",
-    "Technician",
-    "Engineer",
-    "HRD",
-    "Accounting",
-    "Logistic",
-    "Technician",
-    "Engineer",
-  ];
+  const DepartmentTabel({
+    super.key,
+    required this.departemenList,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,33 +39,32 @@ class DepartmentTabel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header tabel
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'Nama Department', // No ID absen
-                        style: TextStyle(
-                            color: AppColors.putih,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            fontFamily: GoogleFonts.poppins().fontFamily),
-                      ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    'Nama Department',
+                    style: TextStyle(
+                      color: AppColors.putih,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
-                  ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 40),
                   child: Text(
-                    'Aksi', // No ID absen
+                    'Aksi',
                     style: TextStyle(
-                        color: AppColors.putih,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        fontFamily: GoogleFonts.poppins().fontFamily),
+                      color: AppColors.putih,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                    ),
                   ),
                 ),
               ],
@@ -81,75 +72,74 @@ class DepartmentTabel extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: FractionallySizedBox(
-                widthFactor: 1.09, // lebih dari 1 = lebar penuh + lebih
+                widthFactor: 1.09,
                 child: Divider(
                   color: AppColors.secondary,
                   thickness: 1,
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
 
-            // 🔽 Bagian Tabel Isi
             ListView.separated(
               shrinkWrap: true,
-              physics:
-                  const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
-              itemCount: headers.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: departemenList.length,
               separatorBuilder: (_, __) =>
                   Divider(color: AppColors.secondary, thickness: 1),
               itemBuilder: (context, index) {
+                final departemen = departemenList[index];
                 return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            headers[index],
-                            style: TextStyle(
-                              color: AppColors.putih,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                            ),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          departemen.namaDepartemen, 
+                          style: TextStyle(
+                            color: AppColors.putih,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 35),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    // Aksi delete
-                                  },
-                                  child: FaIcon(
-                                    FontAwesomeIcons.trash,
-                                    color: AppColors.putih,
-                                    size: 15,
-                                  ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 35),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  onDelete(departemen.id);
+                                },
+                                child: FaIcon(
+                                  FontAwesomeIcons.trash,
+                                  color: AppColors.putih,
+                                  size: 15,
                                 ),
-                                const SizedBox(width: 12), // jarak antar ikon
-                                GestureDetector(
-                                  onTap: () {
-                                    // Aksi edit
-                                  },
-                                  child: FaIcon(
-                                    FontAwesomeIcons.pen,
-                                    color: AppColors.putih,
-                                    size: 15,
-                                  ),
+                              ),
+                              const SizedBox(width: 12),
+                              GestureDetector(
+                                onTap: () {
+                                  onEdit(departemen);
+                                },
+                                child: FaIcon(
+                                  FontAwesomeIcons.pen,
+                                  color: AppColors.putih,
+                                  size: 15,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ));
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ],
