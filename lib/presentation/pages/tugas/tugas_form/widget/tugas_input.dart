@@ -9,8 +9,9 @@ import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
 import 'package:hr/data/models/user_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
-import 'package:hr/data/services/tugas_service.dart';
 import 'package:hr/data/services/user_service.dart';
+import 'package:hr/provider/tugas_provider.dart';
+import 'package:provider/provider.dart';
 
 class TugasInput extends StatefulWidget {
   const TugasInput({super.key});
@@ -21,12 +22,12 @@ class TugasInput extends StatefulWidget {
 
 class _TugasInputState extends State<TugasInput> {
   final TextEditingController _tanggalMulaiController = TextEditingController();
-  final TextEditingController _tanggalSelesaiController = TextEditingController();
+  final TextEditingController _tanggalSelesaiController =
+      TextEditingController();
   final TextEditingController _jamMulaiController = TextEditingController();
   final TextEditingController _lokasiController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _judulTugasController = TextEditingController();
-  
 
   String? _assignmentMode;
   UserModel? _selectedUser;
@@ -46,26 +47,34 @@ class _TugasInputState extends State<TugasInput> {
   Future<void> _loadUsers() async {
     try {
       final userData = await UserService.fetchUsers();
-      setState(() {
-        _userList = userData;
-        _isLoadingUser = false;
-      });
+      if (mounted) {
+        setState(() {
+          _userList = userData;
+          _isLoadingUser = false;
+        });
+      }
     } catch (e) {
       print("Error fetch users: $e");
-      setState(() => _isLoadingUser = false);
+      if (mounted) {
+        setState(() => _isLoadingUser = false);
+      }
     }
   }
 
   Future<void> _loadDepartemen() async {
     try {
       final departemenData = await DepartemenService.fetchDepartemen();
-      setState(() {
-        _departemenList = departemenData;
-        _isLoadingDepartemen = false;
-      });
+      if (mounted) {
+        setState(() {
+          _departemenList = departemenData;
+          _isLoadingDepartemen = false;
+        });
+      }
     } catch (e) {
       print("Error fetch departemen: $e");
-      setState(() => _isLoadingDepartemen = false);
+      if (mounted) {
+        setState(() => _isLoadingDepartemen = false);
+      }
     }
   }
 
@@ -74,7 +83,7 @@ class _TugasInputState extends State<TugasInput> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (pickedTime != null) {
+    if (pickedTime != null && mounted) {
       controller.text = pickedTime.format(context);
     }
   }
@@ -86,13 +95,104 @@ class _TugasInputState extends State<TugasInput> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (pickedDate != null) {
+    if (pickedDate != null && mounted) {
       controller.text =
           "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
     }
   }
 
-  @override
+  Future<void> _handleSubmit() async {
+    // Validate required fields
+    if (_judulTugasController.text.isEmpty ||
+        _jamMulaiController.text.isEmpty ||
+        _tanggalMulaiController.text.isEmpty ||
+        _tanggalSelesaiController.text.isEmpty ||
+        _assignmentMode == null ||
+        _lokasiController.text.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Harap isi semua data wajib")),
+        );
+      }
+      return;
+    }
+
+    // Validate assignment selection
+    if (_assignmentMode == "Per Orang" && _selectedUser == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Pilih karyawan terlebih dahulu")),
+        );
+      }
+      return;
+    }
+
+    if (_assignmentMode == "Per Departemen" && _selectedDepartment == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Pilih departemen terlebih dahulu")),
+        );
+      }
+      return;
+    }
+
+    try {
+      final tugasProvider = context.read<TugasProvider>();
+
+      final result = await tugasProvider.createTugas(
+        judul: _judulTugasController.text,
+        jamMulai: _jamMulaiController.text,
+        tanggalMulai: _tanggalMulaiController.text,
+        tanggalSelesai: _tanggalSelesaiController.text,
+        assignmentMode: _assignmentMode!,
+        person: _assignmentMode == "Per Orang" ? _selectedUser?.id : null,
+        departmentId: _assignmentMode == "Per Departemen"
+            ? _selectedDepartment?.id
+            : null,
+        lokasi: _lokasiController.text,
+        note: _noteController.text,
+      );
+
+      if (!mounted) return;
+
+      final bool isSuccess = result['success'] == true;
+      final String message = result['message'] ?? '';
+
+      NotificationHelper.showSnackBar(
+        context,
+        message,
+        isSuccess: isSuccess,
+      );
+
+      if (isSuccess) {
+        // Clear form after successful submission
+        _judulTugasController.clear();
+        _jamMulaiController.clear();
+        _tanggalMulaiController.clear();
+        _tanggalSelesaiController.clear();
+        _lokasiController.clear();
+        _noteController.clear();
+
+        setState(() {
+          _assignmentMode = null;
+          _selectedUser = null;
+          _selectedDepartment = null;
+        });
+
+        // Navigate back with success result
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      if (mounted) {
+        NotificationHelper.showSnackBar(
+          context,
+          'Terjadi kesalahan: $e',
+          isSuccess: false,
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _tanggalMulaiController.dispose();
@@ -104,9 +204,13 @@ class _TugasInputState extends State<TugasInput> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // Use Consumer to properly watch the provider
+    final tugasProvider = context.read<TugasProvider>();
+
+    final isLoading = tugasProvider.isLoading;
+
     final inputStyle = InputDecoration(
       hintStyle: TextStyle(color: AppColors.putih),
       enabledBorder: const UnderlineInputBorder(
@@ -134,6 +238,7 @@ class _TugasInputState extends State<TugasInput> {
         vertical: MediaQuery.of(context).size.height * 0.01,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // Fix the expanding issue
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomInputField(
@@ -196,7 +301,7 @@ class _TugasInputState extends State<TugasInput> {
           const SizedBox(height: 10),
           if (_assignmentMode == 'Per Orang')
             _isLoadingUser
-                ? const CircularProgressIndicator()
+                ? const Center(child: CircularProgressIndicator())
                 : CustomDropDownField(
                     label: 'Karyawan',
                     hint: 'Pilih user',
@@ -207,10 +312,12 @@ class _TugasInputState extends State<TugasInput> {
                     value: _selectedUser?.nama,
                     onChanged: (val) {
                       setState(() {
-                        _selectedUser = _userList.firstWhere((user) => user.nama == val);
+                        _selectedUser = _userList.firstWhere(
+                          (user) => user.nama == val,
+                          orElse: () => _userList.first,
+                        );
                       });
                     },
-
                     labelStyle: labelStyle,
                     textStyle: textStyle,
                     dropdownColor: AppColors.secondary,
@@ -220,20 +327,20 @@ class _TugasInputState extends State<TugasInput> {
                   )
           else if (_assignmentMode == 'Per Departemen')
             _isLoadingDepartemen
-                ? const CircularProgressIndicator()
+                ? const Center(child: CircularProgressIndicator())
                 : CustomDropDownField(
                     label: 'Departemen',
                     hint: 'Pilih departemen',
-                    items:
-                        _departemenList
-                            .map((d) => d.namaDepartemen)
-                            .where((name) => name.isNotEmpty)
-                            .toList(),
+                    items: _departemenList
+                        .map((d) => d.namaDepartemen)
+                        .where((name) => name.isNotEmpty)
+                        .toList(),
                     value: _selectedDepartment?.namaDepartemen,
                     onChanged: (val) {
                       setState(() {
                         _selectedDepartment = _departemenList.firstWhere(
                           (d) => d.namaDepartemen == val,
+                          orElse: () => _departemenList.first,
                         );
                       });
                     },
@@ -260,63 +367,38 @@ class _TugasInputState extends State<TugasInput> {
             textStyle: textStyle,
             inputStyle: inputStyle,
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
+            height: 50, // Fixed height to prevent expanding
             child: ElevatedButton(
-              onPressed: () async {
-                if (_judulTugasController.text.isEmpty ||
-                    _jamMulaiController.text.isEmpty ||
-                    _tanggalMulaiController.text.isEmpty ||
-                    _tanggalSelesaiController.text.isEmpty ||
-                    _assignmentMode == null ||
-                    _lokasiController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Harap isi semua data wajib")),
-                  );
-                  return;
-                }
-
-                final result = await TugasService.createTugas(
-                  judul: _judulTugasController.text,
-                  jamMulai: _jamMulaiController.text,
-                  tanggalMulai: _tanggalMulaiController.text,
-                  tanggalSelesai: _tanggalSelesaiController.text,
-                  assignmentMode: _assignmentMode!,
-                  person: _assignmentMode == "Per Orang" 
-                      ? _selectedUser?.id
-                      : null,
-                  departmentId: _assignmentMode == "Per Departemen"
-                      ? _selectedDepartment?.id
-                      : null,
-                  lokasi: _lokasiController.text,
-                  note: _noteController.text,
-                );
-
-                if (!mounted) return;
-
-                NotificationHelper.showSnackBar(
-                  context,
-                  result['message'],
-                  isSuccess: true,
-                );
-              },
-
+              onPressed: isLoading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF1F1F1F),
+                backgroundColor: const Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                disabledBackgroundColor:
+                    const Color(0xFF1F1F1F).withOpacity(0.6),
               ),
-              child: Text(
-                'Submit',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      'Submit',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
             ),
           ),
         ],

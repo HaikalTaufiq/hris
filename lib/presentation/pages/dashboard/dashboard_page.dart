@@ -91,8 +91,8 @@ class _DashboardPageState extends State<DashboardPage> {
               },
             ),
             DashboardMenuItem(
-              label: "Hak Akses",
-              featureId: "hak_akses",
+              label: "Peran",
+              featureId: "peran",
               icon: FontAwesomeIcons.fileShield,
               onTap: () {
                 Navigator.push(

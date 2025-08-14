@@ -4,11 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/loading.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/components/custom/header.dart';
-import 'package:hr/data/models/tugas_model.dart';
-import 'package:hr/data/services/tugas_service.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_form.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_tabel.dart';
+import 'package:hr/provider/tugas_provider.dart';
+import 'package:provider/provider.dart';
 
 class TugasPage extends StatefulWidget {
   const TugasPage({super.key});
@@ -18,66 +18,139 @@ class TugasPage extends StatefulWidget {
 }
 
 class _TugasPageState extends State<TugasPage> {
-  late Future<List<TugasModel>> tugasFuture;
-  final searchController = TextEditingController(); // value awal
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    tugasFuture = TugasService.fetchTugas();
+    // Fetch data when page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TugasProvider>().fetchTugas();
+    });
+  }
+
+  Future<void> _refreshData() async {
+    await context.read<TugasProvider>().fetchTugas();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            const Header(title: 'Manajemen Tugas'),
-            SearchingBar(
-              controller: searchController,
-              onChanged: (value) {
-                print("Search Halaman A: $value");
-              },
-              onFilter1Tap: () => print("Filter1 Halaman A"),
-              onFilter2Tap: () => print("Filter2 Halaman A"),
-            ),
-            // TugasTabel sekarang kita ganti dengan FutureBuilder
-            FutureBuilder<List<TugasModel>>(
-              future: tugasFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: const Center(
-                      child: LoadingWidget(),
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Text(
-                      'Data tugas kosong',
-                      style: TextStyle(
-                        color: AppColors.putih,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+        RefreshIndicator(
+          onRefresh: _refreshData,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const Header(title: 'Manajemen Tugas'),
+              SearchingBar(
+                controller: searchController,
+                onChanged: (value) {
+                  // You can implement search functionality here
+                  // context.read<TugasProvider>().searchTugas(value);
+                  print("Search Halaman A: $value");
+                },
+                onFilter1Tap: () => print("Filter1 Halaman A"),
+                onFilter2Tap: () => print("Filter2 Halaman A"),
+              ),
+              // Use Consumer to watch TugasProvider state
+              Consumer<TugasProvider>(
+                builder: (context, tugasProvider, child) {
+                  if (tugasProvider.isLoading) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: const Center(
+                        child: LoadingWidget(),
                       ),
-                    )),
-                  );
-                } else {
-                  // Kirim data tugas ke widget TugasTabel
-                  return TugasTabel(tugasList: snapshot.data!);
-                }
-              },
-            ),
-          ],
-        ),
+                    );
+                  }
 
-        // Floating Action Button
+                  if (tugasProvider.errorMessage != null) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Error: ${tugasProvider.errorMessage}',
+                              style: TextStyle(
+                                color: AppColors.red,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: _refreshData,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.secondary,
+                              ),
+                              child: Text(
+                                'Retry',
+                                style: TextStyle(
+                                  color: AppColors.putih,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (tugasProvider.tugasList.isEmpty) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.assignment_outlined,
+                              size: 64,
+                              color: AppColors.putih.withOpacity(0.5),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Belum ada tugas',
+                              style: TextStyle(
+                                color: AppColors.putih,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Tap tombol + untuk menambah tugas baru',
+                              style: TextStyle(
+                                color: AppColors.putih.withOpacity(0.7),
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  // Show the table with data
+                  return TugasTabel(tugasList: tugasProvider.tugasList);
+                },
+              ),
+            ],
+          ),
+        ),
         Positioned(
           bottom: 16,
           right: 16,
@@ -88,9 +161,8 @@ class _TugasPageState extends State<TugasPage> {
               );
 
               if (result == true) {
-                setState(() {
-                  tugasFuture = TugasService.fetchTugas(); // refresh data
-                });
+                // Refresh data after successful creation
+                _refreshData();
               }
             },
             backgroundColor: AppColors.secondary,

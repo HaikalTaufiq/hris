@@ -54,7 +54,7 @@ class FeatureIds {
   static const gaji = "gaji";
   static const department = "department";
   static const jabatan = "jabatan";
-  static const hakAkses = "hak_akses";
+  static const peran = "peran";
   static const tentang = "tentang";
   static const logAktivitas = "log_aktivitas";
   static const pengaturan = "pengaturan";
@@ -67,7 +67,7 @@ class FeatureIds {
     gaji,
     department,
     jabatan,
-    hakAkses,
+    peran,
     tentang,
     logAktivitas,
     pengaturan,
@@ -79,11 +79,12 @@ class FeatureIds {
     gaji,
     department,
     jabatan,
-    hakAkses,
+    peran,
     tentang,
     logAktivitas,
     pengaturan,
   ];
+
   // Contoh paket lain bisa dibuat seperti ini
   // static const ManageLembur = [approveLembur, declineLembur];
 }

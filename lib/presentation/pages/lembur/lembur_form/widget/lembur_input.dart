@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_input.dart';
+import 'package:hr/components/timepicker/time_picker.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/provider/lembur_provider.dart';
@@ -21,6 +22,9 @@ class _LemburInputState extends State<LemburInput> {
   final TextEditingController _jamSelesaiController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
 
+  int _selectedMinute = 0;
+  int _selectedHour = 0;
+  String _selectedTimeFormat = "AM";
   @override
   void initState() {
     super.initState();
@@ -38,16 +42,100 @@ class _LemburInputState extends State<LemburInput> {
   }
 
   void _onTapIcon(TextEditingController controller) async {
-    final pickedTime = await showTimePicker(
+    showModalBottomSheet(
+      backgroundColor: Color(0xffF9F9F9),
+      useRootNavigator: true,
       context: context,
-      initialTime: TimeOfDay.now(),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: EdgeInsets.all(0),
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  ListTile(
+                    title: Center(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 3,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Color(0xff12171D),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Edit Time',
+                            style: TextStyle(
+                              color: Color(0xff212121),
+                              fontFamily: "poppins",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Feeding Schedule',
+                            style: TextStyle(
+                              color: Color(0xff5F5F5F),
+                              fontFamily: "poppins",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  NumberPickerWidget(
+                    hour: _selectedHour,
+                    minute: _selectedMinute,
+                    timeFormat: _selectedTimeFormat,
+                    onHourChanged: (value) {
+                      setModalState(() {
+                        _selectedHour = value;
+                      });
+                    },
+                    onMinuteChanged: (value) {
+                      setModalState(() {
+                        _selectedMinute = value;
+                      });
+                    },
+                    onTimeFormatChanged: (value) {
+                      setModalState(() {});
+                    },
+                  ),
+                  FloatingActionButton.extended(
+                    backgroundColor: Color(0xFF25A1AE),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    label: Text(
+                      'Save',
+                      style: TextStyle(
+                        fontFamily: "poppins",
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
-
-    if (pickedTime != null && mounted) {
-      final jam = pickedTime.hour.toString().padLeft(2, '0');
-      final menit = pickedTime.minute.toString().padLeft(2, '0');
-      controller.text = '$jam:$menit';
-    }
   }
 
   @override

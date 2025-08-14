@@ -59,15 +59,16 @@ class TugasTabel extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      flex: 3,
-                      child: Text(
-                        values[index],
-                        style: TextStyle(
-                          color: AppColors.putih,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
-                      ),
-                    ),
+                        flex: 3,
+                        child: Text(
+                          values[index].length > 10
+                              ? '${values[index].substring(0, 14)}...'
+                              : values[index],
+                          style: TextStyle(
+                            color: AppColors.putih,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                          ),
+                        )),
                   ],
                 ),
               );
@@ -297,7 +298,9 @@ class TugasTabel extends StatelessWidget {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                        final result = await TugasService.deleteTugas(tugas.id);
+                                        final result =
+                                            await TugasService.deleteTugas(
+                                                tugas.id);
 
                                         NotificationHelper.showSnackBar(
                                           context,
@@ -305,9 +308,8 @@ class TugasTabel extends StatelessWidget {
                                           isSuccess: true,
                                         );
 
-                                        Navigator.pop(context); 
+                                        Navigator.pop(context);
                                       },
-
                                       child: Text(
                                         'Hapus',
                                         style: TextStyle(
