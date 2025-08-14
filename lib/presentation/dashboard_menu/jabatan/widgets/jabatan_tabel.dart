@@ -2,32 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/models/jabatan_model.dart';
 
 class JabatanTabel extends StatelessWidget {
-  const JabatanTabel({super.key});
+  final List<JabatanModel> jabatanList;
+  final Function(JabatanModel) onEdit;
+  final Function(int) onDelete;
 
-  final List<String> headers = const [
-    "CEO",
-    "Supervisor",
-    "Tech Lead",
-    "CEO",
-    "Admin",
-    "CEO",
-    "Supervisor",
-    "Tech Lead",
-    "CEO",
-    "Admin",
-    "CEO",
-    "Supervisor",
-    "Tech Lead",
-    "CEO",
-    "Admin",
-    "CEO",
-    "Supervisor",
-    "Tech Lead",
-    "CEO",
-    "Admin",
-  ];
+  const JabatanTabel({
+    super.key,
+    required this.jabatanList,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,15 +83,14 @@ class JabatanTabel extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // 🔽 Bagian Tabel Isi
             ListView.separated(
               shrinkWrap: true,
-              physics:
-                  const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
-              itemCount: headers.length,
+              physics: const NeverScrollableScrollPhysics(), // supaya ikut scroll luar
+              itemCount: jabatanList.length,
               separatorBuilder: (_, __) =>
                   Divider(color: AppColors.secondary, thickness: 1),
               itemBuilder: (context, index) {
+                final jabatan = jabatanList[index];
                 return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
@@ -113,7 +99,7 @@ class JabatanTabel extends StatelessWidget {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            headers[index],
+                            jabatan.namaJabatan,
                             style: TextStyle(
                               color: AppColors.putih,
                               fontWeight: FontWeight.w400,
@@ -130,7 +116,7 @@ class JabatanTabel extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    // Aksi delete
+                                    onDelete(jabatan.id);
                                   },
                                   child: FaIcon(
                                     FontAwesomeIcons.trash,
@@ -141,7 +127,7 @@ class JabatanTabel extends StatelessWidget {
                                 const SizedBox(width: 12), // jarak antar ikon
                                 GestureDetector(
                                   onTap: () {
-                                    // Aksi edit
+                                    onEdit(jabatan);
                                   },
                                   child: FaIcon(
                                     FontAwesomeIcons.pen,

@@ -1,23 +1,25 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
-import 'package:hr/data/models/departemen_model.dart';
+import 'package:hr/data/models/jabatan_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DepartemenService {
+class JabatanService {
   static const String baseUrl = 'http://192.168.20.50:8000';
 
-  static Future<String?> getToken() async {
+  static Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
 
-  // Fetch departemen
-  static Future<List<DepartemenModel>> fetchDepartemen() async {
-    final token = await getToken();
+  // Fetch jabatan
+  static Future<List<JabatanModel>> fetchJabatan() async{
+    final token = await _getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.get(
-      Uri.parse('$baseUrl/api/departemen'),
+      Uri.parse('$baseUrl/api/jabatan'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -26,29 +28,29 @@ class DepartemenService {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      final List dataList = jsonData['data'];
-
-      return dataList.map((json) => DepartemenModel.fromJson(json)).toList();
+      final List jabatanList = jsonData['data'];
+      return jabatanList.map((json) => JabatanModel.fromJson(json)).toList();
     } else {
-      throw Exception('Gagal memuat data departemen: ${response.statusCode}');
+      print('Gagal fetch jabatan: ${response.statusCode} ${response.body}');
+      throw Exception('Gagal memuat data jabatan');
     }
   }
 
-  // Tambah departemen
-  static Future<Map<String, dynamic>> createDepartemen({
-    required String namaDepartemen,
+  // Tambah jabatan
+  static Future<Map<String, dynamic>> createJabatan({
+    required String namaJabatan,
   }) async {
-    final token = await getToken();
+    final token = await _getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.post(
-      Uri.parse('$baseUrl/api/departemen'),
+      Uri.parse('$baseUrl/api/jabatan'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'nama_departemen': namaDepartemen,
+        'nama_jabatan': namaJabatan,
       }),
     );
 
@@ -56,26 +58,26 @@ class DepartemenService {
 
     return {
       'success': response.statusCode == 200,
-      'message': responseBody['message'] ?? 'Gagal membuat tugas',
+      'message': responseBody['message'] ?? 'Gagal membuat jabatan',
     };
   }
 
-  // Update departemen
-  static Future<Map<String, dynamic>> updateDepartemen({
+  // Update jabatan
+  static Future<Map<String, dynamic>> updateJabatan({
     required int id,
-    required String namaDepartemen,
+    required String namaJabatan,
   }) async {
-    final token = await getToken();
+    final token = await _getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.put(
-      Uri.parse('$baseUrl/api/departemen/$id'),
+      Uri.parse('$baseUrl/api/jabatan/$id'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'nama_departemen': namaDepartemen,
+        'nama_jabatan': namaJabatan,
       }),
     );
 
@@ -83,17 +85,17 @@ class DepartemenService {
 
     return {
       'success': response.statusCode == 200,
-      'message': responseBody['message'] ?? 'Gagal memperbarui departemen',
+      'message': responseBody['message'] ?? 'Gagal memperbarui jabatan',
     };
   }
 
-  // Hapus departemen
-  static Future<Map<String, dynamic>> deleteDepartemen(int id) async {
-    final token = await getToken();
+  // Hapus jabatan
+  static Future<Map<String, dynamic>> deleteJabatan(int id) async {
+    final token = await _getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
 
     final response = await http.delete(
-      Uri.parse('$baseUrl/api/departemen/$id'),
+      Uri.parse('$baseUrl/api/jabatan/$id'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
