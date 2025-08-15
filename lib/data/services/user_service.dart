@@ -30,12 +30,12 @@ class UserService {
       return dataList.map((json) => UserModel.fromJson(json)).toList();
       
     } else {
-      throw Exception('Gagal memuat data departemen: ${response.statusCode}');
+      throw Exception('Gagal memuat data user: ${response.statusCode}');
     }
   }
 
-  // Tambah karyawan baru
-  static Future<void> createKaryawan(Map<String, dynamic> karyawanData) async {
+  // Tambah user baru
+  static Future<void> createUser(Map<String, dynamic> karyawanData) async {
     final token = await _getToken();
     if (token == null) {
       throw Exception('Token tidak ditemukan. Harap login ulang.');
@@ -63,7 +63,39 @@ class UserService {
     }
   }
 
-  // Hapus Karyawan
+  static Future<void> updateUser(int id, Map<String, dynamic> karyawanData) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('Token tidak ditemukan. Harap login ulang.');
+    }
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/api/user/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(karyawanData),
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      final body = json.decode(response.body);
+      if (response.statusCode == 422) {
+        throw body['errors'] ?? {'error': ['Data tidak valid']};
+      } else if (response.statusCode == 404) {
+        throw 'User tidak ditemukan';
+      } else if (response.statusCode == 403) {
+        throw 'Tidak memiliki izin untuk mengubah data ini';
+      } else {
+        throw body['message'] ?? "Terjadi kesalahan saat memperbarui data";
+      }
+    }
+  }
+
+  // Hapus user
   static Future<Map<String, dynamic>> deleteUser(int id) async {
     final token = await _getToken();
     if (token == null) throw Exception('Token tidak ditemukan. Harap login ulang.');
@@ -81,10 +113,8 @@ class UserService {
     return {
       'message': body['message'] ??
           (response.statusCode == 200
-              ? 'Tugas berhasil dihapus'
-              : 'Gagal menghapus tugas'),
+              ? 'User berhasil dihapus'
+              : 'Gagal menghapus user'),
     };
   }
-  
-
 }
