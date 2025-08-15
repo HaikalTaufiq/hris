@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hr/data/model/dahsboard_menu_item.dart';
+import 'package:hr/data/models/dahsboard_menu_item.dart';
 import 'package:hr/presentation/layouts/main_layout.dart';
 import 'package:hr/presentation/pages/dashboard/widget/dashboard_card.dart';
 import 'package:hr/presentation/pages/dashboard/widget/attendance_chart.dart';

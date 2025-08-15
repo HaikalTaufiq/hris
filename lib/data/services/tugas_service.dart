@@ -59,12 +59,25 @@ class TugasService {
       return "${parts[2]}-${parts[1]}-${parts[0]}";
     }
 
-    // Format waktu untuk API
-    String _formatTime(String time12h) {
-      time12h = time12h.replaceAll(RegExp(r'\s+'), ' ').trim();
-      final dateTime = DateFormat('h:mm a').parse(time12h);
-      return DateFormat('HH:mm:ss').format(dateTime);
+    // Format waktu untuk API (24 jam)
+    String _formatTime(String time) {
+      // Cek apakah input sudah 24 jam (HH:mm) atau 12 jam (h:mm a)
+      try {
+        // Coba parse 12 jam dulu
+        final dateTime = DateFormat('h:mm a').parse(time);
+        return DateFormat('HH:mm:ss').format(dateTime);
+      } catch (_) {
+        // Kalau gagal, anggap 24 jam (HH:mm)
+        final parts = time.split(':');
+        if (parts.length >= 2) {
+          final hour = int.parse(parts[0]);
+          final minute = int.parse(parts[1]);
+          return '${hour.toString().padLeft(2,'0')}:${minute.toString().padLeft(2,'0')}:00';
+        }
+        throw FormatException('Format waktu tidak valid: $time');
+      }
     }
+
 
     // Siapkan body request
     final requestBody = {
@@ -82,24 +95,35 @@ class TugasService {
     // Debug: lihat data yang dikirim
     print("DATA KIRIM: $requestBody");
 
-    // Kirim request ke API
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/tugas'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json', 
-      },
-      body: jsonEncode(requestBody), 
-    );
+    // Kirim request ke API dengan debug untuk mobile
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/tugas'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json', 
+        },
+        body: jsonEncode(requestBody), 
+      );
 
-    final responseBody = json.decode(response.body);
-    print("RESPON API: $responseBody"); 
+      print("STATUS CODE: ${response.statusCode}");
+      print("RESPON API: ${response.body}");
 
-    return {
-      'success': response.statusCode == 200,
-      'message': responseBody['message'] ?? 'Gagal membuat tugas',
-    };
+      final responseBody = json.decode(response.body);
+      return {
+        'success': response.statusCode == 200,
+        'message': responseBody['message'] ?? 'Gagal membuat tugas',
+      };
+    } catch (e, stacktrace) {
+      print("ERROR SAAT SUBMIT TUGAS: $e");
+      print(stacktrace);
+      return {
+        'success': false,
+        'message': 'Terjadi error saat submit: $e',
+      };
+    }
+
   }
 
   // Update tugas

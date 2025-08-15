@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
+import 'package:hr/components/timepicker/time_picker.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/components/custom/custom_input.dart';
 
@@ -15,18 +16,111 @@ class _InputOutState extends State<InputOut> {
   final TextEditingController _tanggalController = TextEditingController();
 
   final TextEditingController _jamSelesaiController = TextEditingController();
+  int _selectedMinute = 0;
+  int _selectedHour = 0;
 
   void _onTapIcon(TextEditingController controller) async {
-    final pickedTime = await showTimePicker(
+    showModalBottomSheet(
+      backgroundColor: AppColors.primary,
+      useRootNavigator: true,
       context: context,
-      initialTime: TimeOfDay.now(),
-    );
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  ListTile(
+                    title: Center(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 3,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Pilih Waktu',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Pengajuan Lembur',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  NumberPickerWidget(
+                    hour: _selectedHour,
+                    minute: _selectedMinute,
+                    onHourChanged: (value) {
+                      setModalState(() {
+                        _selectedHour = value;
+                      });
+                    },
+                    onMinuteChanged: (value) {
+                      setModalState(() {
+                        _selectedMinute = value;
+                      });
+                    },
+                  ),
+                  FloatingActionButton.extended(
+                    backgroundColor: AppColors.secondary,
+                    onPressed: () {
+                      // Format waktu menjadi HH:mm
+                      final formattedHour =
+                          _selectedHour.toString().padLeft(2, '0');
+                      final formattedMinute =
+                          _selectedMinute.toString().padLeft(2, '0');
+                      final formattedTime = "$formattedHour:$formattedMinute";
 
-    if (pickedTime != null) {
-      setState(() {
-        controller.text = pickedTime.format(context);
-      });
-    }
+                      // Simpan ke text field controller
+                      controller.text = formattedTime;
+
+                      Navigator.pop(context);
+                    },
+                    label: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: AppColors.putih,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -85,15 +179,36 @@ class _InputOutState extends State<InputOut> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: Color(0xFF1F1F1F), // Header & selected date
+                        onPrimary: Colors.white, // Teks tanggal terpilih
+                        onSurface: AppColors.hitam, // Teks hari/bulan
+                        secondary:
+                            AppColors.yellow, // Hari yang di-hover / highlight
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+                        ),
+                      ),
+                      textTheme: GoogleFonts.poppinsTextTheme(
+                        Theme.of(context).textTheme.apply(
+                              bodyColor: AppColors.hitam,
+                              displayColor: AppColors.hitam,
+                            ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
-              if (pickedDate != null) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                setState(() {
-                  _tanggalController.text = formatted;
-                });
+
+              if (pickedDate != null && mounted) {
+                _tanggalController.text =
+                    "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
               }
             },
             labelStyle: labelStyle,

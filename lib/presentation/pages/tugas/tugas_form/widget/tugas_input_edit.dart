@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
-import 'package:hr/components/custom/loading.dart';
+import 'package:hr/components/timepicker/time_picker.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
@@ -31,7 +31,8 @@ class _TugasInputEditState extends State<TugasInputEdit> {
   final TextEditingController _lokasiController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _judulTugasController = TextEditingController();
-
+  int _selectedMinute = 0;
+  int _selectedHour = 0;
   String? _assignmentMode;
   UserModel? _selectedUser;
   DepartemenModel? _selectedDepartment;
@@ -104,13 +105,107 @@ class _TugasInputEditState extends State<TugasInputEdit> {
   }
 
   void _onTapIconTime(TextEditingController controller) async {
-    final pickedTime = await showTimePicker(
+    showModalBottomSheet(
+      backgroundColor: AppColors.primary,
+      useRootNavigator: true,
       context: context,
-      initialTime: TimeOfDay.now(),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  ListTile(
+                    title: Center(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 3,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Pilih Waktu',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Pengajuan Lembur',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  NumberPickerWidget(
+                    hour: _selectedHour,
+                    minute: _selectedMinute,
+                    onHourChanged: (value) {
+                      setModalState(() {
+                        _selectedHour = value;
+                      });
+                    },
+                    onMinuteChanged: (value) {
+                      setModalState(() {
+                        _selectedMinute = value;
+                      });
+                    },
+                  ),
+                  FloatingActionButton.extended(
+                    backgroundColor: AppColors.secondary,
+                    onPressed: () {
+                      // Format waktu menjadi HH:mm
+                      final formattedHour =
+                          _selectedHour.toString().padLeft(2, '0');
+                      final formattedMinute =
+                          _selectedMinute.toString().padLeft(2, '0');
+                      final formattedTime = "$formattedHour:$formattedMinute";
+
+                      // Simpan ke text field controller
+                      controller.text = formattedTime;
+
+                      Navigator.pop(context);
+                    },
+                    label: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: AppColors.putih,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
-    if (pickedTime != null && mounted) {
-      controller.text = pickedTime.format(context);
-    }
   }
 
   void _onTapIconDate(TextEditingController controller) async {
@@ -119,7 +214,32 @@ class _TugasInputEditState extends State<TugasInputEdit> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF1F1F1F), // Header & selected date
+              onPrimary: Colors.white, // Teks tanggal terpilih
+              onSurface: AppColors.hitam, // Teks hari/bulan
+              secondary: AppColors.yellow, // Hari yang di-hover / highlight
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+              ),
+            ),
+            textTheme: GoogleFonts.poppinsTextTheme(
+              Theme.of(context).textTheme.apply(
+                    bodyColor: AppColors.hitam,
+                    displayColor: AppColors.hitam,
+                  ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+
     if (pickedDate != null && mounted) {
       controller.text =
           "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
@@ -311,7 +431,10 @@ class _TugasInputEditState extends State<TugasInputEdit> {
               const SizedBox(height: 10),
               if (_assignmentMode == 'Per Orang')
                 _isLoadingUser
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                        color: Color(0x00FFFFFF),
+                      ))
                     : CustomDropDownField(
                         label: 'Karyawan',
                         hint: 'Pilih user',
@@ -393,7 +516,7 @@ class _TugasInputEditState extends State<TugasInputEdit> {
                   ),
                   child: isLoading
                       ? const SizedBox(
-                          child: LoadingWidget(),
+                          child: CircularProgressIndicator(),
                         )
                       : Text(
                           'Submit',

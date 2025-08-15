@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/core/theme.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class NumberPage extends StatefulWidget {
@@ -19,7 +21,6 @@ class _NumberPageState extends State<NumberPage> {
       body: NumberPickerWidget(
         hour: hour,
         minute: minute,
-        timeFormat: timeFormat,
         onHourChanged: (value) {
           setState(() {
             hour = value;
@@ -30,11 +31,6 @@ class _NumberPageState extends State<NumberPage> {
             minute = value;
           });
         },
-        onTimeFormatChanged: (value) {
-          setState(() {
-            timeFormat = value;
-          });
-        },
       ),
     );
   }
@@ -43,18 +39,14 @@ class _NumberPageState extends State<NumberPage> {
 class NumberPickerWidget extends StatelessWidget {
   final int hour;
   final int minute;
-  final String timeFormat;
   final ValueChanged<int> onHourChanged;
   final ValueChanged<int> onMinuteChanged;
-  final ValueChanged<String> onTimeFormatChanged;
 
   const NumberPickerWidget({
     required this.hour,
     required this.minute,
-    required this.timeFormat,
     required this.onHourChanged,
     required this.onMinuteChanged,
-    required this.onTimeFormatChanged,
   });
 
   @override
@@ -84,16 +76,17 @@ class NumberPickerWidget extends StatelessWidget {
                   itemWidth: 55,
                   itemHeight: 50,
                   onChanged: onHourChanged,
-                  textStyle: const TextStyle(color: Colors.grey, fontSize: 20),
-                  selectedTextStyle: const TextStyle(
-                    color: Colors.black,
+                  textStyle: TextStyle(
+                      color: AppColors.putih.withOpacity(0.5), fontSize: 20),
+                  selectedTextStyle: TextStyle(
+                    color: AppColors.putih,
                     fontSize: 24,
-                    fontFamily: "poppins",
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: Colors.black),
-                      bottom: BorderSide(color: Colors.black),
+                      top: BorderSide(color: AppColors.putih),
+                      bottom: BorderSide(color: AppColors.putih),
                     ),
                   ),
                 ),
@@ -106,20 +99,20 @@ class NumberPickerWidget extends StatelessWidget {
                   itemWidth: 55,
                   itemHeight: 50,
                   onChanged: onMinuteChanged,
-                  textStyle: const TextStyle(
-                    color: Colors.grey,
+                  textStyle: TextStyle(
+                    color: AppColors.putih.withOpacity(0.5),
                     fontSize: 20,
-                    fontFamily: "poppins",
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
-                  selectedTextStyle: const TextStyle(
-                    color: Colors.black,
+                  selectedTextStyle: TextStyle(
+                    color: AppColors.putih,
                     fontSize: 24,
-                    fontFamily: "poppins",
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: Colors.black),
-                      bottom: BorderSide(color: Colors.black),
+                      top: BorderSide(color: AppColors.putih),
+                      bottom: BorderSide(color: AppColors.putih),
                     ),
                   ),
                 ),

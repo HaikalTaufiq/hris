@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,6 +32,10 @@ class _CutiPageState extends State<CutiPage> {
     Future.microtask(() {
       context.read<CutiProvider>().fetchCuti();
     });
+  }
+
+  Future<void> _refreshData() async {
+    await context.read<CutiProvider>().fetchCuti();
   }
 
   Future<void> _deleteCuti(CutiModel cuti) async {
@@ -98,50 +104,76 @@ class _CutiPageState extends State<CutiPage> {
 
     return Stack(
       children: [
-        ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Header(title: 'Pengajuan Cuti'),
-            SearchingBar(
-              controller: searchController,
-              onChanged: (value) => print("Search: $value"),
-              onFilter1Tap: () => print("Filter1"),
-              onFilter2Tap: () => print("Filter2"),
-            ),
-            if (cutiProvider.isLoading)
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: const Center(child: LoadingWidget()),
-              )
-            else if (cutiProvider.cutiList.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: Text(
-                    'Tidak ada data cuti',
-                    style: TextStyle(
-                      color: AppColors.putih,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+        RefreshIndicator(
+          onRefresh: _refreshData,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Header(title: 'Pengajuan Cuti'),
+              SearchingBar(
+                controller: searchController,
+                onChanged: (value) => print("Search: $value"),
+                onFilter1Tap: () => print("Filter1"),
+                onFilter2Tap: () => print("Filter2"),
+              ),
+              if (cutiProvider.isLoading)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: const Center(child: LoadingWidget()),
+                )
+              else if (cutiProvider.cutiList.isEmpty)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.note_alt_outlined,
+                          size: 64,
+                          color: AppColors.putih.withOpacity(0.5),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Belum ada pengajuan',
+                          style: TextStyle(
+                            color: AppColors.putih,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Tap tombol + untuk menambah pengajuan baru',
+                          style: TextStyle(
+                            color: AppColors.putih.withOpacity(0.7),
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
+                )
+              else
+                ListView.builder(
+                  itemCount: cutiProvider.cutiList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final cuti = cutiProvider.cutiList[index];
+                    return CutiCard(
+                      cuti: cuti,
+                      onApprove: () => _approveCuti(cuti),
+                      onDecline: () => _declineCuti(cuti),
+                      onDelete: () => _deleteCuti(cuti),
+                    );
+                  },
                 ),
-              )
-            else
-              ListView.builder(
-                itemCount: cutiProvider.cutiList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final cuti = cutiProvider.cutiList[index];
-                  return CutiCard(
-                    cuti: cuti,
-                    onApprove: () => _approveCuti(cuti),
-                    onDecline: () => _declineCuti(cuti),
-                    onDelete: () => _deleteCuti(cuti),
-                  );
-                },
-              ),
-          ],
+            ],
+          ),
         ),
         FeatureGuard(
           featureId: "add_cuti",

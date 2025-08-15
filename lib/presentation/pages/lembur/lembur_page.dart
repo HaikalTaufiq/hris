@@ -95,58 +95,88 @@ class _LemburPageState extends State<LemburPage> {
     }
   }
 
+  Future<void> _refreshData() async {
+    await context.read<LemburProvider>().fetchLembur();
+  }
+
   @override
   Widget build(BuildContext context) {
     final lemburProvider = context.watch<LemburProvider>();
 
     return Stack(
       children: [
-        ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            const Header(title: 'Pengajuan Lembur'),
-            SearchingBar(
-              controller: searchController,
-              onChanged: (value) {},
-              onFilter1Tap: () {},
-              onFilter2Tap: () {},
-            ),
-            if (lemburProvider.isLoading)
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: const Center(child: LoadingWidget()),
-              )
-            else if (lemburProvider.errorMessage != null)
-              Center(child: Text('Error: ${lemburProvider.errorMessage}'))
-            else if (lemburProvider.lemburList.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    'Belum ada data lembur.',
-                    style: TextStyle(
-                      color: AppColors.putih,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+        RefreshIndicator(
+          onRefresh: _refreshData,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const Header(title: 'Pengajuan Lembur'),
+              SearchingBar(
+                controller: searchController,
+                onChanged: (value) {},
+                onFilter1Tap: () {},
+                onFilter2Tap: () {},
+              ),
+              if (lemburProvider.isLoading)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: const Center(child: LoadingWidget()),
+                )
+              else if (lemburProvider.errorMessage != null)
+                Center(child: Text('Error: ${lemburProvider.errorMessage}'))
+              else if (lemburProvider.lemburList.isEmpty)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.hourglass_empty,
+                          size: 64,
+                          color: AppColors.putih.withOpacity(0.5),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Belum ada pengajuan',
+                          style: TextStyle(
+                            color: AppColors.putih,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Tap tombol + untuk menambah pengajuan baru',
+                          style: TextStyle(
+                            color: AppColors.putih.withOpacity(0.7),
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
+                )
+              else
+                ListView.builder(
+                  itemCount: lemburProvider.lemburList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final lembur = lemburProvider.lemburList[index];
+                    return LemburCard(
+                      lembur: lembur,
+                      onApprove: () => _approveLembur(lembur),
+                      onDecline: () => _declineLembur(lembur),
+                      onDelete: () => _deleteLembur(lembur),
+                    );
+                  },
                 ),
-              )
-            else
-              ListView.builder(
-                itemCount: lemburProvider.lemburList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final lembur = lemburProvider.lemburList[index];
-                  return LemburCard(
-                    lembur: lembur,
-                    onApprove: () => _approveLembur(lembur),
-                    onDecline: () => _declineLembur(lembur),
-                    onDelete: () => _deleteLembur(lembur),
-                  );
-                },
-              ),
-          ],
+            ],
+          ),
         ),
         FeatureGuard(
           featureId: "add_lembur",

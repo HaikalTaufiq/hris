@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
+import 'package:hr/components/timepicker/time_picker.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/departemen_model.dart';
@@ -28,7 +29,8 @@ class _TugasInputState extends State<TugasInput> {
   final TextEditingController _lokasiController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _judulTugasController = TextEditingController();
-
+  int _selectedMinute = 0;
+  int _selectedHour = 0;
   String? _assignmentMode;
   UserModel? _selectedUser;
   DepartemenModel? _selectedDepartment;
@@ -79,13 +81,107 @@ class _TugasInputState extends State<TugasInput> {
   }
 
   void _onTapIconTime(TextEditingController controller) async {
-    final pickedTime = await showTimePicker(
+    showModalBottomSheet(
+      backgroundColor: AppColors.primary,
+      useRootNavigator: true,
       context: context,
-      initialTime: TimeOfDay.now(),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  ListTile(
+                    title: Center(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 3,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Pilih Waktu',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Penambahan Tugas',
+                            style: TextStyle(
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  NumberPickerWidget(
+                    hour: _selectedHour,
+                    minute: _selectedMinute,
+                    onHourChanged: (value) {
+                      setModalState(() {
+                        _selectedHour = value;
+                      });
+                    },
+                    onMinuteChanged: (value) {
+                      setModalState(() {
+                        _selectedMinute = value;
+                      });
+                    },
+                  ),
+                  FloatingActionButton.extended(
+                    backgroundColor: AppColors.secondary,
+                    onPressed: () {
+                      // Format waktu menjadi HH:mm
+                      final formattedHour =
+                          _selectedHour.toString().padLeft(2, '0');
+                      final formattedMinute =
+                          _selectedMinute.toString().padLeft(2, '0');
+                      final formattedTime = "$formattedHour:$formattedMinute";
+
+                      // Simpan ke text field controller
+                      controller.text = formattedTime;
+
+                      Navigator.pop(context);
+                    },
+                    label: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: AppColors.putih,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
-    if (pickedTime != null && mounted) {
-      controller.text = pickedTime.format(context);
-    }
   }
 
   void _onTapIconDate(TextEditingController controller) async {
@@ -94,102 +190,35 @@ class _TugasInputState extends State<TugasInput> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF1F1F1F), // Header & selected date
+              onPrimary: Colors.white, // Teks tanggal terpilih
+              onSurface: AppColors.hitam, // Teks hari/bulan
+              secondary: AppColors.yellow, // Hari yang di-hover / highlight
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+              ),
+            ),
+            textTheme: GoogleFonts.poppinsTextTheme(
+              Theme.of(context).textTheme.apply(
+                    bodyColor: AppColors.hitam,
+                    displayColor: AppColors.hitam,
+                  ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+
     if (pickedDate != null && mounted) {
       controller.text =
           "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
-    }
-  }
-
-  Future<void> _handleSubmit() async {
-    // Validate required fields
-    if (_judulTugasController.text.isEmpty ||
-        _jamMulaiController.text.isEmpty ||
-        _tanggalMulaiController.text.isEmpty ||
-        _tanggalSelesaiController.text.isEmpty ||
-        _assignmentMode == null ||
-        _lokasiController.text.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Harap isi semua data wajib")),
-        );
-      }
-      return;
-    }
-
-    // Validate assignment selection
-    if (_assignmentMode == "Per Orang" && _selectedUser == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Pilih karyawan terlebih dahulu")),
-        );
-      }
-      return;
-    }
-
-    if (_assignmentMode == "Per Departemen" && _selectedDepartment == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Pilih departemen terlebih dahulu")),
-        );
-      }
-      return;
-    }
-
-    try {
-      final tugasProvider = context.read<TugasProvider>();
-
-      final result = await tugasProvider.createTugas(
-        judul: _judulTugasController.text,
-        jamMulai: _jamMulaiController.text,
-        tanggalMulai: _tanggalMulaiController.text,
-        tanggalSelesai: _tanggalSelesaiController.text,
-        assignmentMode: _assignmentMode!,
-        person: _assignmentMode == "Per Orang" ? _selectedUser?.id : null,
-        departmentId: _assignmentMode == "Per Departemen"
-            ? _selectedDepartment?.id
-            : null,
-        lokasi: _lokasiController.text,
-        note: _noteController.text,
-      );
-
-      if (!mounted) return;
-
-      final bool isSuccess = result['success'] == true;
-      final String message = result['message'] ?? '';
-
-      NotificationHelper.showSnackBar(
-        context,
-        message,
-        isSuccess: isSuccess,
-      );
-
-      if (isSuccess) {
-        // Clear form after successful submission
-        _judulTugasController.clear();
-        _jamMulaiController.clear();
-        _tanggalMulaiController.clear();
-        _tanggalSelesaiController.clear();
-        _lokasiController.clear();
-        _noteController.clear();
-
-        setState(() {
-          _assignmentMode = null;
-          _selectedUser = null;
-          _selectedDepartment = null;
-        });
-
-        // Navigate back with success result
-        Navigator.pop(context, true);
-      }
-    } catch (e) {
-      if (mounted) {
-        NotificationHelper.showSnackBar(
-          context,
-          'Terjadi kesalahan: $e',
-          isSuccess: false,
-        );
-      }
     }
   }
 
@@ -206,9 +235,7 @@ class _TugasInputState extends State<TugasInput> {
 
   @override
   Widget build(BuildContext context) {
-    // Use Consumer to properly watch the provider
-    final tugasProvider = context.read<TugasProvider>();
-
+    final tugasProvider = context.watch<TugasProvider>();
     final isLoading = tugasProvider.isLoading;
 
     final inputStyle = InputDecoration(
@@ -238,12 +265,12 @@ class _TugasInputState extends State<TugasInput> {
         vertical: MediaQuery.of(context).size.height * 0.01,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Fix the expanding issue
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomInputField(
-            label: "Judul Tugas",
             hint: "",
+            label: "Judul Tugas",
             controller: _judulTugasController,
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -306,16 +333,14 @@ class _TugasInputState extends State<TugasInput> {
                     label: 'Karyawan',
                     hint: 'Pilih user',
                     items: _userList
-                        .map((user) => user.nama)
-                        .where((name) => name.isNotEmpty)
+                        .map((u) => u.nama)
+                        .where((n) => n.isNotEmpty)
                         .toList(),
                     value: _selectedUser?.nama,
                     onChanged: (val) {
                       setState(() {
-                        _selectedUser = _userList.firstWhere(
-                          (user) => user.nama == val,
-                          orElse: () => _userList.first,
-                        );
+                        _selectedUser =
+                            _userList.firstWhere((u) => u.nama == val);
                       });
                     },
                     labelStyle: labelStyle,
@@ -333,15 +358,13 @@ class _TugasInputState extends State<TugasInput> {
                     hint: 'Pilih departemen',
                     items: _departemenList
                         .map((d) => d.namaDepartemen)
-                        .where((name) => name.isNotEmpty)
+                        .where((n) => n.isNotEmpty)
                         .toList(),
                     value: _selectedDepartment?.namaDepartemen,
                     onChanged: (val) {
                       setState(() {
-                        _selectedDepartment = _departemenList.firstWhere(
-                          (d) => d.namaDepartemen == val,
-                          orElse: () => _departemenList.first,
-                        );
+                        _selectedDepartment = _departemenList
+                            .firstWhere((d) => d.namaDepartemen == val);
                       });
                     },
                     labelStyle: labelStyle,
@@ -360,8 +383,8 @@ class _TugasInputState extends State<TugasInput> {
             inputStyle: inputStyle,
           ),
           CustomInputField(
-            label: "Note",
             hint: "",
+            label: "Note",
             controller: _noteController,
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -370,27 +393,59 @@ class _TugasInputState extends State<TugasInput> {
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
-            height: 50, // Fixed height to prevent expanding
             child: ElevatedButton(
-              onPressed: isLoading ? null : _handleSubmit,
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      if (_judulTugasController.text.isEmpty ||
+                          _jamMulaiController.text.isEmpty ||
+                          _tanggalMulaiController.text.isEmpty ||
+                          _tanggalSelesaiController.text.isEmpty ||
+                          _assignmentMode == null ||
+                          _lokasiController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Harap isi semua data wajib")),
+                        );
+                        return;
+                      }
+
+                      final result = await tugasProvider.createTugas(
+                        judul: _judulTugasController.text,
+                        jamMulai: _jamMulaiController.text,
+                        tanggalMulai: _tanggalMulaiController.text,
+                        tanggalSelesai: _tanggalSelesaiController.text,
+                        assignmentMode: _assignmentMode!,
+                        person: _assignmentMode == "Per Orang"
+                            ? _selectedUser?.id
+                            : null,
+                        departmentId: _assignmentMode == "Per Departemen"
+                            ? _selectedDepartment?.id
+                            : null,
+                        lokasi: _lokasiController.text,
+                        note: _noteController.text,
+                      );
+
+                      if (!mounted) return;
+                      NotificationHelper.showSnackBar(
+                        context,
+                        result['message'],
+                        isSuccess: result['success'] ?? false,
+                      );
+
+                      if (result['success'] == true) {
+                        Navigator.pop(context);
+                      }
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1F1F1F),
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                disabledBackgroundColor:
-                    const Color(0xFF1F1F1F).withOpacity(0.6),
               ),
               child: isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                  ? const CircularProgressIndicator(color: Colors.white)
                   : Text(
                       'Submit',
                       style: GoogleFonts.poppins(

@@ -106,15 +106,36 @@ class _CutiInputState extends State<CutiInput> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: Color(0xFF1F1F1F), // Header & selected date
+                        onPrimary: Colors.white, // Teks tanggal terpilih
+                        onSurface: AppColors.hitam, // Teks hari/bulan
+                        secondary:
+                            AppColors.yellow, // Hari yang di-hover / highlight
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+                        ),
+                      ),
+                      textTheme: GoogleFonts.poppinsTextTheme(
+                        Theme.of(context).textTheme.apply(
+                              bodyColor: AppColors.hitam,
+                              displayColor: AppColors.hitam,
+                            ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
-              if (pickedDate != null) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                setState(() {
-                  _tanggalMulaiController.text = formatted;
-                });
+
+              if (pickedDate != null && mounted) {
+                _tanggalMulaiController.text =
+                    "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
               }
             },
             labelStyle: labelStyle,
@@ -132,15 +153,36 @@ class _CutiInputState extends State<CutiInput> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: Color(0xFF1F1F1F), // Header & selected date
+                        onPrimary: Colors.white, // Teks tanggal terpilih
+                        onSurface: AppColors.hitam, // Teks hari/bulan
+                        secondary:
+                            AppColors.yellow, // Hari yang di-hover / highlight
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+                        ),
+                      ),
+                      textTheme: GoogleFonts.poppinsTextTheme(
+                        Theme.of(context).textTheme.apply(
+                              bodyColor: AppColors.hitam,
+                              displayColor: AppColors.hitam,
+                            ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
-              if (pickedDate != null) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                setState(() {
-                  _tanggalSelesaiController.text = formatted;
-                });
+
+              if (pickedDate != null && mounted) {
+                _tanggalSelesaiController.text =
+                    "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
               }
             },
             labelStyle: labelStyle,

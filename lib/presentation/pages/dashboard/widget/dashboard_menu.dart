@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
-import 'package:hr/data/model/dahsboard_menu_item.dart';
+import 'package:hr/data/models/dahsboard_menu_item.dart';
 import 'package:provider/provider.dart';
 import 'package:hr/provider/user_provider.dart';
 

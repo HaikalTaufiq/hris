@@ -24,7 +24,6 @@ class _LemburInputState extends State<LemburInput> {
 
   int _selectedMinute = 0;
   int _selectedHour = 0;
-  String _selectedTimeFormat = "AM";
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,7 @@ class _LemburInputState extends State<LemburInput> {
 
   void _onTapIcon(TextEditingController controller) async {
     showModalBottomSheet(
-      backgroundColor: Color(0xffF9F9F9),
+      backgroundColor: AppColors.primary,
       useRootNavigator: true,
       context: context,
       clipBehavior: Clip.antiAlias,
@@ -56,10 +55,9 @@ class _LemburInputState extends State<LemburInput> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Container(
-              padding: EdgeInsets.all(0),
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ListTile(
                     title: Center(
                       child: Column(
@@ -68,27 +66,26 @@ class _LemburInputState extends State<LemburInput> {
                             height: 3,
                             width: 40,
                             decoration: BoxDecoration(
-                              color: Color(0xff12171D),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30),
-                              ),
+                              color: AppColors.secondary,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
-                            'Edit Time',
+                            'Pilih Waktu',
                             style: TextStyle(
-                              color: Color(0xff212121),
-                              fontFamily: "poppins",
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           Text(
-                            'Feeding Schedule',
+                            'Pengajuan Lembur',
                             style: TextStyle(
-                              color: Color(0xff5F5F5F),
-                              fontFamily: "poppins",
+                              color: AppColors.putih,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -100,7 +97,6 @@ class _LemburInputState extends State<LemburInput> {
                   NumberPickerWidget(
                     hour: _selectedHour,
                     minute: _selectedMinute,
-                    timeFormat: _selectedTimeFormat,
                     onHourChanged: (value) {
                       setModalState(() {
                         _selectedHour = value;
@@ -111,21 +107,31 @@ class _LemburInputState extends State<LemburInput> {
                         _selectedMinute = value;
                       });
                     },
-                    onTimeFormatChanged: (value) {
-                      setModalState(() {});
-                    },
                   ),
                   FloatingActionButton.extended(
-                    backgroundColor: Color(0xFF25A1AE),
+                    backgroundColor: AppColors.secondary,
                     onPressed: () {
+                      // Format waktu menjadi HH:mm
+                      final formattedHour =
+                          _selectedHour.toString().padLeft(2, '0');
+                      final formattedMinute =
+                          _selectedMinute.toString().padLeft(2, '0');
+                      final formattedTime = "$formattedHour:$formattedMinute";
+
+                      // Simpan ke text field controller
+                      controller.text = formattedTime;
+
                       Navigator.pop(context);
                     },
-                    label: Text(
-                      'Save',
-                      style: TextStyle(
-                        fontFamily: "poppins",
-                        color: Colors.white,
-                        fontSize: 18,
+                    label: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          color: AppColors.putih,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -200,13 +206,36 @@ class _LemburInputState extends State<LemburInput> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: Color(0xFF1F1F1F), // Header & selected date
+                        onPrimary: Colors.white, // Teks tanggal terpilih
+                        onSurface: AppColors.hitam, // Teks hari/bulan
+                        secondary:
+                            AppColors.yellow, // Hari yang di-hover / highlight
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.hitam, // Tombol CANCEL/OK
+                        ),
+                      ),
+                      textTheme: GoogleFonts.poppinsTextTheme(
+                        Theme.of(context).textTheme.apply(
+                              bodyColor: AppColors.hitam,
+                              displayColor: AppColors.hitam,
+                            ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
+
               if (pickedDate != null && mounted) {
-                final formatted =
-                    "${pickedDate.day.toString().padLeft(2, '0')} / "
-                    "${pickedDate.month.toString().padLeft(2, '0')} / "
-                    "${pickedDate.year}";
-                _tanggalController.text = formatted;
+                _tanggalController.text =
+                    "${pickedDate.day.toString().padLeft(2, '0')} / ${pickedDate.month.toString().padLeft(2, '0')} / ${pickedDate.year}";
               }
             },
             labelStyle: labelStyle,
