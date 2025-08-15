@@ -134,7 +134,7 @@ class _KaryawanInputState extends State<KaryawanInput> {
     }
 
     try {
-      await UserService.createKaryawan({
+      await UserService.createUser({
         "nama": _namaController.text,
         "peran_id": _peranId,
         "jabatan_id": _jabatanId,
