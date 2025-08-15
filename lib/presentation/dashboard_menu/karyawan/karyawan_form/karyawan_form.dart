@@ -14,24 +14,24 @@ class KaryawanForm extends StatelessWidget {
         title: Text(
           'Daftarkan Karyawan',
           style: TextStyle(
-              color: AppColors.putih,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              fontFamily: GoogleFonts.poppins().fontFamily),
+            color: AppColors.putih,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
         ),
         backgroundColor: AppColors.bg,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios), // atau CupertinoIcons.back
+          icon: const Icon(Icons.arrow_back_ios),
           color: AppColors.putih,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        iconTheme: IconThemeData(
-          color: AppColors.putih, // warna ikon back
-        ),
       ),
-      body: ListView(children: [
-        KaryawanInput(),
-      ]),
+      body: ListView(
+        children: [
+          KaryawanInput(),
+        ],
+      ),
     );
   }
 }

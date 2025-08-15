@@ -61,10 +61,10 @@ class _TugasPageState extends State<TugasPage> {
                     padding: const EdgeInsets.all(16),
                     child: Center(
                         child: Text(
-                      'Data tugas kosong',
-                      style: TextStyle(
-                        color: AppColors.putih,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                          'Data tugas kosong',
+                          style: TextStyle(
+                            color: AppColors.putih,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     )),
                   );

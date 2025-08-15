@@ -1,8 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hr/components/search_bar/search_bar.dart';
 import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/theme.dart';
+import 'package:hr/data/models/user_model.dart';
+import 'package:hr/data/services/user_service.dart';
 import 'package:hr/presentation/dashboard_menu/karyawan/karyawan_form/karyawan_form.dart';
 import 'package:hr/presentation/dashboard_menu/karyawan/widgets/karyawan_tabel.dart';
 
@@ -14,7 +18,34 @@ class KaryawanPage extends StatefulWidget {
 }
 
 class _KaryawanPageState extends State<KaryawanPage> {
-  final searchController = TextEditingController(); // value awal
+  final searchController = TextEditingController();
+  List<UserModel> users = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  void fetchUsers() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final fetchedUsers = await UserService.fetchUsers(); 
+      setState(() {
+        users = fetchedUsers;
+      });
+    } catch (e) {
+      print('Gagal fetch users: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +63,14 @@ class _KaryawanPageState extends State<KaryawanPage> {
               onFilter1Tap: () => print("Filter1 Halaman A"),
               onFilter2Tap: () => print("Filter2 Halaman A"),
             ),
-            const KaryawanTabel(),
-            const KaryawanTabel(),
-            const KaryawanTabel(),
+            if (isLoading)
+              Center(
+                child: CircularProgressIndicator(color: AppColors.secondary),
+              )
+            else
+              KaryawanTabel(users: users), 
           ],
         ),
-        // Floating Action Button
         Positioned(
           bottom: 16,
           right: 16,
