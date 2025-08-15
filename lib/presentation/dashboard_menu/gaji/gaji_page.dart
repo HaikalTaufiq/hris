@@ -26,7 +26,6 @@ class _GajiPageState extends State<GajiPage> {
             print("Search Halaman A: $value");
           },
           onFilter1Tap: () => print("Filter1 Halaman A"),
-          onFilter2Tap: () => print("Filter2 Halaman A"),
         ),
         const GajiCount(),
         const GajiTabel(),

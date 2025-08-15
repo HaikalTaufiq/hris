@@ -7,7 +7,7 @@ import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/lembur_model.dart';
 import 'package:hr/presentation/pages/lembur/lembur_form/lembur_form_edit.dart';
 import 'package:hr/provider/features/features_guard.dart';
-import 'package:hr/provider/ui/lembur_card_provider.dart';
+import 'package:hr/provider/function/lembur_provider.dart';
 import 'package:provider/provider.dart';
 
 class LemburCard extends StatelessWidget {
@@ -27,9 +27,9 @@ class LemburCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => LemburCardProvider(lembur),
+      create: (_) => LemburProvider(),
       builder: (context, _) {
-        final provider = context.watch<LemburCardProvider>();
+        final provider = context.watch<LemburProvider>();
         return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.02,
@@ -72,7 +72,7 @@ class LemburCard extends StatelessWidget {
                             DetailItem(
                                 label: 'Status',
                                 value: lembur.status,
-                                color: provider.statusColor),
+                                color: lembur.statusColor),
                             DetailItem(
                                 label: 'Tanggal Mulai',
                                 value: provider.formatDate(lembur.tanggal)),
@@ -120,7 +120,7 @@ class LemburCard extends StatelessWidget {
                                 width: 15,
                                 height: 15,
                                 decoration: BoxDecoration(
-                                  color: provider.statusColor,
+                                  color: lembur.statusColor,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -131,7 +131,7 @@ class LemburCard extends StatelessWidget {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: GoogleFonts.poppins().fontFamily,
-                                  color: provider.statusColor,
+                                  color: lembur.statusColor,
                                 ),
                               ),
                             ],
@@ -162,7 +162,7 @@ class LemburCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       // Deskripsi singkat
                       Text(
-                        provider.shortDeskripsi,
+                        lembur.shortDeskripsi,
                         style: GoogleFonts.poppins(
                           color: AppColors.putih,
                           fontSize: 14,
@@ -178,7 +178,7 @@ class LemburCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (provider.isPending) ...[
+                    if (lembur.isPending) ...[
                       FeatureGuard(
                         featureId: 'decline_lembur',
                         child: ActionButton(

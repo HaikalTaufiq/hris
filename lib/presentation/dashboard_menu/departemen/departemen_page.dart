@@ -20,7 +20,8 @@ class DepartemenPage extends StatefulWidget {
 
 class _DepartemenPageState extends State<DepartemenPage> {
   final searchController = TextEditingController();
-  final TextEditingController departmentNameController = TextEditingController();
+  final TextEditingController departmentNameController =
+      TextEditingController();
   late Future<List<DepartemenModel>> _departemenList;
 
   @override
@@ -97,8 +98,8 @@ class _DepartemenPageState extends State<DepartemenPage> {
                       onPressed: () => Navigator.pop(context),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14),
-                        child:
-                            Text('Cancel', style: TextStyle(color: Colors.white)),
+                        child: Text('Cancel',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -114,8 +115,8 @@ class _DepartemenPageState extends State<DepartemenPage> {
                       onPressed: onSubmit,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14),
-                        child:
-                            Text('Submit', style: TextStyle(color: Colors.white)),
+                        child: Text('Submit',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -144,14 +145,16 @@ class _DepartemenPageState extends State<DepartemenPage> {
       );
 
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         setState(() {
           _departemenList = DepartemenService.fetchDepartemen();
         });
         departmentNameController.clear();
         Navigator.pop(context);
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -177,14 +180,16 @@ class _DepartemenPageState extends State<DepartemenPage> {
       );
 
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         setState(() {
           _departemenList = DepartemenService.fetchDepartemen();
         });
         departmentNameController.clear();
         Navigator.pop(context);
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -200,8 +205,12 @@ class _DepartemenPageState extends State<DepartemenPage> {
         title: const Text('Konfirmasi'),
         content: const Text('Yakin mau hapus departemen ini?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Batal')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Hapus')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Batal')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Hapus')),
         ],
       ),
     );
@@ -209,12 +218,14 @@ class _DepartemenPageState extends State<DepartemenPage> {
     if (confirm == true) {
       final result = await DepartemenService.deleteDepartemen(id);
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         setState(() {
           _departemenList = DepartemenService.fetchDepartemen();
         });
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     }
   }
@@ -233,7 +244,6 @@ class _DepartemenPageState extends State<DepartemenPage> {
                 print("Search Halaman A: $value");
               },
               onFilter1Tap: () => print("Filter1 Halaman A"),
-              onFilter2Tap: () => print("Filter2 Halaman A"),
             ),
             FutureBuilder<List<DepartemenModel>>(
               future: _departemenList,

@@ -25,6 +25,7 @@ class CutiPage extends StatefulWidget {
 
 class _CutiPageState extends State<CutiPage> {
   final searchController = TextEditingController();
+  bool isAscending = true;
 
   @override
   void initState() {
@@ -49,7 +50,10 @@ class _CutiPageState extends State<CutiPage> {
     );
 
     if (confirmed) {
-      final message = await context.read<CutiProvider>().deleteCuti(cuti.id);
+      final message =
+          await context.read<CutiProvider>().deleteCuti(cuti.id, "");
+      searchController.clear();
+
       NotificationHelper.showSnackBar(
         context,
         message,
@@ -69,7 +73,9 @@ class _CutiPageState extends State<CutiPage> {
     );
 
     if (confirmed) {
-      final message = await context.read<CutiProvider>().approveCuti(cuti.id);
+      final message =
+          await context.read<CutiProvider>().approveCuti(cuti.id, "");
+      searchController.clear();
       NotificationHelper.showSnackBar(
         context,
         message ?? 'Gagal menyetujui Cuti',
@@ -89,7 +95,10 @@ class _CutiPageState extends State<CutiPage> {
     );
 
     if (confirmed) {
-      final message = await context.read<CutiProvider>().declineCuti(cuti.id);
+      final message =
+          await context.read<CutiProvider>().declineCuti(cuti.id, "");
+      searchController.clear();
+
       NotificationHelper.showSnackBar(
         context,
         message ?? 'Gagal menolak Cuti',
@@ -98,10 +107,31 @@ class _CutiPageState extends State<CutiPage> {
     }
   }
 
+  void _toggleSort() {
+    setState(() {
+      isAscending = !isAscending;
+
+      final provider = context.read<CutiProvider>();
+      final listToSort = searchController.text.isEmpty
+          ? provider.cutiList
+          : provider.filteredCutiList;
+
+      listToSort.sort((a, b) {
+        final dateA = DateTime.parse(a.tanggal_mulai);
+        final dateB = DateTime.parse(b.tanggal_mulai);
+        return isAscending
+            ? dateA.compareTo(dateB) // Terlama → Terbaru
+            : dateB.compareTo(dateA); // Terbaru → Terlama
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final cutiProvider = context.watch<CutiProvider>();
-
+    final displayedList = searchController.text.isEmpty
+        ? cutiProvider.cutiList
+        : cutiProvider.filteredCutiList;
     return Stack(
       children: [
         RefreshIndicator(
@@ -112,9 +142,10 @@ class _CutiPageState extends State<CutiPage> {
               Header(title: 'Pengajuan Cuti'),
               SearchingBar(
                 controller: searchController,
-                onChanged: (value) => print("Search: $value"),
-                onFilter1Tap: () => print("Filter1"),
-                onFilter2Tap: () => print("Filter2"),
+                onChanged: (value) {
+                  cutiProvider.filterCuti(value);
+                },
+                onFilter1Tap: _toggleSort,
               ),
               if (cutiProvider.isLoading)
                 SizedBox(
@@ -159,11 +190,11 @@ class _CutiPageState extends State<CutiPage> {
                 )
               else
                 ListView.builder(
-                  itemCount: cutiProvider.cutiList.length,
+                  itemCount: displayedList.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    final cuti = cutiProvider.cutiList[index];
+                    final cuti = displayedList[index];
                     return CutiCard(
                       cuti: cuti,
                       onApprove: () => _approveCuti(cuti),

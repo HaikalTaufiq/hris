@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hr/data/models/cuti_model.dart';
 import 'package:hr/data/services/cuti_service.dart';
+import 'package:intl/intl.dart';
 
 class CutiProvider with ChangeNotifier {
   List<CutiModel> _cutiList = [];
@@ -10,6 +11,9 @@ class CutiProvider with ChangeNotifier {
   List<CutiModel> get cutiList => _cutiList;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+
+  List<CutiModel> filteredCutiList = [];
+  String _currentSearch = '';
 
   /// Ambil semua data cuti dari API
   Future<void> fetchCuti() async {
@@ -24,6 +28,25 @@ class CutiProvider with ChangeNotifier {
     }
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  /// Searching fitur
+  void filterCuti(String query) {
+    if (query.isEmpty) {
+      filteredCutiList.clear();
+    } else {
+      final lowerQuery = query.toLowerCase();
+      filteredCutiList = cutiList.where((cuti) {
+        final namaKaryawan = (cuti.user['nama'] ?? '').toString().toLowerCase();
+        return namaKaryawan.contains(lowerQuery) ||
+            cuti.alasan.toLowerCase().contains(lowerQuery) ||
+            cuti.tipe_cuti.toLowerCase().contains(lowerQuery) ||
+            cuti.status.toLowerCase().contains(lowerQuery) ||
+            cuti.tanggal_mulai.toLowerCase().contains(lowerQuery) ||
+            cuti.tanggal_selesai.toLowerCase().contains(lowerQuery);
+      }).toList();
+    }
     notifyListeners();
   }
 
@@ -76,23 +99,67 @@ class CutiProvider with ChangeNotifier {
   }
 
   /// Hapus cuti
-  Future<String> deleteCuti(int id) async {
+  Future<String> deleteCuti(int id, String currentSearch) async {
     final result = await CutiService.deleteCuti(id);
     await fetchCuti();
+    filterCuti(_currentSearch);
     return result['message'] ?? 'Tidak ada pesan';
   }
 
   /// Approve cuti
-  Future<String?> approveCuti(int id) async {
+  Future<String?> approveCuti(int id, String currentSearch) async {
     final message = await CutiService.approveCuti(id);
     await fetchCuti();
+    filterCuti(_currentSearch);
     return message;
   }
 
   /// Decline cuti
-  Future<String?> declineCuti(int id) async {
+  Future<String?> declineCuti(int id, String currentSearch) async {
     final message = await CutiService.declineCuti(id);
     await fetchCuti();
+    filterCuti(_currentSearch);
+
     return message;
+  }
+
+  String formatDate(String date) {
+    if (date.isEmpty) return '-';
+    return DateFormat('dd/MM/yyyy').format(DateTime.parse(date));
+  }
+
+  /// Approve cuti (tetap bisa pakai onApprove callback)
+  Future<void> approve(Future<void> Function()? onApprove, {int? id}) async {
+    if (onApprove != null) await onApprove(); // panggil callback UI dulu
+
+    if (id != null) {
+      await CutiService.approveCuti(id); // update di backend
+      await fetchCuti(); // refresh cuti utama
+      // apply filter lagi jika ada search aktif
+      if (filteredCutiList.isNotEmpty) filterCuti('');
+    }
+  }
+
+  /// Decline cuti (tetap bisa pakai onDecline callback)
+  Future<void> decline(Future<void> Function()? onDecline, {int? id}) async {
+    if (onDecline != null) await onDecline();
+
+    if (id != null) {
+      await CutiService.declineCuti(id);
+      await fetchCuti();
+      if (filteredCutiList.isNotEmpty) filterCuti('');
+    }
+  }
+
+  /// Delete cuti (tetap bisa pakai onDelete callback)
+  void delete(VoidCallback? onDelete, {int? id}) {
+    if (onDelete != null) onDelete();
+
+    if (id != null) {
+      CutiService.deleteCuti(id).then((_) async {
+        await fetchCuti();
+        if (filteredCutiList.isNotEmpty) filterCuti('');
+      });
+    }
   }
 }

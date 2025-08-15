@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:hr/core/theme.dart';
+
 class LemburModel {
   final int id;
   final int userId;
@@ -30,5 +34,31 @@ class LemburModel {
       status: json['status'],
       user: json['user'],
     );
+  }
+
+  /// Semua field yang bisa dicari
+  List<String> get searchableFields => [
+        user['nama']?.toString() ?? '',
+        tanggal,
+        jamMulai,
+        jamSelesai,
+        deskripsi,
+        status,
+      ];
+
+  String get shortDeskripsi =>
+      deskripsi.length > 20 ? '${deskripsi.substring(0, 20)}...' : deskripsi;
+
+  bool get isPending => status.toLowerCase() == 'pending';
+
+  Color get statusColor {
+    switch (status.toLowerCase()) {
+      case 'disetujui':
+        return AppColors.green;
+      case 'ditolak':
+        return AppColors.red;
+      default:
+        return AppColors.yellow;
+    }
   }
 }

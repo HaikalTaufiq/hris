@@ -7,7 +7,6 @@ class SearchingBar extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final VoidCallback? onFilter1Tap;
-  final VoidCallback? onFilter2Tap;
   final ValueChanged<String>? onChanged;
 
   const SearchingBar({
@@ -15,7 +14,6 @@ class SearchingBar extends StatelessWidget {
     required this.controller, // wajib diisi dari luar
     this.hintText = 'Search...',
     this.onFilter1Tap,
-    this.onFilter2Tap,
     this.onChanged,
   });
 
@@ -93,26 +91,6 @@ class SearchingBar extends StatelessWidget {
                   size: 20,
                   color: AppColors.putih,
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: buttonSize,
-            height: buttonSize,
-            child: ElevatedButton(
-              onPressed: onFilter2Tap,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                backgroundColor: AppColors.secondary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: FaIcon(
-                FontAwesomeIcons.sliders,
-                size: 20,
-                color: AppColors.putih,
               ),
             ),
           ),

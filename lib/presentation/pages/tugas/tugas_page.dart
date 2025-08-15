@@ -58,7 +58,6 @@ class _TugasPageState extends State<TugasPage> {
                   print("Search Halaman A: $value");
                 },
                 onFilter1Tap: () => print("Filter1 Halaman A"),
-                onFilter2Tap: () => print("Filter2 Halaman A"),
               ),
               // Use Consumer to watch TugasProvider state
               Consumer<TugasProvider>(

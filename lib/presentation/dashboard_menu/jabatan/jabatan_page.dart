@@ -38,20 +38,24 @@ class _JabatanPageState extends State<JabatanPage> {
   void createJabatan() async {
     final namaJabatan = jabatanNameController.text.trim();
     if (namaJabatan.isEmpty) {
-      NotificationHelper.showSnackBar(context, 'Nama jabatan tidak boleh kosong');
+      NotificationHelper.showSnackBar(
+          context, 'Nama jabatan tidak boleh kosong');
       return;
     }
 
     try {
-      final result = await JabatanService.createJabatan(namaJabatan: namaJabatan);
+      final result =
+          await JabatanService.createJabatan(namaJabatan: namaJabatan);
 
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         refreshJabatanList();
         jabatanNameController.clear();
         Navigator.pop(context);
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     } catch (e) {
       NotificationHelper.showSnackBar(context, 'Terjadi kesalahan: $e');
@@ -61,20 +65,24 @@ class _JabatanPageState extends State<JabatanPage> {
   void updateJabatan(int id) async {
     final namaJabatan = jabatanNameController.text.trim();
     if (namaJabatan.isEmpty) {
-      NotificationHelper.showSnackBar(context, 'Nama jabatan tidak boleh kosong');
+      NotificationHelper.showSnackBar(
+          context, 'Nama jabatan tidak boleh kosong');
       return;
     }
 
     try {
-      final result = await JabatanService.updateJabatan(id: id, namaJabatan: namaJabatan);
+      final result =
+          await JabatanService.updateJabatan(id: id, namaJabatan: namaJabatan);
 
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         refreshJabatanList();
         jabatanNameController.clear();
         Navigator.pop(context);
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     } catch (e) {
       NotificationHelper.showSnackBar(context, 'Terjadi kesalahan: $e');
@@ -88,8 +96,12 @@ class _JabatanPageState extends State<JabatanPage> {
         title: const Text("Hapus Jabatan"),
         content: const Text("Apakah Anda yakin ingin menghapus jabatan ini?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Batal")),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text("Hapus", style: TextStyle(color: Colors.red))),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Batal")),
+          TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("Hapus", style: TextStyle(color: Colors.red))),
         ],
       ),
     );
@@ -97,12 +109,14 @@ class _JabatanPageState extends State<JabatanPage> {
     if (confirm == true) {
       final result = await JabatanService.deleteJabatan(id);
       if (result['success']) {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: true);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: true);
         setState(() {
           _jabatanList = JabatanService.fetchJabatan();
         });
       } else {
-        NotificationHelper.showSnackBar(context, result['message'], isSuccess: false);
+        NotificationHelper.showSnackBar(context, result['message'],
+            isSuccess: false);
       }
     }
   }
@@ -118,7 +132,8 @@ class _JabatanPageState extends State<JabatanPage> {
       backgroundColor: AppColors.primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: screenHeight * 0.8, maxWidth: screenWidth * 0.9),
+        constraints: BoxConstraints(
+            maxHeight: screenHeight * 0.8, maxWidth: screenWidth * 0.9),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -152,7 +167,8 @@ class _JabatanPageState extends State<JabatanPage> {
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide.none,
                   ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
                 ),
               ),
               const SizedBox(height: 24),
@@ -163,12 +179,16 @@ class _JabatanPageState extends State<JabatanPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.grey,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () => Navigator.pop(context),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        child: Text('Cancel', style: TextStyle(color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily)),
+                        child: Text('Cancel',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: GoogleFonts.poppins().fontFamily)),
                       ),
                     ),
                   ),
@@ -177,12 +197,16 @@ class _JabatanPageState extends State<JabatanPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.blue,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: onSubmit,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        child: Text('Submit', style: TextStyle(color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily)),
+                        child: Text('Submit',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: GoogleFonts.poppins().fontFamily)),
                       ),
                     ),
                   ),
@@ -207,7 +231,6 @@ class _JabatanPageState extends State<JabatanPage> {
               controller: searchController,
               onChanged: (value) => print("Search Halaman Jabatan: $value"),
               onFilter1Tap: () => print("Filter1 Jabatan"),
-              onFilter2Tap: () => print("Filter2 Jabatan"),
             ),
             FutureBuilder<List<JabatanModel>>(
               future: _jabatanList,

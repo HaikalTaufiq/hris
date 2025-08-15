@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/components/dialog/update_status_dialog.dart';
 import 'package:hr/components/button/action_button.dart';
 import 'package:hr/components/dialog/detail_item.dart';
+import 'package:hr/provider/function/cuti_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/cuti_model.dart';
-import 'package:hr/provider/ui/cuti_card_provider.dart';
 import 'package:hr/provider/features/features_guard.dart';
 import 'package:hr/presentation/pages/cuti/cuti_form/cuti_edit_form.dart';
 
@@ -27,9 +27,9 @@ class CutiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CutiCardProvider(cuti),
+      create: (_) => CutiProvider(),
       builder: (context, _) {
-        final provider = Provider.of<CutiCardProvider>(context);
+        final provider = Provider.of<CutiProvider>(context);
         return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.02,
@@ -67,7 +67,7 @@ class CutiCard extends StatelessWidget {
                             DetailItem(
                                 label: 'Status',
                                 value: cuti.status,
-                                color: provider.statusColor),
+                                color: cuti.statusColor),
                             DetailItem(
                                 label: 'Tipe Cuti', value: cuti.tipe_cuti),
                             DetailItem(
@@ -108,7 +108,7 @@ class CutiCard extends StatelessWidget {
                                 width: 15,
                                 height: 15,
                                 decoration: BoxDecoration(
-                                  color: provider.statusColor,
+                                  color: cuti.statusColor,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -119,7 +119,7 @@ class CutiCard extends StatelessWidget {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: GoogleFonts.poppins().fontFamily,
-                                  color: provider.statusColor,
+                                  color: cuti.statusColor,
                                 ),
                               ),
                             ],
@@ -143,7 +143,7 @@ class CutiCard extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                           )),
                       const SizedBox(height: 8),
-                      Text(provider.shortAlasan,
+                      Text(cuti.shortAlasan,
                           style: GoogleFonts.poppins(
                             color: AppColors.putih,
                             fontSize: 14,
@@ -156,7 +156,7 @@ class CutiCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (provider.isPending) ...[
+                    if (cuti.isPending) ...[
                       FeatureGuard(
                         featureId: 'decline_cuti',
                         child: ActionButton(

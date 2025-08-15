@@ -34,7 +34,7 @@ class _KaryawanPageState extends State<KaryawanPage> {
     });
 
     try {
-      final fetchedUsers = await UserService.fetchUsers(); 
+      final fetchedUsers = await UserService.fetchUsers();
       setState(() {
         users = fetchedUsers;
       });
@@ -61,14 +61,13 @@ class _KaryawanPageState extends State<KaryawanPage> {
                 print("Search Halaman A: $value");
               },
               onFilter1Tap: () => print("Filter1 Halaman A"),
-              onFilter2Tap: () => print("Filter2 Halaman A"),
             ),
             if (isLoading)
               Center(
                 child: CircularProgressIndicator(color: AppColors.secondary),
               )
             else
-              KaryawanTabel(users: users), 
+              KaryawanTabel(users: users),
           ],
         ),
         Positioned(

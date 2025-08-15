@@ -25,7 +25,6 @@ class _LogPageState extends State<LogPage> {
             print("Search Halaman A: $value");
           },
           onFilter1Tap: () => print("Filter1 Halaman A"),
-          onFilter2Tap: () => print("Filter2 Halaman A"),
         ),
         const LogTabel(),
         const LogTabel(),
