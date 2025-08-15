@@ -1,10 +1,12 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/core/helpers/notification_helper.dart';
 import 'package:hr/data/services/departemen_service.dart';
 import 'package:hr/data/services/jabatan_service.dart';
 import 'package:hr/data/services/peran_service.dart';
-import 'package:http/http.dart' as http;
+import 'package:hr/data/services/user_service.dart';
 import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/theme.dart';
@@ -33,9 +35,9 @@ class _KaryawanInputState extends State<KaryawanInput> {
   String? _statusPernikahan;
 
   // Data lists
-  List<Map<String, dynamic>> _jabatanList = [];
+  List<Map<String, Object>> _jabatanList = [];
   List<Map<String, dynamic>> _peranList = [];
-  List<Map<String, dynamic>> _departemenList = [];
+  List<Map<String, Object>> _departemenList = [];
 
   // Loading states
   bool _isLoadingJabatan = true;
@@ -58,12 +60,10 @@ class _KaryawanInputState extends State<KaryawanInput> {
     try {
       final data = await JabatanService.fetchJabatan();
       setState(() {
-        _jabatanList = data
-            .map((j) => {
-                  "id": j.id,
-                  "label": j.namaJabatan,
-                })
-            .toList();
+        _jabatanList = data.map((j) => {
+          "id": j.id,
+          "nama_jabatan": j.namaJabatan,
+        }).toList();
         _isLoadingJabatan = false;
       });
     } catch (e) {
@@ -76,7 +76,7 @@ class _KaryawanInputState extends State<KaryawanInput> {
 
   Future<void> _loadPeran() async {
     try {
-      final data = await PeranService.fetchPeran(); // sudah return List<Map>
+      final data = await PeranService.fetchPeran(); 
       setState(() {
         _peranList = data;
         _isLoadingPeran = false;
@@ -93,12 +93,10 @@ class _KaryawanInputState extends State<KaryawanInput> {
     try {
       final data = await DepartemenService.fetchDepartemen();
       setState(() {
-        _departemenList = data
-            .map((d) => {
-                  "id": d.id,
-                  "label": d.namaDepartemen,
-                })
-            .toList();
+        _departemenList = data.map((d) => {
+          "id": d.id,
+          "nama_departemen": d.namaDepartemen,
+        }).toList();
         _isLoadingDepartemen = false;
       });
     } catch (e) {
@@ -135,41 +133,46 @@ class _KaryawanInputState extends State<KaryawanInput> {
       return;
     }
 
-    final body = {
-      "nama": _namaController.text,
-      "peran_id": _peranId.toString(),
-      "jabatan_id": _jabatanId.toString(),
-      "departemen_id": _departemenId.toString(),
-      "gaji_pokok": int.parse(_gajiController.text),
-      "npwp": _npwpController.text,
-      "bpjs_kesehatan": _bpjsKesController.text,
-      "bpjs_ketenagakerjaan": _bpjsKetController.text,
-      "jenis_kelamin": _jenisKelamin,
-      "status_pernikahan": _statusPernikahan,
-      "password": _passwordController.text,
-    };
-
     try {
-      final res = await http.post(
-        Uri.parse("https://api-kamu.com/karyawan"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(body),
+      await UserService.createKaryawan({
+        "nama": _namaController.text,
+        "peran_id": _peranId,
+        "jabatan_id": _jabatanId,
+        "departemen_id": _departemenId,
+        "gaji_pokok": int.tryParse(_gajiController.text) ?? 0,
+        "npwp": _npwpController.text,
+        "bpjs_kesehatan": _bpjsKesController.text,
+        "bpjs_ketenagakerjaan": _bpjsKetController.text,
+        "jenis_kelamin": _jenisKelamin,
+        "status_pernikahan": _statusPernikahan,
+        "password": _passwordController.text,
+      });
+
+      NotificationHelper.showSnackBar(
+        context,
+        "Karyawan berhasil ditambahkan",
+        isSuccess: true,
       );
 
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Karyawan berhasil ditambahkan")),
-        );
-        Navigator.pop(context, true);
+      Navigator.pop(context, true);
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        // Error validasi Laravel
+        e.forEach((field, messages) {
+          NotificationHelper.showSnackBar(
+            context,
+            "$field: ${(messages as List).join(', ')}",
+            isSuccess: false,
+          );
+        });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Gagal menambahkan: ${res.body}")),
+        // Error umum
+        NotificationHelper.showSnackBar(
+          context,
+          "Error: $e",
+          isSuccess: false,
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
     }
   }
 
@@ -215,12 +218,16 @@ class _KaryawanInputState extends State<KaryawanInput> {
           CustomDropDownField(
             label: 'Jabatan',
             hint: _isLoadingJabatan ? 'Memuat...' : '',
-            items:
-                _jabatanList.map((e) => (e["label"] ?? "") as String).toList(),
+            items: _jabatanList
+                .where((e) => e["nama_jabatan"] != null) 
+                .map((e) => e["nama_jabatan"] as String)
+                .toList(),
             onChanged: (val) {
-              final selected =
-                  _jabatanList.firstWhere((e) => e["label"] == val);
-              _jabatanId = selected["id"];
+              final selected = _jabatanList.firstWhere(
+                (e) => e["nama_jabatan"] == val,
+                orElse: () => <String, Object>{},
+              );
+              _jabatanId = selected["id"] as int;
             },
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -229,12 +236,19 @@ class _KaryawanInputState extends State<KaryawanInput> {
             dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
+
           CustomDropDownField(
             label: 'Peran',
             hint: _isLoadingPeran ? 'Memuat...' : '',
-            items: _peranList.map((e) => e["label"] as String).toList(),
+            items: _peranList
+                .where((e) => e["nama_peran"] != null) 
+                .map((e) => e["nama_peran"] as String)
+                .toList(),
             onChanged: (val) {
-              final selected = _peranList.firstWhere((e) => e["label"] == val);
+              final selected = _peranList.firstWhere(
+                (e) => e["nama_peran"] == val,
+                orElse: () => <String, dynamic>{}, 
+              );
               _peranId = selected["id"];
             },
             labelStyle: labelStyle,
@@ -244,14 +258,20 @@ class _KaryawanInputState extends State<KaryawanInput> {
             dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
+
           CustomDropDownField(
             label: 'Departemen',
             hint: _isLoadingDepartemen ? 'Memuat...' : '',
-            items: _departemenList.map((e) => e["label"] as String).toList(),
+            items: _departemenList
+                .where((e) => e["nama_departemen"] != null) 
+                .map((e) => e["nama_departemen"] as String)
+                .toList(),
             onChanged: (val) {
-              final selected =
-                  _departemenList.firstWhere((e) => e["label"] == val);
-              _departemenId = selected["id"];
+              final selected = _departemenList.firstWhere(
+                (e) => e["nama_departemen"] == val,
+                orElse: () => <String, Object>{},
+              );
+              _departemenId = selected["id"] as int;
             },
             labelStyle: labelStyle,
             textStyle: textStyle,
@@ -260,6 +280,7 @@ class _KaryawanInputState extends State<KaryawanInput> {
             dropdownIconColor: AppColors.putih,
             inputStyle: inputStyle,
           ),
+
           CustomInputField(
             controller: _gajiController,
             label: "Gaji Pokok",
