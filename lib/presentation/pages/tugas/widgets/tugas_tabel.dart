@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_edit_form.dart';
 import 'package:hr/core/helpers/notification_helper.dart';
-import 'package:hr/provider/tugas_provider.dart';
+import 'package:hr/provider/function/tugas_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';

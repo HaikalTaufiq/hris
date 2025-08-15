@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hr/presentation/pages/landing/landing_page.dart';
-import 'package:hr/provider/cuti_provider.dart';
-import 'package:hr/provider/lembur_provider.dart';
-import 'package:hr/provider/tugas_provider.dart';
-import 'package:hr/provider/user_provider.dart';
+import 'package:hr/provider/function/cuti_provider.dart';
+import 'package:hr/provider/function/lembur_provider.dart';
+import 'package:hr/provider/function/tugas_provider.dart';
+import 'package:hr/provider/function/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {

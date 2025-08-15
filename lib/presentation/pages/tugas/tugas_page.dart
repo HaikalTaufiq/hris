@@ -7,7 +7,8 @@ import 'package:hr/components/custom/header.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/tugas/tugas_form/tugas_form.dart';
 import 'package:hr/presentation/pages/tugas/widgets/tugas_tabel.dart';
-import 'package:hr/provider/tugas_provider.dart';
+import 'package:hr/provider/features/features_guard.dart';
+import 'package:hr/provider/function/tugas_provider.dart';
 import 'package:provider/provider.dart';
 
 class TugasPage extends StatefulWidget {
@@ -151,23 +152,26 @@ class _TugasPageState extends State<TugasPage> {
             ],
           ),
         ),
-        Positioned(
-          bottom: 16,
-          right: 16,
-          child: FloatingActionButton(
-            onPressed: () async {
-              final result = await Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const TugasForm()),
-              );
+        FeatureGuard(
+          featureId: "add_tugas",
+          child: Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const TugasForm()),
+                );
 
-              if (result == true) {
-                // Refresh data after successful creation
-                _refreshData();
-              }
-            },
-            backgroundColor: AppColors.secondary,
-            shape: const CircleBorder(),
-            child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+                if (result == true) {
+                  // Refresh data after successful creation
+                  _refreshData();
+                }
+              },
+              backgroundColor: AppColors.secondary,
+              shape: const CircleBorder(),
+              child: FaIcon(FontAwesomeIcons.plus, color: AppColors.putih),
+            ),
           ),
         ),
       ],

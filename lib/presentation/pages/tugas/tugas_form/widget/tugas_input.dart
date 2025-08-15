@@ -11,7 +11,7 @@ import 'package:hr/data/models/departemen_model.dart';
 import 'package:hr/data/models/user_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
 import 'package:hr/data/services/user_service.dart';
-import 'package:hr/provider/tugas_provider.dart';
+import 'package:hr/provider/function/tugas_provider.dart';
 import 'package:provider/provider.dart';
 
 class TugasInput extends StatefulWidget {

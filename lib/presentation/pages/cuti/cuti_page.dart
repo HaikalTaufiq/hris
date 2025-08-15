@@ -12,7 +12,7 @@ import 'package:hr/data/models/cuti_model.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/presentation/pages/cuti/cuti_form/cuti_form.dart';
 import 'package:hr/presentation/pages/cuti/widgets/cuti_card.dart';
-import 'package:hr/provider/cuti_provider.dart';
+import 'package:hr/provider/function/cuti_provider.dart';
 import 'package:hr/provider/features/features_guard.dart';
 import 'package:provider/provider.dart';
 

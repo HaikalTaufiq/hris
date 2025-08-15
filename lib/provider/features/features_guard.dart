@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hr/provider/user_provider.dart';
+import 'package:hr/provider/function/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class FeatureGuard extends StatelessWidget {

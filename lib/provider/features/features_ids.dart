@@ -85,6 +85,9 @@ class FeatureIds {
     pengaturan,
   ];
 
+  // ====================== Modul fitur tugas ======================
+  static const addTugas = "add_tugas";
+
   // Contoh paket lain bisa dibuat seperti ini
   // static const ManageLembur = [approveLembur, declineLembur];
 }

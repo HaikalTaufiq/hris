@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hr/data/models/user_model.dart';
 import 'package:hr/data/services/departemen_service.dart';
 import 'package:hr/data/services/jabatan_service.dart';
 import 'package:hr/data/services/peran_service.dart';
@@ -9,14 +10,16 @@ import 'package:hr/components/custom/custom_dropdown.dart';
 import 'package:hr/components/custom/custom_input.dart';
 import 'package:hr/core/theme.dart';
 
-class KaryawanInput extends StatefulWidget {
-  const KaryawanInput({super.key});
+class KaryawanInputEdit extends StatefulWidget {
+  final UserModel user;
+
+  const KaryawanInputEdit({super.key, required this.user});
 
   @override
-  State<KaryawanInput> createState() => _KaryawanInputState();
+  State<KaryawanInputEdit> createState() => _KaryawanInputEditState();
 }
 
-class _KaryawanInputState extends State<KaryawanInput> {
+class _KaryawanInputEditState extends State<KaryawanInputEdit> {
   // Controllers
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _gajiController = TextEditingController();

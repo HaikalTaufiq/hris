@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hr/core/theme.dart';
 import 'package:hr/data/models/user_model.dart';
+import 'package:hr/presentation/dashboard_menu/karyawan/karyawan_form/karyawan_form_edit.dart';
 
 class KaryawanTabel extends StatelessWidget {
   final List<UserModel> users;
@@ -173,7 +174,15 @@ class KaryawanTabel extends StatelessWidget {
                         IconButton(
                           icon: FaIcon(FontAwesomeIcons.pen,
                               color: AppColors.putih, size: 20),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => KaryawanFormEdit(
+                                        user: user,
+                                      )),
+                            );
+                          },
                         ),
                       ],
                     )
@@ -194,8 +203,7 @@ class KaryawanTabel extends StatelessWidget {
                               style: TextStyle(
                                   color: AppColors.putih,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily:
-                                      GoogleFonts.poppins().fontFamily),
+                                  fontFamily: GoogleFonts.poppins().fontFamily),
                             ),
                           ),
                           Expanded(
@@ -204,8 +212,7 @@ class KaryawanTabel extends StatelessWidget {
                               values[index],
                               style: TextStyle(
                                   color: AppColors.putih,
-                                  fontFamily:
-                                      GoogleFonts.poppins().fontFamily),
+                                  fontFamily: GoogleFonts.poppins().fontFamily),
                             ),
                           ),
                         ],
